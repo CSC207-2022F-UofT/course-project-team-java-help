@@ -1,19 +1,9 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    id 'java'
+    id 'com.android.application' version '7.2.0-beta04' apply false
+    id 'com.android.library' version '7.2.0-beta04' apply false
 }
 
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation 'junit:junit:4.13.1'
-    testImplementation('org.junit.jupiter:junit-jupiter:5.6.0')
-}
-
-test {
-    useJUnitPlatform()
-    testLogging {
-        events "passed", "skipped", "failed"
-    }
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }
