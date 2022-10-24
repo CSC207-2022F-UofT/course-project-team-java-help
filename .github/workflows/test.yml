@@ -1,0 +1,23 @@
+name: Test
+
+on:
+  push:
+
+jobs:
+  build:
+    name: Build & Test
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v3
+
+      - name: Setup gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Configure gradle wrapper
+        run: chmod +x gradlew
+
+      - name: Run gradle build
+        run: ./gradlew build
