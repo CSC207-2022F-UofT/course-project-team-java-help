@@ -29,7 +29,7 @@ task buildZip(type: Zip) {
     // Link: https://docs.gradle.org/current/dsl/org.gradle.api.tasks.bundling.Zip.html
 
     // set the base name of the zip file
-    archiveBaseName = "hello"
+    archiveBaseName = "function-package"
     from compileJava
     from processResources
     into('lib') {
