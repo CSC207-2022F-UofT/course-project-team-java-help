@@ -24,7 +24,8 @@ public class Handler implements RequestHandler<Map<String, Object>, ApiGatewayRe
 		// here the response is setup before being returned and sent back to whoever
 		// called this function
 		SimpleResponse response = new SimpleResponse("Hello World, And Hello AWS Lambda! " +
-				"This is from within the backend module!");
+				"This is from within the backend module! " +
+				"This was pushed by the new CD pipeline!");
 
 		return ApiGatewayResponse.builder() 	// this is a little utility class provided by the serverless framework, we
 												// can use this
