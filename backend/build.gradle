@@ -2,14 +2,10 @@ plugins {
     id 'java-library'
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-sourceSets {
-    test.java.srcDirs += 'src/test'
-    test.resources.srcDirs += 'src/test'
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
-
 
 dependencies {
     api (
@@ -20,8 +16,7 @@ dependencies {
             'com.fasterxml.jackson.core:jackson-annotations:2.11.0'
     )
     api project(path: ':model')
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation 'junit:junit:4.13.2'
 }
 
 // Task for building the zip file for upload
@@ -42,10 +37,10 @@ task buildZip(type: Zip) {
     }
 }
 
-test {
-    useJUnitPlatform()
-
-    dependsOn 'cleanTest'
-}
+//test {
+//    useJUnitPlatform()
+//
+//    dependsOn 'cleanTest'
+//}
 
 build.dependsOn buildZip
