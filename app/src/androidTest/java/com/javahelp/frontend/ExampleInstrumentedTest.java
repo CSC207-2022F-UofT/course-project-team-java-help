@@ -1,4 +1,4 @@
-package com.javahelp;
+package com.javahelp.frontend;
 
 import android.content.Context;
 

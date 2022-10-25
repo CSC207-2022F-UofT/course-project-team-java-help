@@ -116,3 +116,9 @@ gradle-app.setting
 hs_err_pid*
 replay_pid*
 /local.properties
+
+# serverless directory
+.serverless
+
+# node
+node_modules
