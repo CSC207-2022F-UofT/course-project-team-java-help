@@ -48,4 +48,12 @@ public class SurveyQuestion {
     public String getQuestion() {
         return question;
     }
+
+    /**
+     *
+     * @return the number of responses to this question
+     */
+    public int getNumberOfResponses() {
+        return answers.size();
+    }
 }

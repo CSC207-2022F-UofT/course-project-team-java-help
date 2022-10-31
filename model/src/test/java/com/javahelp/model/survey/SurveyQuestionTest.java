@@ -49,6 +49,11 @@ public class SurveyQuestionTest {
     }
 
     @Test
+    public void getNumberOfResponses() {
+        assertEquals(2, question.getNumberOfResponses());
+    }
+
+    @Test
     public void getAnswer() {
         assertEquals("This is an example response option", question.getAnswer(0));
     }
