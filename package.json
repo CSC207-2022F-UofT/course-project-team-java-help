@@ -1,0 +1,23 @@
+{
+  "name": "javahelpbackend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jacob4649/JavaHelpBackend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jacob4649/JavaHelpBackend/issues"
+  },
+  "homepage": "https://github.com/jacob4649/JavaHelpBackend#readme",
+  "dependencies": {
+    "serverless": "^3.22.0"
+  }
+}

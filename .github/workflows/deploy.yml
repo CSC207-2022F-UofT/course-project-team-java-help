@@ -1,0 +1,63 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    name: Build
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v3
+
+      - name: Setup gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Configure gradle wrapper
+        run: chmod +x gradlew
+
+      - name: Run gradle build
+        run: ./gradlew build
+
+      - name: Upload build as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifact
+          path: backend/build/distributions/**
+
+  deploy:
+    name: Deploy
+
+    needs: build
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout project 
+      uses: actions/checkout@v3
+    
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: build-artifact
+        path: backend/build/distributions
+
+    - name: Setup node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16.x
+    
+    - name: NPM install dependencies
+      run: npm ci
+    
+    - name: Serverless deploy
+      uses: serverless/github-action@v3.1
+      with:
+        args: deploy
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
