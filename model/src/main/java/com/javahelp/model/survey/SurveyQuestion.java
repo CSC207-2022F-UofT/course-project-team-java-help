@@ -27,6 +27,9 @@ public class SurveyQuestion {
      * @return the ith {@link String} answer for this question
      */
     public String getAnswer(int i) {
+        if (i < 0 || i >= answers.size()) {
+            throw new IndexOutOfBoundsException("SurveyQuestion does not have enough responses");
+        }
         return answers.get(i);
     }
 
