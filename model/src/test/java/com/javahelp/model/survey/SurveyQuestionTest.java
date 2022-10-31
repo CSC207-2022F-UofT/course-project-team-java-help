@@ -27,12 +27,12 @@ public class SurveyQuestionTest {
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
-    public void surveyQuestion_throwsIndexOutOfBounds() {
+    public void getAnswer_throwsIndexOutOfBounds() {
         emptyQuestion.getAnswer(0);
     }
 
     @Test
-    public void surveyQuestion_size() {
+    public void getAnswers_size() {
         int emptyLength = 0, nonEmptyLength = 0;
 
         for (String s : emptyQuestion.getAnswers()) {
@@ -49,12 +49,12 @@ public class SurveyQuestionTest {
     }
 
     @Test
-    public void surveyQuestion_responseOption() {
+    public void getAnswer() {
         assertEquals("This is an example response option", question.getAnswer(0));
     }
 
     @Test
-    public void surveyQuestion_question() {
+    public void getQuestion() {
         assertEquals("This is an example question", emptyQuestion.getQuestion());
     }
 
