@@ -76,4 +76,15 @@ public class SurveyTest {
     public void size() {
         assertEquals(5, survey.size());
     }
+
+    @Test
+    public void answer() {
+        SurveyResponse response = survey.answer("test id", 0, 1, 7, 8, 9);
+        assertEquals("10", response.getResponse(4).getResponse());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void answer_throwsIllegalArgumentException() {
+        survey.answer("test", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+    }
 }

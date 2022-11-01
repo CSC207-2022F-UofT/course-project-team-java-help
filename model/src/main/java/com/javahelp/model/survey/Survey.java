@@ -1,6 +1,8 @@
 package com.javahelp.model.survey;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Representation of a survey.
@@ -69,6 +71,26 @@ public class Survey {
      */
     public int size() {
         return questions.size();
+    }
+
+    /**
+     * Answer this {@link Survey}
+     * @param id {@link String} id for the {@link SurveyResponse}
+     * @param answers int array with answer indices for the {@link Survey}
+     * @return {@link SurveyResponse} corresponding to filled in answers
+     */
+    public SurveyResponse answer(String id, int... answers) {
+        if (answers.length != questions.size()) {
+            throw new IllegalArgumentException("Must provide exactly one answer for each question");
+        }
+        Map<SurveyQuestion, SurveyQuestionResponse> map = new HashMap<>();
+        for (int i = 0; i < answers.length; i++) {
+            SurveyQuestion question = questions.get(i);
+            int responseIndex = answers[i];
+            SurveyQuestionResponse response = question.answer(responseIndex);
+            map.put(question, response);
+        }
+        return new SurveyResponse(id, this, map);
     }
 
 }
