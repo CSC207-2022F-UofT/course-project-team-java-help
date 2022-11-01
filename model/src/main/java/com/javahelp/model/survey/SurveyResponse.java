@@ -54,6 +54,9 @@ public class SurveyResponse {
      * @return the ith {@link SurveyQuestion}'s {@link SurveyQuestionResponse}
      */
     public SurveyQuestionResponse getResponse(int i) {
+        if (i < 0 || i >= survey.size()) {
+            throw new IndexOutOfBoundsException("Survey does not have enough questions");
+        }
         return getResponse(survey.get(i));
     }
 
