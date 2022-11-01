@@ -63,4 +63,14 @@ public class SurveyQuestionTest {
         assertEquals("This is an example question", emptyQuestion.getQuestion());
     }
 
+    @Test
+    public void answer() {
+        assertEquals("This is an example response option", question.answer(0).getResponse());
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void answer_throwsIndexOutOfBoundsException() {
+        question.answer(100);
+    }
+
 }

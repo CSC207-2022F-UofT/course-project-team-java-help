@@ -56,4 +56,17 @@ public class SurveyQuestion {
     public int getNumberOfResponses() {
         return answers.size();
     }
+
+    /**
+     * Answers this {@link SurveyQuestion}
+     * @param i the index of the answer to select
+     * @return {@link SurveyQuestionResponse} containing this {@link SurveyQuestion}
+     * and the selected response
+     */
+    public SurveyQuestionResponse answer(int i) {
+        if (i < 0 || i >= answers.size()) {
+            throw new IndexOutOfBoundsException("SurveyQuestion does not have enough responses");
+        }
+        return new SurveyQuestionResponse(this, i);
+    }
 }
