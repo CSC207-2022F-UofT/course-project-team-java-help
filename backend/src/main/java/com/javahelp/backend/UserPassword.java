@@ -42,9 +42,6 @@ public class UserPassword {
         return salt;
     }
 
-    public User getUser(){
-        return user;
-    }
 
     /** The setters of the current attributes. Please note that only current salt and password can be set, while the
      * current user always stays the same in this UserPassword entity!
@@ -68,7 +65,7 @@ public class UserPassword {
      *
      * @return A concatenated array of salt and hashed password, with salt being up front.
      */
-    public static byte[] combineByteArrays (byte[] salt, byte[] hash){
+    private static byte[] combineByteArrays (byte[] salt, byte[] hash){
         byte[] representation = new byte[salt.length + hash.length];
         int position = 0;
         for (byte element: salt){
