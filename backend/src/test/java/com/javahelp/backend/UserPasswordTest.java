@@ -22,25 +22,19 @@ public class UserPasswordTest {
         this.user2Pass = new UserPassword(user2, "DEF".getBytes(), "Second Password I guess".getBytes());
     }
 
-    @Test(timeout = 50000)
+    @Test(timeout = 50)
     public void testUserHashPassword(){
         assertNotEquals("".getBytes(), user1Pass.getHash());
         assertEquals("Second Password I guess".getBytes(), user2Pass.getHash());
     }
 
-    @Test(timeout = 500)
+    @Test(timeout = 50)
     public void testUserSalt(){
         assertNotEquals("ABC ".getBytes(), user1Pass.getSalt());
         assertEquals("DEF".getBytes(), user2Pass.getSalt());
     }
 
     @Test(timeout = 50)
-    public void testUser(){
-        assertEquals(user1, user1Pass.getUser());
-        assertNotEquals(user1, user2Pass.getUser());
-    }
-
-    @Test(timeout = 500)
     public void testSetHashPassword(){
         this.user1Pass.setHash("New password for me!".getBytes());
         assertEquals("New password for me!".getBytes(), user1Pass.getHash());
@@ -49,7 +43,7 @@ public class UserPasswordTest {
         assertEquals("Second Password I guess".getBytes(), user2Pass.getHash());
     }
 
-    @Test(timeout = 500)
+    @Test(timeout = 50)
     public void testSetSalt(){
         user1Pass.setSalt(" ".getBytes());
         assertEquals(" ".getBytes(), user1Pass.getSalt());
@@ -58,16 +52,7 @@ public class UserPasswordTest {
         assertNotEquals("2nd".getBytes(), user2Pass.getSalt());
     }
 
-    @Test(timeout = 500)
-    public void testCombineByteArrays(){
-        assertNotEquals("ABCDEFPass ".getBytes(),
-                UserPassword.combineByteArrays("ABC".getBytes(), "DEFPass".getBytes()));
-
-        assertEquals("ABCDEFPass".getBytes(),
-                UserPassword.combineByteArrays("ABC".getBytes(), "DEFPass".getBytes()));
-    }
-
-    @Test(timeout = 500)
+    @Test(timeout = 50)
     public void testGetBase64SaltHash(){
         assertEquals("ABCFirst Password I guess",
                 UserPassword.getBase64SaltHash(user1Pass));
