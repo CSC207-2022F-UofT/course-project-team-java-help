@@ -3,7 +3,7 @@ package com.javahelp.model.user;
 /**
  * Stores the information of a client.
  */
-public class ClientInfo extends UserInfo {
+public class ClientUserInfo extends UserInfo {
     private String firstName;
     private String lastName;
     private String address;
@@ -18,8 +18,8 @@ public class ClientInfo extends UserInfo {
      * @param firstName: the first name of this client.
      * @param lastName: the last name of this client.
      */
-    public ClientInfo(String emailAddress, String address, String phoneNumber, String firstName,
-                      String lastName) {
+    public ClientUserInfo(String emailAddress, String address, String phoneNumber, String firstName,
+                          String lastName) {
         super(emailAddress);
         this.firstName = firstName;
         this.lastName = lastName;

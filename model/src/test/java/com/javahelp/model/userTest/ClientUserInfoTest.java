@@ -2,19 +2,19 @@ package com.javahelp.model.userTest;
 
 import static org.junit.Assert.assertEquals;
 
-import com.javahelp.model.user.ClientInfo;
+import com.javahelp.model.user.ClientUserInfo;
 import com.javahelp.model.user.UserType;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class ClientInfoTest {
+public class ClientUserInfoTest {
 
-    ClientInfo c;
+    ClientUserInfo c;
 
     @Before
     public void setUp() {
-        c = new ClientInfo("uoft@utoronto.ca",
+        c = new ClientUserInfo("uoft@utoronto.ca",
                 "University of Toronto", "000-123-4567",
                 "Johnny", "Meng");
     }

@@ -4,18 +4,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import com.javahelp.model.user.ProviderInfo;
+import com.javahelp.model.user.ProviderUserInfo;
 import com.javahelp.model.user.UserType;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class ProviderInfoTest {
-    ProviderInfo p;
+public class ProviderUserInfoTest {
+    ProviderUserInfo p;
 
     @Before
     public void setUp() {
-        p = new ProviderInfo("uoft@utoronto.ca", "St. George",
+        p = new ProviderUserInfo("uoft@utoronto.ca", "St. George",
                 "111-234-5678", "University of Toronto");
     }
 

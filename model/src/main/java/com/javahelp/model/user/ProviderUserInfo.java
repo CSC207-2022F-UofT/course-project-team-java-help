@@ -3,7 +3,7 @@ package com.javahelp.model.user;
 /**
  * Stores the information of a provider.
  */
-public class ProviderInfo extends UserInfo {
+public class ProviderUserInfo extends UserInfo {
     private String practiceName;
     private boolean certified;
     private String address;
@@ -17,8 +17,8 @@ public class ProviderInfo extends UserInfo {
      * @param phoneNumber: the phone number of the provider.
      * @param practiceName: the name of the provider.
      */
-    public ProviderInfo(String emailAddress, String address, String phoneNumber,
-                        String practiceName) {
+    public ProviderUserInfo(String emailAddress, String address, String phoneNumber,
+                            String practiceName) {
         super(emailAddress);
         this.practiceName = practiceName;
         this.certified = false;
@@ -56,7 +56,7 @@ public class ProviderInfo extends UserInfo {
     /**
      * Sets the certification status of this provider.
      *
-     * @param certified: true or false; whether this provider is certified
+     * @param certified: true or false; whether this provider is certified.
      */
     public void setCertified(boolean certified) {
         this.certified = certified;
