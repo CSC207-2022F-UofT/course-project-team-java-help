@@ -9,17 +9,18 @@ import org.junit.*;
 
 import static org.junit.Assert.*;
 
+/**
+ * These are tests for User Entity
+ */
 public class UserEntityTest {
 
-    /** These are tests for User Entity
-     *
+    /**
      * --- Attributes ----
      * user1 - The first user object
      * user2 - the second user object
      * userinfo1 - the information of the first user
      * userinfo2 - the information of the second user
      */
-
     private User user1;
 
     private User user2;

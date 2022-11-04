@@ -2,62 +2,61 @@ package com.javahelp.model.userEntityTest;
 
 import java.util.Base64;
 
+/**
+ * A class for the password of a user entity
+ */
 public class UserPassword {
+
     /**
-     * A class for hashing a user's password
      * --- Attributes ---
      * salt - a current salt of a user
      * hash - the current and hashed password of the user
-     * user - the user object
      */
-
     private byte[] salt;
 
     private byte[] hash;
 
-    private User user;
-
     /** The constructor to build an instance of the password of a user account.
      *
      * @param salt - The currently used salt for the hashed password.
-     * @param hash - The already-hashed password
-     * @param user - the current user account
+     *        hash - The already-hashed password
      */
-
-    public UserPassword(User user, byte[] salt, byte[] hash){
-        this.user = user;
+    public UserPassword(byte[] salt, byte[] hash){
         this.salt = salt;
         this.hash = hash;
     }
 
-    /** Getters of the current attributes of UserPassword
+    /** Get the current hashed password of UserPassword
      *
-     * @return Hash - the currently hashed password
-     *         Salt - the currently used salt
-     *         User - the current user
+     * @return The currently hashed password
      */
-
     public byte[] getHash() {
         return hash;
     }
 
+    /** Get the current salt of UserPassword
+     *
+     * @return The currently used salt
+     */
     public byte[] getSalt() {
         return salt;
     }
 
-
-    /** The setters of the current attributes. Please note that only current salt and
-     * password can be set, while the current user always stays the same
-     * in this UserPassword entity!
+    /** Set current hashed password to the user.
+     * Please note that only hashed password can be set, while the current user always
+     * stays the same in this UserPassword entity!
      *
      * @param hash - the currently hashed password
-     *        salt - the current salt
      */
-
     public void setHash(byte[] hash) {
         this.hash = hash;
     }
 
+    /** Set the current salt.
+     * Please note that the consistency in user object applies to salt, too.
+     *
+     * @param salt - the current salt
+     */
     public void setSalt(byte[] salt) {
         this.salt = salt;
     }
@@ -71,15 +70,8 @@ public class UserPassword {
      */
     private static byte[] combineByteArrays (byte[] salt, byte[] hash){
         byte[] representation = new byte[salt.length + hash.length];
-        int position = 0;
-        for (byte element: salt){
-            representation[position] = element;
-            position++;
-        }
-        for (byte element: hash){
-            representation[position] = element;
-            position++;
-        }
+        System.arraycopy(salt, 0, representation, 0, salt.length);
+        System.arraycopy(hash, 0, representation, salt.length, hash.length);
         return representation;
     }
 
@@ -90,10 +82,8 @@ public class UserPassword {
      *
      * @return a Base64 String representation of the given array.
      */
-
     public static String getBase64SaltHash(UserPassword password){
         byte[] concatenated = UserPassword.combineByteArrays(password.salt, password.hash);
-        return "The Base 64 representation of "+ password.user + "is: " +
-                Base64.getEncoder().encodeToString(concatenated);
+        return Base64.getEncoder().encodeToString(concatenated);
     }
 }
