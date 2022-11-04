@@ -11,12 +11,22 @@ import static org.junit.Assert.*;
 
 public class UserEntityTest {
 
-    User user1;
-    User user2;
+    /** These are tests for User Entity
+     *
+     * --- Attributes ----
+     * user1 - The first user object
+     * user2 - the second user object
+     * userinfo1 - the information of the first user
+     * userinfo2 - the information of the second user
+     */
 
-    UserInfo userinfo1;
+    private User user1;
 
-    UserInfo userinfo2;
+    private User user2;
+
+    private UserInfo userinfo1;
+
+    private UserInfo userinfo2;
 
     @Before
     public void setUp() {
@@ -35,8 +45,8 @@ public class UserEntityTest {
     @Test(timeout = 50)
     public void testUserInfo() {
         assertEquals(userinfo1, user1.getUserInfo());
-        assertNotEquals("This is not the user info of the current user!", userinfo1,
-                user2.getUserInfo());
+        assertNotEquals("This is not the user info of the current user!", userinfo2,
+                user1.getUserInfo());
     }
 
     @Test(timeout = 50)

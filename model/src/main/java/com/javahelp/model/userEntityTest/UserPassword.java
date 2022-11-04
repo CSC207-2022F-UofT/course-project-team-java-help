@@ -5,7 +5,10 @@ import java.util.Base64;
 public class UserPassword {
     /**
      * A class for hashing a user's password
-     *
+     * --- Attributes ---
+     * salt - a current salt of a user
+     * hash - the current and hashed password of the user
+     * user - the user object
      */
 
     private byte[] salt;
