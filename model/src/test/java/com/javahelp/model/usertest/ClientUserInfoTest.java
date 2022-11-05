@@ -1,4 +1,4 @@
-package com.javahelp.model.userTest;
+package com.javahelp.model.usertest;
 
 import static org.junit.Assert.assertEquals;
 
