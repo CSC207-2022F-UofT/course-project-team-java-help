@@ -10,18 +10,23 @@ import static org.junit.Assert.*;
 public class UserEntityTest {
 
     /**
-     * --- Attributes ----
-     * user1 - The first user object
-     * user2 - the second user object
-     * userinfo1 - the information of the first user
-     * userinfo2 - the information of the second user
+     * The first user object
      */
     private User user1;
 
+    /**
+     * The second user object
+     */
     private User user2;
 
+    /**
+     * The info of the first user
+     */
     private UserInfo userinfo1;
 
+    /**
+     * The info of the second user
+     */
     private UserInfo userinfo2;
 
     @Before

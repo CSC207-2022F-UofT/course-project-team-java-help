@@ -8,12 +8,13 @@ import java.util.Base64;
 public class UserPassword {
 
     /**
-     * --- Attributes ---
-     * salt - the current salt of a user
-     * hash - the current and hashed password of the user
+     * The current salt of this user
      */
     private byte[] salt;
 
+    /**
+     * The current hashed password of this user
+     */
     private byte[] hash;
 
     /** The constructor to build an instance of the password of a user account.
