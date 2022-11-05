@@ -12,7 +12,7 @@ public class User {
     /**
      * --- Attributes---
      * stringID - the ID of the user account
-     * userInfo - contains all information of the user. It varies based on Client/Provider
+     * userInfo - all information of the user. It varies based on Client/Provider
      */
     private String stringID;
     private UserInfo userInfo;
@@ -21,9 +21,9 @@ public class User {
     /**
      * A constructor for the current User Entity
      *
-     * @param stringID - The ID of the account
-     * @param userInfo - The account information
-     * @param username - The username of the account (randomly generated)
+     * @param stringID the ID of the account
+     * @param userInfo the account information
+     * @param username the username of the account (randomly generated)
      */
     public User(String stringID, UserInfo userInfo, String username) {
         this.stringID = stringID;
@@ -34,7 +34,7 @@ public class User {
     /**
      * Set the StringID for the user
      *
-     * @param stringID - an updated ID of the account
+     * @param stringID an updated ID of the account
      */
     public void setStringID(String stringID) {
         this.stringID = stringID;
@@ -43,14 +43,14 @@ public class User {
     /**
      * Set the StringID for the user
      *
-     * @param userInfo - an updated ID of the account
+     * @param userInfo an updated ID of the account
      */
     public void setUserInfo(UserInfo userInfo) { this.userInfo = userInfo; }
 
     /**
      * Set the username for the user
      *
-     * @param username - an updated username of the account
+     * @param username an updated username of the account
      */
     public void setUsername(String username){
         this.username = username;
@@ -59,7 +59,7 @@ public class User {
     /**
      * Get the current user entity ID.
      *
-     * @return The current ID of the user in form of a String
+     * @return the current ID of the user in form of a String
      */
     public String getStringID() {
         return stringID;
@@ -67,7 +67,7 @@ public class User {
 
     /**
      * Get the current information of this user entity.
-     * @return The user information of the user in form of a UserInfo instance
+     * @return the user information of the user in form of a UserInfo instance
      */
     public UserInfo getUserInfo() {
         return userInfo;
@@ -76,7 +76,7 @@ public class User {
     /**
      * Get the current username of this user.
      *
-     * @return The username of this user.
+     * @return the username of this user.
      */
     public String getUsername(){
         return username;

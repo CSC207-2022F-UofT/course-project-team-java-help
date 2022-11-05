@@ -9,7 +9,7 @@ public class UserPassword {
 
     /**
      * --- Attributes ---
-     * salt - a current salt of a user
+     * salt - the current salt of a user
      * hash - the current and hashed password of the user
      */
     private byte[] salt;
@@ -18,8 +18,8 @@ public class UserPassword {
 
     /** The constructor to build an instance of the password of a user account.
      *
-     * @param salt - The currently used salt for the hashed password.
-     * @param hash - The already-hashed password
+     * @param salt the currently used salt for the hashed password.
+     * @param hash the already-hashed password
      */
     public UserPassword(byte[] salt, byte[] hash){
         this.salt = salt;
@@ -43,19 +43,16 @@ public class UserPassword {
     }
 
     /** Set current hashed password to the user.
-     * Please note that only hashed password can be set, while the current user always
-     * stays the same in this UserPassword entity!
      *
-     * @param hash - the currently hashed password
+     * @param hash the currently hashed password
      */
     public void setHash(byte[] hash) {
         this.hash = hash;
     }
 
     /** Set the current salt.
-     * Please note that the consistency in user object applies to salt, too.
      *
-     * @param salt - the current salt
+     * @param salt the current salt
      */
     public void setSalt(byte[] salt) {
         this.salt = salt;
@@ -63,13 +60,13 @@ public class UserPassword {
 
     /** A helper method to combine salt and hashed passwords together into one array.
      *
-     * @param salt - the current used salt
-     * @param hash - the current hashed password of this user
+     * @param salt the current used salt
+     * @param hash the current hashed password of this user
      *
-     * @return A concatenated array of salt and hashed password, with salt being up front.
+     * @return a concatenated array of salt and hashed password, with salt being up front.
      */
     private static byte[] combineByteArrays (byte[] salt, byte[] hash){
-        if (salt.length == 0 || hash.length == 0) {
+        if (hash.length == 0) {
             throw new ArrayIndexOutOfBoundsException("The given password is empty. Please " +
                     "give it a value!");
         }
@@ -82,7 +79,7 @@ public class UserPassword {
     /** A function that takes an array of both salt and hashed password and return a Base64 String
      * representation of that array.
      *
-     * @param password - a concatenated array of both salt and hashed password
+     * @param password a concatenated array of both salt and hashed password
      *
      * @return a Base64 String representation of the given array.
      */
