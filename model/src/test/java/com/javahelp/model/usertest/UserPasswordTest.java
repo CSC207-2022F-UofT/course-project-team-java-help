@@ -1,4 +1,4 @@
-package com.javahelp.model.userEntityTest;
+package com.javahelp.model.usertest;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -6,10 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import com.javahelp.model.user.UserInfo;
-import com.javahelp.model.user.ClientUserInfo;
-import com.javahelp.model.user.UserType;
-import com.javahelp.model.user.ProviderUserInfo;
+import com.javahelp.model.user.UserPassword;
 
 import java.util.Base64;
 import java.util.Random;

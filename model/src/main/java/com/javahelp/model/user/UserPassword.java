@@ -1,4 +1,4 @@
-package com.javahelp.model.userEntityTest;
+package com.javahelp.model.user;
 
 import java.util.Base64;
 
@@ -19,7 +19,7 @@ public class UserPassword {
     /** The constructor to build an instance of the password of a user account.
      *
      * @param salt - The currently used salt for the hashed password.
-     *        hash - The already-hashed password
+     * @param hash - The already-hashed password
      */
     public UserPassword(byte[] salt, byte[] hash){
         this.salt = salt;
@@ -69,6 +69,10 @@ public class UserPassword {
      * @return A concatenated array of salt and hashed password, with salt being up front.
      */
     private static byte[] combineByteArrays (byte[] salt, byte[] hash){
+        if (salt.length == 0 || hash.length == 0) {
+            throw new ArrayIndexOutOfBoundsException("The given password is empty. Please " +
+                    "give it a value!");
+        }
         byte[] representation = new byte[salt.length + hash.length];
         System.arraycopy(salt, 0, representation, 0, salt.length);
         System.arraycopy(hash, 0, representation, salt.length, hash.length);
