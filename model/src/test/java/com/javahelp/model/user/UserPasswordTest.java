@@ -1,12 +1,10 @@
-package com.javahelp.model.usertest;
+package com.javahelp.model.user;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-
-import com.javahelp.model.user.UserPassword;
 
 import java.util.Base64;
 import java.util.Random;

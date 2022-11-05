@@ -1,8 +1,4 @@
-package com.javahelp.model.usertest;
-
-import com.javahelp.model.user.User;
-import com.javahelp.model.user.UserInfo;
-import com.javahelp.model.user.ClientUserInfo;
+package com.javahelp.model.user;
 
 import org.junit.*;
 
