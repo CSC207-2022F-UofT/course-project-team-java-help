@@ -1,8 +1,4 @@
 package com.javahelp.model.user;
-import com.javahelp.model.user.UserInfo;
-import com.javahelp.model.user.ClientUserInfo;
-import com.javahelp.model.user.UserType;
-import com.javahelp.model.user.ProviderUserInfo;
 
 /**
  * A class for a user entity
@@ -10,12 +6,18 @@ import com.javahelp.model.user.ProviderUserInfo;
 public class User {
 
     /**
-     * --- Attributes---
-     * stringID - the ID of the user account
-     * userInfo - all information of the user. It varies based on Client/Provider
+     * The ID of the user account (randomly generated and immutable)
      */
     private String stringID;
+
+    /**
+     * The information of the current user
+     */
     private UserInfo userInfo;
+
+    /**
+     * The username of the current user
+     */
     private String username;
 
     /**
