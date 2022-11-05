@@ -1,9 +1,8 @@
-package com.javahelp.model.userEntityTest;
+package com.javahelp.model.usertest;
 
+import com.javahelp.model.user.User;
 import com.javahelp.model.user.UserInfo;
 import com.javahelp.model.user.ClientUserInfo;
-import com.javahelp.model.user.UserType;
-import com.javahelp.model.user.ProviderUserInfo;
 
 import org.junit.*;
 
@@ -39,8 +38,8 @@ public class UserEntityTest {
                 "0 This St., Porters Lake", "0000000001",
                 "First", "Last");
 
-        this.user1 = new User("ABC75736", userinfo1);
-        this.user2 = new User(" ", userinfo2);
+        this.user1 = new User("ABC75736", userinfo1, "OnceInABlueMoon101");
+        this.user2 = new User(" ", userinfo2, "S6C0ND57687378");
     }
 
     @Test(timeout = 50)
@@ -57,21 +56,39 @@ public class UserEntityTest {
     }
 
     @Test(timeout = 50)
-    public void testSetUserID(){
+    public void testUsername(){
+        assertEquals("S6C0ND57687378", user2.getUsername());
+        assertNotEquals("OnceInABlueMoon101", user2.getUsername());
+    }
+
+    @Test(timeout = 50)
+    public void testSetUserInfo(){
         ClientUserInfo newInfo = new ClientUserInfo("abcdef2@mail.utoronto.ca",
                 "100 Yonge St., Toronto", "0123459876",
                 "Client", "Info");
         user1.setUserInfo(newInfo);
-        assertNotEquals("The information has not been updated!", userinfo1, user1.getUserInfo());
+        assertNotEquals("The information has not been updated!",
+                userinfo1, user1.getUserInfo());
         assertEquals(newInfo, user1.getUserInfo());
     }
 
     @Test(timeout = 50)
-    public void testSetUsername(){
+    public void testSetUserID(){
         assertNotEquals("This is not the correct username!", "ABC7573 ", user1.getStringID());
         user1.setStringID("ABC7573 ");
         assertEquals("ABC7573 ", user1.getStringID());
         user2.setStringID("SECOND");
         assertEquals("SECOND", user2.getStringID());
+    }
+
+    @Test(timeout = 50)
+    public void testSetUsername(){
+        // Not setting a new username yet
+        String newUsername = "I2E4SG789";
+        assertNotEquals(newUsername, user1.getUsername());
+
+        // Until now
+        user1.setUsername(newUsername);
+        assertEquals(newUsername, user1.getUsername());
     }
 }

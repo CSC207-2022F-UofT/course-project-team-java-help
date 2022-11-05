@@ -1,4 +1,4 @@
-package com.javahelp.model.userEntityTest;
+package com.javahelp.model.user;
 import com.javahelp.model.user.UserInfo;
 import com.javahelp.model.user.ClientUserInfo;
 import com.javahelp.model.user.UserType;
@@ -16,22 +16,25 @@ public class User {
      */
     private String stringID;
     private UserInfo userInfo;
+    private String username;
 
     /**
      * A constructor for the current User Entity
      *
-     * @param stringID - the ID of the account
-     * @param userInfo - The account information.
+     * @param stringID - The ID of the account
+     * @param userInfo - The account information
+     * @param username - The username of the account (randomly generated)
      */
-    public User(String stringID, UserInfo userInfo) {
+    public User(String stringID, UserInfo userInfo, String username) {
         this.stringID = stringID;
         this.userInfo = userInfo;
+        this.username = username;
     }
 
     /**
      * Set the StringID for the user
      *
-     * @param stringID - the updated ID of the account
+     * @param stringID - an updated ID of the account
      */
     public void setStringID(String stringID) {
         this.stringID = stringID;
@@ -40,9 +43,18 @@ public class User {
     /**
      * Set the StringID for the user
      *
-     * @param userInfo - the updated ID of the account
+     * @param userInfo - an updated ID of the account
      */
     public void setUserInfo(UserInfo userInfo) { this.userInfo = userInfo; }
+
+    /**
+     * Set the username for the user
+     *
+     * @param username - an updated username of the account
+     */
+    public void setUsername(String username){
+        this.username = username;
+    }
 
     /**
      * Get the current user entity ID.
@@ -59,5 +71,14 @@ public class User {
      */
     public UserInfo getUserInfo() {
         return userInfo;
+    }
+
+    /**
+     * Get the current username of this user.
+     *
+     * @return The username of this user.
+     */
+    public String getUsername(){
+        return username;
     }
 }
