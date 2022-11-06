@@ -8,7 +8,7 @@ public class User {
     /**
      * The ID of the user account (randomly generated and immutable)
      */
-    private String stringID;
+    private final String stringID;
 
     /**
      * The information of the current user
@@ -34,20 +34,13 @@ public class User {
     }
 
     /**
-     * Set the StringID for the user
+     * Set the userinfo for the user
      *
-     * @param stringID an updated ID of the account
+     * @param userInfo an updated userinfo of the account
      */
-    public void setStringID(String stringID) {
-        this.stringID = stringID;
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
     }
-
-    /**
-     * Set the StringID for the user
-     *
-     * @param userInfo an updated ID of the account
-     */
-    public void setUserInfo(UserInfo userInfo) { this.userInfo = userInfo; }
 
     /**
      * Set the username for the user

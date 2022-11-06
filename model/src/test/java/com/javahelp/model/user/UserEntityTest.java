@@ -74,15 +74,6 @@ public class UserEntityTest {
     }
 
     @Test(timeout = 50)
-    public void testSetUserID(){
-        assertNotEquals("This is not the correct username!", "ABC7573 ", user1.getStringID());
-        user1.setStringID("ABC7573 ");
-        assertEquals("ABC7573 ", user1.getStringID());
-        user2.setStringID("SECOND");
-        assertEquals("SECOND", user2.getStringID());
-    }
-
-    @Test(timeout = 50)
     public void testSetUsername(){
         // Not setting a new username yet
         String newUsername = "I2E4SG789";
