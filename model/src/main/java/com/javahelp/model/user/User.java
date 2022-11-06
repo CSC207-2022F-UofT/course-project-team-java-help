@@ -6,7 +6,8 @@ package com.javahelp.model.user;
 public class User {
 
     /**
-     * The ID of the user account (randomly generated and immutable)
+     * The ID of the user account (randomly generated and immutable ONLY when it is assigned
+     * and saved/entered to the database)
      */
     private String stringID;
 
