@@ -17,7 +17,8 @@ public class UserPassword {
      */
     private byte[] hash;
 
-    /** The constructor to build an instance of the password of a user account.
+    /**
+     * The constructor to build an instance of the password of a user account.
      *
      * @param salt the currently used salt for the hashed password.
      * @param hash the already-hashed password
@@ -27,7 +28,8 @@ public class UserPassword {
         this.hash = hash;
     }
 
-    /** Get the current hashed password of UserPassword
+    /**
+     * Get the current hashed password of UserPassword
      *
      * @return The currently hashed password
      */
@@ -35,7 +37,8 @@ public class UserPassword {
         return hash;
     }
 
-    /** Get the current salt of UserPassword
+    /**
+     * Get the current salt of UserPassword
      *
      * @return The currently used salt
      */
@@ -43,7 +46,8 @@ public class UserPassword {
         return salt;
     }
 
-    /** Set current hashed password to the user.
+    /**
+     * Set current hashed password to the user.
      *
      * @param hash the currently hashed password
      */
@@ -51,7 +55,8 @@ public class UserPassword {
         this.hash = hash;
     }
 
-    /** Set the current salt.
+    /**
+     * Set the current salt.
      *
      * @param salt the current salt
      */
@@ -59,7 +64,8 @@ public class UserPassword {
         this.salt = salt;
     }
 
-    /** A helper method to combine salt and hashed passwords together into one array.
+    /**
+     * A helper method to combine salt and hashed passwords together into one array.
      *
      * @param salt the current used salt
      * @param hash the current hashed password of this user
@@ -77,7 +83,8 @@ public class UserPassword {
         return representation;
     }
 
-    /** A function that takes an array of both salt and hashed password and return a Base64 String
+    /**
+     * A function that takes an array of both salt and hashed password and return a Base64 String
      * representation of that array.
      *
      * @param password a concatenated array of both salt and hashed password

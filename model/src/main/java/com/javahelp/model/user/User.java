@@ -23,9 +23,9 @@ public class User {
     /**
      * A constructor for the current User Entity
      *
-     * @param stringID the ID of the account (randomly generated)
+     * @param stringID the ID of the account (randomly generated & stays consistent once generated)
      * @param userInfo the account information
-     * @param username the username of the account
+     * @param username the username of the accoun
      */
     public User(String stringID, UserInfo userInfo, String username) {
         this.stringID = stringID;
@@ -62,6 +62,7 @@ public class User {
 
     /**
      * Get the current information of this user entity.
+     *
      * @return the user information of the user in form of a UserInfo instance
      */
     public UserInfo getUserInfo() {
