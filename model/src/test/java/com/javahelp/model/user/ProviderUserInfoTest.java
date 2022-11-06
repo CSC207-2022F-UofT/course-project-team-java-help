@@ -1,11 +1,8 @@
-package com.javahelp.model.userTest;
+package com.javahelp.model.user;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
-import com.javahelp.model.user.ProviderUserInfo;
-import com.javahelp.model.user.UserType;
 
 import org.junit.Before;
 import org.junit.Test;
