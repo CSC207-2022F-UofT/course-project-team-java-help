@@ -23,9 +23,9 @@ public class User {
     /**
      * A constructor for the current User Entity
      *
-     * @param stringID the ID of the account
+     * @param stringID the ID of the account (randomly generated)
      * @param userInfo the account information
-     * @param username the username of the account (randomly generated)
+     * @param username the username of the account
      */
     public User(String stringID, UserInfo userInfo, String username) {
         this.stringID = stringID;
