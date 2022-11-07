@@ -2,7 +2,7 @@ package com.javahelp.model.token;
 
 import com.javahelp.model.user.ClientUserInfo;
 import com.javahelp.model.user.User;
-import org.joda.time.*;
+import java.time.*;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
@@ -12,18 +12,18 @@ import java.time.format.DateTimeFormatter;
  * Unit tests for {@link Token}
  */
 public class TokenTest {
-
     // Setting up the user and token
-    ClientUserInfo info = new ClientUserInfo("user1@example.com", "New York",
+    LocalDate issued = LocalDate.of(2022, 11, 06);
+    LocalDate expiry = LocalDate.of(2022, 11, 20);
+    ClientUserInfo info = new ClientUserInfo("user@example.com", "NY",
             "111","David", "Smith");
     User user1 = new User("123", info, "user1");
-    Token token = new Token("This is Test token", user1);
+    Token token = new Token("[!jkl123", issued, expiry, "This is Test token", user1);
 
     @Test(timeout = 50)
     public void getToken(){
-        token.setToken("[!jkl123");
-        String expected_token = "[!jkl123";
-        assertEquals(expected_token,token.getToken());
+        String expectedToken = "[!jkl123";
+        assertEquals(expectedToken,token.getToken());
     }
 
     @Test(timeout = 50)
@@ -33,17 +33,13 @@ public class TokenTest {
 
     @Test(timeout = 50)
     public void getIssuedDate(){
-        DateTime issuedDate = token.getIssuedDate();
-        token.setIssuedDate(issuedDate);
-        DateTime expected_date = token.getIssuedDate();
-        assertEquals(expected_date, issuedDate);
+        LocalDate expectedDate = LocalDate.of(2022, 11, 06);
+        assertEquals(expectedDate,token.getIssuedDate());
     }
 
     @Test(timeout = 50)
     public void getExpiryDate(){
-        DateTime expiredDate = token.getExpiryDate();
-        token.setExpiryDate(expiredDate);
-        DateTime expected_date = token.getExpiryDate();
-        assertEquals(expected_date, expiredDate);
+        LocalDate expectedDate = LocalDate.of(2022, 11, 20);
+        assertEquals(expectedDate, token.getExpiryDate());
     }
 }

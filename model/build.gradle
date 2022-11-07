@@ -10,6 +10,3 @@ java {
 dependencies {
     testImplementation 'junit:junit:4.13.2'
 }
-dependencies {
-    implementation 'joda-time:joda-time:2.9.4'
-}
