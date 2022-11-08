@@ -52,6 +52,14 @@ public class ProviderUserInfoTest {
     }
 
     @Test(timeout = 50)
+    public void testSetAttribute() {
+        p.setAttribute("Gender", 0);
+        assertEquals(Integer.valueOf(0), p.getAttribute("Gender"));
+        assertEquals(Integer.valueOf(-1), p.getAttribute("Age"));
+    }
+
+
+    @Test(timeout = 50)
     public void testGetType() {
         assertEquals(UserType.PROVIDER, p.getType());
     }

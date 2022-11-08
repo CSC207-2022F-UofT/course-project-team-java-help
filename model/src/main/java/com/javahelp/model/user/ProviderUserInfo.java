@@ -1,5 +1,7 @@
 package com.javahelp.model.user;
 
+import java.util.HashMap;
+
 /**
  * Stores the information of a provider.
  */
@@ -8,6 +10,7 @@ public class ProviderUserInfo extends UserInfo {
     private boolean certified;
     private String address;
     private String phoneNumber;
+    private HashMap<String, Integer> attributeMap;
 
     /**
      * Constructs a ProviderInfo object.
@@ -24,6 +27,7 @@ public class ProviderUserInfo extends UserInfo {
         this.certified = false;
         this.address = address;
         this.phoneNumber = phoneNumber;
+        this.attributeMap = new HashMap<>();
     }
 
     /**
@@ -96,6 +100,18 @@ public class ProviderUserInfo extends UserInfo {
      */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public void setAttribute(String question, Integer answer) {
+        this.attributeMap.put(question, answer);
+    }
+
+    /**
+     * Gets the an attribute of this client.
+     * @return the answer to a question (attribute) of this client (or -1 if question does not exist).
+     */
+    public Integer getAttribute(String question) {
+        return this.attributeMap.getOrDefault(question, -1);
     }
 
     @Override

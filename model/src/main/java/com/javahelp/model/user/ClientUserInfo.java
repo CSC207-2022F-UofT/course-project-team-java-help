@@ -1,5 +1,7 @@
 package com.javahelp.model.user;
 
+import java.util.HashMap;
+
 /**
  * Stores the information of a client.
  */
@@ -8,6 +10,7 @@ public class ClientUserInfo extends UserInfo {
     private String lastName;
     private String address;
     private String phoneNumber;
+    private HashMap<String, Integer> attributeMap;
 
     /**
      * Constructs a ClientInfo object.
@@ -25,6 +28,7 @@ public class ClientUserInfo extends UserInfo {
         this.lastName = lastName;
         this.address = address;
         this.phoneNumber = phoneNumber;
+        this.attributeMap = new HashMap<>();
     }
 
     /**
@@ -97,6 +101,25 @@ public class ClientUserInfo extends UserInfo {
      */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    /**
+     * Adds an attribute to this client.
+     * Should be called when SurveyResponse is updated.
+     *
+     * @param question: one question from the Survey.
+     * @param answer: one integer answer from the Survey. (only integers answers are allowed for now)
+     */
+    public void setAttribute(String question, Integer answer) {
+        this.attributeMap.put(question, answer);
+    }
+
+    /**
+     * Gets the an attribute of this client.
+     * @return the answer to a question (attribute) of this client (or -1 if question does not exist).
+     */
+    public Integer getAttribute(String question) {
+        return this.attributeMap.getOrDefault(question, -1);
     }
 
     @Override
