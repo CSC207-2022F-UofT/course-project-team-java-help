@@ -115,11 +115,19 @@ public class ClientUserInfo extends UserInfo {
     }
 
     /**
+     * Gets one attribute of this client.
+     * @return the answer to a question (attribute) of this client (or -1 if question does not exist).
+     */
+    public Integer getSingleAttribute(String question) {
+        return this.attributeMap.getOrDefault(question, -1);
+    }
+
+    /**
      * Gets the an attribute of this client.
      * @return the answer to a question (attribute) of this client (or -1 if question does not exist).
      */
-    public Integer getAttribute(String question) {
-        return this.attributeMap.getOrDefault(question, -1);
+    public HashMap<String, Integer> getAllAttribute() {
+        return this.attributeMap;
     }
 
     @Override

@@ -7,6 +7,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.HashMap;
+
 public class ProviderUserInfoTest {
     ProviderUserInfo p;
 
@@ -52,12 +54,24 @@ public class ProviderUserInfoTest {
     }
 
     @Test(timeout = 50)
-    public void testSetAttribute() {
+    public void testSetSingleAttributeNonExist() {
         p.setAttribute("Gender", 0);
-        assertEquals(Integer.valueOf(0), p.getAttribute("Gender"));
-        assertEquals(Integer.valueOf(-1), p.getAttribute("Age"));
+        assertEquals(Integer.valueOf(-1), p.getSingleAttribute("Age"));
     }
 
+    @Test(timeout = 50)
+    public void testSetMultipleAttribute() {
+        p.setAttribute("Gender", 0);
+        p.setAttribute("Age", 20);
+        p.setAttribute("Symptom", 3);
+
+        HashMap<String, Integer> attributes = new HashMap<String, Integer>();
+        attributes.put("Gender", 0);
+        attributes.put("Age", 20);
+        attributes.put("Symptom", 3);
+
+        assertEquals(attributes, p.getAllAttribute());
+    }
 
     @Test(timeout = 50)
     public void testGetType() {
