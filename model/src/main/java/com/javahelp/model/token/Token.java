@@ -38,13 +38,14 @@ public class Token {
 
     /**
      * Creates a new {@link Token}
-     * @param token {@link String} of this {@link Token}
+     *
+     * @param token  {@link String} of this {@link Token}
      * @param issued {@link LocalDate} of this {@link Token}
      * @param expiry {@link LocalDate} of this {@link Token}
-     * @param tag {@link String} of this {@link Token}
-     * @param user {@link User} who requested this {@link Token}
+     * @param tag    {@link String} of this {@link Token}
+     * @param user   {@link User} who requested this {@link Token}
      */
-    public Token(String token, LocalDate issued, LocalDate expiry, String tag, User user){
+    public Token(String token, LocalDate issued, LocalDate expiry, String tag, User user) {
         // Creating a token using functions from SecureRandom
         this.token = token;
         this.issued = issued;
@@ -54,26 +55,30 @@ public class Token {
     }
 
     /**
-     *
      * @return unique {@link String} token for this {@link Token}
      */
-    public String getToken(){return this.token;}
+    public String getToken() {
+        return this.token;
+    }
 
     /**
-     *
      * @return {@link String} tag for this {@link Token}
      */
-    public String getTag(){return this.tag;}
+    public String getTag() {
+        return this.tag;
+    }
 
     /**
-     *
      * @return {@link LocalDate} issued date for this {@link Token}
      */
-    public LocalDate getIssuedDate(){ return this.issued;}
+    public LocalDate getIssuedDate() {
+        return this.issued;
+    }
 
     /**
-     *
      * @return {@link LocalDate expiry date for this {@link Token}
      */
-    public LocalDate getExpiryDate(){return this.expiry;}
+    public LocalDate getExpiryDate() {
+        return this.expiry;
+    }
 }
