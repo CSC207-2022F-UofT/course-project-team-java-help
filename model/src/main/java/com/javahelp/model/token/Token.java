@@ -76,4 +76,12 @@ public class Token {
      * @return {@link LocalDate expiry date for this {@link Token}
      */
     public LocalDate getExpiryDate(){return this.expiry;}
+
+    /**
+     *
+     * @return {@link User} this {@link Token} is valid for
+     */
+    public User getUser() {
+        return this.user;
+    }
 }
