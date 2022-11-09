@@ -76,7 +76,7 @@ public class Token {
     }
 
     /**
-     * @return {@link LocalDate expiry date for this {@link Token}
+     * @return {@link LocalDate} expiry date for this {@link Token}
      */
     public LocalDate getExpiryDate() {
         return this.expiry;
