@@ -1,13 +1,7 @@
 package com.javahelp.model.token;
 
 import com.javahelp.model.user.User;
-
-import org.w3c.dom.ls.LSOutput;
-
 import java.time.*;
-import java.security.SecureRandom;
-
-import javax.crypto.spec.PSource;
 
 /**
  * Representation of token entity
