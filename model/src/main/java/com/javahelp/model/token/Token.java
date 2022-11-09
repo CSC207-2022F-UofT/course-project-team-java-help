@@ -6,7 +6,6 @@ import java.time.*;
 /**
  * Representation of token entity
  */
-
 public class Token {
     /**
      * Token requested by the user

@@ -2,6 +2,8 @@ package com.javahelp.frontend;
 
 import static org.junit.Assert.assertEquals;
 
+import com.javahelp.model.ExampleEntity;
+
 import org.junit.Test;
 
 /**
