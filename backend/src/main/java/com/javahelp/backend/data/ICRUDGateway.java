@@ -1,4 +1,4 @@
-package com.javahelp.backend.core.gateway;
+package com.javahelp.backend.data;
 
 /**
  * Interface specifying generic CRUD operations for the provided type.
