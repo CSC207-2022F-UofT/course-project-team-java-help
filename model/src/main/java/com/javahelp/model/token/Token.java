@@ -60,6 +60,14 @@ public class Token {
     }
 
     /**
+     * Sets the token {@link String} for this {@link Token}
+     * @param s {@link String} for the {@link Token}
+     */
+    public void setToken(String s) {
+        token = s;
+    }
+
+    /**
      * @return {@link String} tag for this {@link Token}
      */
     public String getTag() {
