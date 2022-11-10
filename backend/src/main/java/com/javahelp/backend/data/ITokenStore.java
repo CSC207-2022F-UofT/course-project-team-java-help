@@ -1,5 +1,6 @@
 package com.javahelp.backend.data;
 
+import com.amazonaws.regions.Regions;
 import com.javahelp.backend.data.ICRUDGateway;
 import com.javahelp.model.token.Token;
 import com.javahelp.model.user.User;
@@ -8,6 +9,14 @@ import com.javahelp.model.user.User;
  * Interface for classes interact with {@link Token}s on a database
  */
 public interface ITokenStore extends ICRUDGateway<Token, String> {
+
+    /**
+     *
+     * @return the default implementation of {@link ITokenStore}
+     */
+    static ITokenStore getDefaultImplementation() {
+        return new DynamoDBTokenStore("javahelpBackendTokens", Regions.US_EAST_1);
+    }
 
     /**
      * Determines whether a {@link Token} matching the parameters exists.
