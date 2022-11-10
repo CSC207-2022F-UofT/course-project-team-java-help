@@ -28,7 +28,7 @@ abstract class DynamoDBStore {
     /**
      * @return {@link AmazonDynamoDB} client
      */
-    private AmazonDynamoDB getClient() {
+    protected AmazonDynamoDB getClient() {
         return client;
     }
 }
