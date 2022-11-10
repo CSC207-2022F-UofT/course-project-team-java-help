@@ -17,12 +17,12 @@ public class Token {
     /**
      * Expiry date of the token.
      */
-    private LocalDate expiry;
+    private Instant expiry;
 
     /**
      * Issued date of the token.
      */
-    private LocalDate issued;
+    private Instant issued;
 
     /**
      * ID of {@link User} for {@link Token}.
@@ -39,12 +39,12 @@ public class Token {
      * Creates a new {@link Token}
      *
      * @param token  {@link String} of this {@link Token}
-     * @param issued {@link LocalDate} of this {@link Token}
-     * @param expiry {@link LocalDate} of this {@link Token}
+     * @param issued {@link Instant} of this {@link Token}
+     * @param expiry {@link Instant} of this {@link Token}
      * @param tag    {@link String} of this {@link Token}
      * @param userId ID of {@link User} who requested this {@link Token}
      */
-    public Token(String token, LocalDate issued, LocalDate expiry, String tag, String userId) {
+    public Token(String token, Instant issued, Instant expiry, String tag, String userId) {
         this.token = token;
         this.issued = issued;
         this.expiry = expiry;
@@ -67,16 +67,16 @@ public class Token {
     }
 
     /**
-     * @return {@link LocalDate} issued date for this {@link Token}
+     * @return {@link Instant} issued date for this {@link Token}
      */
-    public LocalDate getIssuedDate() {
+    public Instant getIssuedDate() {
         return this.issued;
     }
 
     /**
-     * @return {@link LocalDate} expiry date for this {@link Token}
+     * @return {@link Instant} expiry date for this {@link Token}
      */
-    public LocalDate getExpiryDate() {
+    public Instant getExpiryDate() {
         return this.expiry;
     }
 
