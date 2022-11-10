@@ -3,7 +3,6 @@ package com.javahelp.model.token;
 import com.javahelp.model.user.User;
 
 import java.time.*;
-import java.security.SecureRandom;
 
 /**
  * Representation of token entity
@@ -26,9 +25,9 @@ public class Token {
     private LocalDate issued;
 
     /**
-     * User who requested the token.
+     * ID of {@link User} for {@link Token}.
      */
-    private User user;
+    private String userId;
 
     /**
      * This holds any additional information about the toekn.
@@ -43,14 +42,13 @@ public class Token {
      * @param issued {@link LocalDate} of this {@link Token}
      * @param expiry {@link LocalDate} of this {@link Token}
      * @param tag    {@link String} of this {@link Token}
-     * @param user   {@link User} who requested this {@link Token}
+     * @param userId ID of {@link User} who requested this {@link Token}
      */
-    public Token(String token, LocalDate issued, LocalDate expiry, String tag, User user) {
-        // Creating a token using functions from SecureRandom
+    public Token(String token, LocalDate issued, LocalDate expiry, String tag, String userId) {
         this.token = token;
         this.issued = issued;
         this.expiry = expiry;
-        this.user = user;
+        this.userId = userId;
         this.tag = tag;
     }
 
@@ -80,5 +78,12 @@ public class Token {
      */
     public LocalDate getExpiryDate() {
         return this.expiry;
+    }
+
+    /**
+     * @return {@link String} ID of the {@link User} this {@link Token} is for
+     */
+    public String getUserID() {
+        return this.userId;
     }
 }

@@ -18,7 +18,7 @@ public class TokenTest {
     ClientUserInfo info = new ClientUserInfo("user@example.com", "NY",
             "111","David", "Smith");
     User user1 = new User("123", info, "user1");
-    Token token = new Token("[!jkl123", issued, expiry, "This is Test token", user1);
+    Token token = new Token("[!jkl123", issued, expiry, "This is Test token", user1.getStringID());
 
     @Test(timeout = 50)
     public void getToken(){
