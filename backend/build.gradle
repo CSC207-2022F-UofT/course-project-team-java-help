@@ -15,6 +15,10 @@ dependencies {
             'com.fasterxml.jackson.core:jackson-databind:2.11.0',
             'com.fasterxml.jackson.core:jackson-annotations:2.11.0'
     )
+
+    implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.1000')
+    implementation 'com.amazonaws:aws-java-sdk-dynamodb'
+
     api project(path: ':model')
     testImplementation 'junit:junit:4.13.2'
 }
