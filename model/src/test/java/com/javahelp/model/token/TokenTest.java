@@ -7,14 +7,18 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Unit tests for {@link Token}
  */
 public class TokenTest {
     // Setting up the user and token
-    LocalDate issued = LocalDate.of(2022, 11, 06);
-    LocalDate expiry = LocalDate.of(2022, 11, 20);
+    Instant issued = LocalDate.of(2022, 11, 06).atStartOfDay()
+            .atZone(TimeZone.getDefault().toZoneId()).toInstant();
+    Instant expiry = LocalDate.of(2022, 11, 20).atStartOfDay()
+            .atZone(TimeZone.getDefault().toZoneId()).toInstant();
     ClientUserInfo info = new ClientUserInfo("user@example.com", "NY",
             "111","David", "Smith");
     User user1 = new User("123", info, "user1");
@@ -33,13 +37,15 @@ public class TokenTest {
 
     @Test(timeout = 50)
     public void getIssuedDate(){
-        LocalDate expectedDate = LocalDate.of(2022, 11, 06);
+        Instant expectedDate = LocalDate.of(2022, 11, 06).atStartOfDay()
+                .atZone(TimeZone.getDefault().toZoneId()).toInstant();
         assertEquals(expectedDate,token.getIssuedDate());
     }
 
     @Test(timeout = 50)
     public void getExpiryDate(){
-        LocalDate expectedDate = LocalDate.of(2022, 11, 20);
+        Instant expectedDate = LocalDate.of(2022, 11, 20).atStartOfDay()
+                .atZone(TimeZone.getDefault().toZoneId()).toInstant();
         assertEquals(expectedDate, token.getExpiryDate());
     }
 }
