@@ -1,6 +1,6 @@
-package com.javahelp.backend.auth;
+package com.javahelp.backend.data;
 
-import com.javahelp.backend.core.gateway.ICRUDGateway;
+import com.javahelp.backend.data.ICRUDGateway;
 import com.javahelp.model.token.Token;
 import com.javahelp.model.user.User;
 
