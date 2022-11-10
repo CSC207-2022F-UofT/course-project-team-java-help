@@ -21,7 +21,7 @@ public interface ITokenStore extends ICRUDGateway<Token, String> {
      */
     default boolean containsMatching(String token, String userId) {
         Token t = read(token);
-        return t != null && userId.equals(t.getUser().getStringID());
+        return t != null && userId.equals(t.getUserID());
     }
 
 }
