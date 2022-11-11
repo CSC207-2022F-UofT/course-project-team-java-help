@@ -16,7 +16,7 @@ package com.javahelp.backend.data;
  * @param <T> type to specify CRUD operations for
  * @param <S> id/primary key type for CRUD type
  */
-public interface ICRUDGateway<T, S> {
+interface ICRUDGateway<T, S> {
 
     /**
      * Creates a new object, and mutates its ID field to reflect the newly created object's ID.
