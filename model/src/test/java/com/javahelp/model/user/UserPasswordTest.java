@@ -141,10 +141,8 @@ public class UserPasswordTest {
 
     @Test(timeout = 50)
     public void testGetBase64SaltHash(){
-        /* This test is to highlight the randomness in generating values of Base64, that could
-        generate different values to any value, regardless of their similarity. */
         byte[] combined = {5, 6, 8, 2, 6, 4, 1, 5, 6, 1, 8, 5, 6, 'a', '!', 6, 5};
         assertNotEquals(Base64.getEncoder().encodeToString(combined),
-                UserPassword.getBase64SaltHash(user1Pass));
+                user1Pass.getBase64SaltHash());
     }
 }
