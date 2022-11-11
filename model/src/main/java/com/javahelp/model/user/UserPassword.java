@@ -1,5 +1,6 @@
 package com.javahelp.model.user;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.function.Function;
@@ -28,13 +29,14 @@ public class UserPassword {
      * Creates a new {@link UserPassword}
      *
      * @param combinedBase64 {@link Base64} encoded concatenated salt and hash in format:
-     *                       Base64(salt + hash)
-     * @param saltLength     length of the salt in bytes
+     *                       Base64(salt length (Int32) + salt + hash)
      */
-    public UserPassword(String combinedBase64, int saltLength) {
+    public UserPassword(String combinedBase64) {
         byte[] joined = Base64.getDecoder().decode(combinedBase64);
-        this.salt = Arrays.copyOfRange(joined, 0, saltLength);
-        this.hash = Arrays.copyOfRange(joined, saltLength, joined.length);
+        byte[] saltLengthArray = Arrays.copyOfRange(joined, 0, 4);
+        int saltLength = ByteBuffer.wrap(saltLengthArray).getInt();
+        this.salt = Arrays.copyOfRange(joined, 4, saltLength + 4);
+        this.hash = Arrays.copyOfRange(joined, saltLength + 4, joined.length);
     }
 
     /**
@@ -72,16 +74,18 @@ public class UserPassword {
      *
      * @param salt byte array containing the salt
      * @param hash byte array containing the password hash
-     * @return concatenation of salt and hash arrays
+     * @return concatenation of salt and hash arrays, with salt length stuck on front
      */
     private static byte[] combineByteArrays(byte[] salt, byte[] hash) {
         if (hash.length == 0) {
             throw new ArrayIndexOutOfBoundsException("The given password is empty. Please " +
                     "give it a value!");
         }
-        byte[] representation = new byte[salt.length + hash.length];
-        System.arraycopy(salt, 0, representation, 0, salt.length);
-        System.arraycopy(hash, 0, representation, salt.length, hash.length);
+        byte[] representation = new byte[4 + salt.length + hash.length];
+        byte[] saltLength = ByteBuffer.allocate(4).putInt(salt.length).array();
+        System.arraycopy(saltLength, 0, representation, 0, 4);
+        System.arraycopy(salt, 0, representation, 4, salt.length);
+        System.arraycopy(hash, 0, representation, salt.length + 4, hash.length);
         return representation;
     }
 
