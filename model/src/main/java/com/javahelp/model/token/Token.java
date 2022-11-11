@@ -3,6 +3,7 @@ package com.javahelp.model.token;
 import com.javahelp.model.user.User;
 
 import java.time.*;
+import java.util.UUID;
 
 /**
  * Representation of token entity
@@ -53,6 +54,21 @@ public class Token {
     }
 
     /**
+     * Creates a new {@link Token} for the given user, with a random token string,
+     * initiated at the current moment.
+     * @param validDuration {@link Duration} the {@link Token} is valid for
+     * @param tag {@link String} tags for the {@link Token}
+     * @param userId {@link String} user id for the {@link Token}
+     */
+    public Token(Duration validDuration, String tag, String userId) {
+        token = UUID.randomUUID().toString();
+        issued = Instant.now();
+        expiry = issued.plus(validDuration);
+        this.tag = tag;
+        this.userId = userId;
+    }
+
+    /**
      * @return unique {@link String} token for this {@link Token}
      */
     public String getToken() {
@@ -72,6 +88,14 @@ public class Token {
      */
     public String getTag() {
         return this.tag;
+    }
+
+    /**
+     * Sets the tags for this {@link Token}
+     * @param s {@link String} tag for this {@link Token}
+     */
+    public void setTag(String s) {
+        tag = s;
     }
 
     /**
