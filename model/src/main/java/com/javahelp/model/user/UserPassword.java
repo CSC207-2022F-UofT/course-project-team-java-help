@@ -1,36 +1,45 @@
 package com.javahelp.model.user;
 
+import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.function.Function;
 
 /**
- * A class for the password of a user entity
+ * A class for the password of a {@link User}
  */
 public class UserPassword {
 
-    /**
-     * The current salt of this user
-     */
     private byte[] salt;
 
-    /**
-     * The current hashed password of this user
-     */
     private byte[] hash;
 
     /**
-     * The constructor to build an instance of the password of a user account.
+     * Creates an instance an {@link UserPassword}.
      *
-     * @param salt the currently used salt for the hashed password.
-     * @param hash the already-hashed password
+     * @param salt the salt for the hashed password.
+     * @param hash the hashed password
      */
-    public UserPassword(byte[] salt, byte[] hash){
+    public UserPassword(byte[] salt, byte[] hash) {
         this.salt = salt;
         this.hash = hash;
     }
 
     /**
-     * Get the current hashed password of UserPassword
+     * Creates a new {@link UserPassword}
      *
+     * @param combinedBase64 {@link Base64} encoded concatenated salt and hash in format:
+     *                       Base64(salt length (Int32) + salt + hash)
+     */
+    public UserPassword(String combinedBase64) {
+        byte[] joined = Base64.getDecoder().decode(combinedBase64);
+        byte[] saltLengthArray = Arrays.copyOfRange(joined, 0, 4);
+        int saltLength = ByteBuffer.wrap(saltLengthArray).getInt();
+        this.salt = Arrays.copyOfRange(joined, 4, saltLength + 4);
+        this.hash = Arrays.copyOfRange(joined, saltLength + 4, joined.length);
+    }
+
+    /**
      * @return The currently hashed password
      */
     public byte[] getHash() {
@@ -38,25 +47,21 @@ public class UserPassword {
     }
 
     /**
-     * Get the current salt of UserPassword
-     *
-     * @return The currently used salt
+     * @return The salt
      */
     public byte[] getSalt() {
         return salt;
     }
 
     /**
-     * Set current hashed password to the user.
-     *
-     * @param hash the currently hashed password
+     * @param hash the hashed password
      */
     public void setHash(byte[] hash) {
         this.hash = hash;
     }
 
     /**
-     * Set the current salt.
+     * Set the salt
      *
      * @param salt the current salt
      */
@@ -65,34 +70,30 @@ public class UserPassword {
     }
 
     /**
-     * A helper method to combine salt and hashed passwords together into one array.
+     * Combines salts and hashes together into one array.
      *
-     * @param salt the current used salt
-     * @param hash the current hashed password of this user
-     *
-     * @return a concatenated array of salt and hashed password, with salt being up front.
+     * @param salt byte array containing the salt
+     * @param hash byte array containing the password hash
+     * @return concatenation of salt and hash arrays, with salt length stuck on front
      */
-    private static byte[] combineByteArrays (byte[] salt, byte[] hash){
+    private static byte[] combineByteArrays(byte[] salt, byte[] hash) {
         if (hash.length == 0) {
             throw new ArrayIndexOutOfBoundsException("The given password is empty. Please " +
                     "give it a value!");
         }
-        byte[] representation = new byte[salt.length + hash.length];
-        System.arraycopy(salt, 0, representation, 0, salt.length);
-        System.arraycopy(hash, 0, representation, salt.length, hash.length);
+        byte[] representation = new byte[4 + salt.length + hash.length];
+        byte[] saltLength = ByteBuffer.allocate(4).putInt(salt.length).array();
+        System.arraycopy(saltLength, 0, representation, 0, 4);
+        System.arraycopy(salt, 0, representation, 4, salt.length);
+        System.arraycopy(hash, 0, representation, salt.length + 4, hash.length);
         return representation;
     }
 
     /**
-     * A function that takes an array of both salt and hashed password and return a Base64 String
-     * representation of that array.
-     *
-     * @param password a concatenated array of both salt and hashed password
-     *
-     * @return a Base64 String representation of the given array.
+     * @return a Base64 {@link String} representation of this {@link UserPassword}
      */
-    public static String getBase64SaltHash(UserPassword password){
-        byte[] concatenated = UserPassword.combineByteArrays(password.salt, password.hash);
+    public String getBase64SaltHash() {
+        byte[] concatenated = combineByteArrays(salt, hash);
         return Base64.getEncoder().encodeToString(concatenated);
     }
 }

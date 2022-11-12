@@ -3,9 +3,12 @@ package com.javahelp.model.user;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Random;
 
@@ -141,10 +144,25 @@ public class UserPasswordTest {
 
     @Test(timeout = 50)
     public void testGetBase64SaltHash(){
-        /* This test is to highlight the randomness in generating values of Base64, that could
-        generate different values to any value, regardless of their similarity. */
         byte[] combined = {5, 6, 8, 2, 6, 4, 1, 5, 6, 1, 8, 5, 6, 'a', '!', 6, 5};
         assertNotEquals(Base64.getEncoder().encodeToString(combined),
-                UserPassword.getBase64SaltHash(user1Pass));
+                user1Pass.getBase64SaltHash());
+    }
+
+    @Test
+    public void testEncodeDecodeBase64() {
+        Random r = new Random();
+        for (int i = 0; i < 100; i++) {
+            int saltLength = 1 + r.nextInt(31);
+            byte[] salt = new byte[saltLength];
+            int hashLength = 1 + r.nextInt(31);
+            byte[] hash = new byte[hashLength];
+            r.nextBytes(salt);
+            r.nextBytes(hash);
+            UserPassword base = new UserPassword(salt, hash);
+            UserPassword encoded = new UserPassword(base.getBase64SaltHash());
+            assertArrayEquals(base.getHash(), encoded.getHash());
+            assertArrayEquals(base.getSalt(), encoded.getSalt());
+        }
     }
 }
