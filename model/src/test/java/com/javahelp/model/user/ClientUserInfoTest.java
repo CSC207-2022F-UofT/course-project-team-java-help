@@ -1,6 +1,7 @@
 package com.javahelp.model.user;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -8,12 +9,16 @@ import org.junit.Test;
 public class ClientUserInfoTest {
 
     ClientUserInfo c;
+    ClientUserInfo c2;
 
     @Before
     public void setUp() {
         c = new ClientUserInfo("uoft@utoronto.ca",
                 "University of Toronto", "000-123-4567",
-                "Johnny", "Meng");
+                "Johnny", "Meng", "Male");
+        c2 = new ClientUserInfo("uoft@utoronto.ca",
+                "University of Toronto", "012-345-4567",
+                "Imaginary", "Last", "Male");
     }
 
     @Test(timeout = 50)
@@ -54,5 +59,12 @@ public class ClientUserInfoTest {
     @Test(timeout = 50)
     public void testGetType() {
         assertEquals(UserType.CLIENT, c.getType());
+    }
+
+    @Test(timeout = 50)
+    public void getGender() {
+        assertEquals("MALE", c.getGender());
+        c2.setGender("Others");
+        assertNotEquals("This is not updated!", "MALE", c2.getGender());
     }
 }

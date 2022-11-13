@@ -1,5 +1,8 @@
 package com.javahelp.model.user;
 
+import java.io.IOException;
+import java.util.Objects;
+
 /**
  * Stores the information of a client.
  */
@@ -8,6 +11,7 @@ public class ClientUserInfo extends UserInfo {
     private String lastName;
     private String address;
     private String phoneNumber;
+    private String gender;
 
     /**
      * Constructs a ClientInfo object.
@@ -17,14 +21,21 @@ public class ClientUserInfo extends UserInfo {
      * @param phoneNumber: the phone number of this client.
      * @param firstName: the first name of this client.
      * @param lastName: the last name of this client.
+     * @param gender: the gender of this client
      */
     public ClientUserInfo(String emailAddress, String address, String phoneNumber, String firstName,
-                          String lastName) {
+                          String lastName, String gender) {
         super(emailAddress);
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.phoneNumber = phoneNumber;
+        if (! gender.toUpperCase().equals("FEMALE") && ! gender.toUpperCase().equals("MALE") &&
+        ! gender.toUpperCase().equals("OTHERS")){
+            throw new IllegalArgumentException("Invalid input! Should be either FEMALE, " +
+                    "MALE or OTHERS");
+        }
+        this.gender = gender.toUpperCase();
     }
 
     /**
@@ -102,5 +113,23 @@ public class ClientUserInfo extends UserInfo {
     @Override
     public UserType getType() {
         return UserType.CLIENT;
+    }
+
+    /**
+     * Get the gender of this client
+     *
+     * @return "MALE" or "FEMALE" depending on their gender
+     */
+    public String getGender() {
+        return this.gender;
+    }
+
+    /**
+     * Re-correct the gender of this client
+     *
+     * @param gender: the updated gender of this client
+     */
+    public void setGender(String gender){
+        this.gender = gender;
     }
 }

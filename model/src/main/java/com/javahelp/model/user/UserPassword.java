@@ -91,7 +91,7 @@ public class UserPassword {
      *
      * @return a Base64 String representation of the given array.
      */
-    public static String getBase64SaltHash(UserPassword password){
+    public static String getBase64SaltHash(UserPassword password) {
         byte[] concatenated = UserPassword.combineByteArrays(password.salt, password.hash);
         return Base64.getEncoder().encodeToString(concatenated);
     }
