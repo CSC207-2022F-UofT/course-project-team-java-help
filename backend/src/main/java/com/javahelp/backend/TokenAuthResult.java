@@ -10,7 +10,7 @@ public class TokenAuthResult {
     private String errorMessage;
 
     /**
-     * Constructs a TokenAuthManager object.
+     * Constructs a TokenAuthResult object.
      *
      * @param user: the user that needs to be authenticated
      * @param token: the token used to authenticate the user
