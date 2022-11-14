@@ -31,7 +31,7 @@ public class SHAPasswordHasher implements IPasswordHasher {
     /**
      * @return Instance of {@link SHAPasswordHasher}
      */
-    public static SHAPasswordHasher getInstance() {
+    public static IPasswordHasher getInstance() {
         return INSTANCE;
     }
 
@@ -57,20 +57,35 @@ public class SHAPasswordHasher implements IPasswordHasher {
      */
     @Override
     public byte[] hash(String password, byte[] salt) {
+
+        if (salt.length != SALT_LENGTH) {
+            throw new IllegalArgumentException("Illegal salt length, must be 512 bit");
+        }
+
+        byte[] hash = new byte[HASH_LENGTH + salt.length];
+
+        SecretKeyFactory factory = null;
+
         try {
-            byte[] hash = new byte[HASH_LENGTH + salt.length];
-            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
-            PBEKeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, REPETITIONS,
-                    8 * HASH_LENGTH);
-            Key key = factory.generateSecret(keySpec);
-            byte[] keyBytes = key.getEncoded();
-            System.arraycopy(salt, 0, hash, 0, salt.length);
-            System.arraycopy(keyBytes, 0, hash, salt.length, keyBytes.length);
-            return hash;
+            factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Error with hashing implementation");
+        }
+
+        PBEKeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, REPETITIONS,
+                8 * HASH_LENGTH);
+
+        Key key = null;
+
+        try {
+            key = factory.generateSecret(keySpec);
         } catch (InvalidKeySpecException e) {
             throw new IllegalArgumentException("Error with password or salt in key spec");
         }
+
+        byte[] keyBytes = key.getEncoded();
+        System.arraycopy(salt, 0, hash, 0, salt.length);
+        System.arraycopy(keyBytes, 0, hash, salt.length, keyBytes.length);
+        return hash;
     }
 }
