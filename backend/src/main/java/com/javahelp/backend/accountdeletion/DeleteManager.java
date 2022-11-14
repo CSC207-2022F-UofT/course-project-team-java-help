@@ -4,37 +4,35 @@ import com.javahelp.backend.data.IUserStore;
 import com.javahelp.model.user.User;
 import com.javahelp.model.user.UserPassword;
 
-import java.util.Arrays;
-
 /**
- * A DeleteManager for an account deletion action.
+ * A class for managing an account deletion action.
  */
 class DeleteManager {
-    /**
-     * The UserStore to use.
-     */
-    private final IUserStore iUserStore;
 
     /**
-     * Constructs a DeleteManager instance.
-     *
-     * @param iUserStore: the UserStore used to store users.
+     * The {@link IUserStore} to use.
      */
-    protected DeleteManager(IUserStore iUserStore) {
-        this.iUserStore = iUserStore;
+    private final IUserStore userStore;
+
+    /**
+     * Constructs a {@link DeleteManager} instance.
+     *
+     * @param userStore: the UserStore used to store users.
+     */
+    protected DeleteManager(IUserStore userStore) {
+        this.userStore = userStore;
     }
 
+
     /**
-     * A helper method used to verify whether the entered password matches the password
-     * stored in the database.
+     * @param user: the {@link User} to be deleted.
+     * @param userPassword: the {@link UserPassword} entered by the user.
      *
-     * @param userID: the userID of the user.
-     * @param userPassword: the password entered by the user.
-     * @return whether the password entered matches the password in the database.
+     * @return whether the {@link UserPassword} entered by the user matches the {@link UserPassword} in the database.
      */
-    private boolean verify(String userID, UserPassword userPassword) {
-        UserPassword dbPassword = iUserStore.readPassword(userID);
-        return Arrays.equals(dbPassword.getHash(), userPassword.getHash());
+    private boolean verify(User user, UserPassword userPassword) {
+        UserPassword dbPassword = userStore.readPassword(user.getStringID());
+        return userPassword.getBase64SaltHash().equals(dbPassword.getBase64SaltHash());
     }
 
     /**
@@ -44,18 +42,48 @@ class DeleteManager {
      *
      * Else, the user with the given userID will be deleted from the database.
      *
-     * @param userID: the userID of the user.
-     * @param userPassword: the password entered by the user.
-     * @return a DeleteResult instance encoding whether the deletion is successful.
+     * @param input: an {@link IDeleteInputBoundary} instance that contains one of
+     *                           username, email, or userID of the user to be deleted.
+     * @param userPassword: the {@link UserPassword} entered by the user.
+     * @return a {@link DeleteResult} instance encoding whether the deletion is successful.
      */
-    protected DeleteResult delete(String userID, UserPassword userPassword) {
-        User user = iUserStore.read(userID);
+    protected DeleteResult delete(IDeleteInputBoundary input, UserPassword userPassword) {
+        User user = locateUser(input.getUserID(), input.getEmail(), input.getUsername());
 
-        if (verify(userID, userPassword)) {
-            iUserStore.delete(userID);
-            return new DeleteResult(true, user);
+        if (verify(user, userPassword)) {
+            userStore.delete(user.getStringID());
+            return new DeleteResult(user);
         }
 
-        return new DeleteResult(false, user);
+        return new DeleteResult("The password is incorrect.");
+    }
+
+    /**
+     * A helper method to locates a user given at least one of userID, email, or username.
+     *
+     * @param userID: the {@link String} userID of the user.
+     * @param email: the {@link String} email of the user.
+     * @param username: the {@link String} username of the user.
+     *
+     * @return the located {@link User} in the database, or null if none located.
+     */
+    private User locateUser(String userID, String email, String username) {
+        if (userID == null && email == null && username == null) {
+            throw new IllegalArgumentException("At least one of userID, email, or username must be provided");
+        }
+
+        User u = null;
+
+        if (userID != null) {
+            u = userStore.read(userID);
+        }
+        else if (email != null) {
+            u = userStore.readByEmail(email);
+        }
+        else {
+            u = userStore.readByUsername(username);
+        }
+
+        return u;
     }
 }

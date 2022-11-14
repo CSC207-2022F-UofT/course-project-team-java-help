@@ -4,57 +4,51 @@ import com.javahelp.model.token.Token;
 import com.javahelp.model.user.User;
 
 /**
- * A class that encodes whether an account deletion was successful.
+ * A class used by a {@link DeleteManager} that encodes whether an account deletion was successful.
  */
 class DeleteResult {
-    private boolean success;
-    private User user;
+    private final String errorMessage;
+    private final User user;
 
     /**
-     * Constructs a DeleteResult instance.
+     * Constructs a {@link DeleteResult} instance for a successful deletion.
      *
-     * @param success: whether the deletion was successful.
-     * @param user: the user to be deleted.
+     * @param user: the {@link User} to be deleted.
      */
-    protected DeleteResult(boolean success, User user) {
-        this.success = success;
+    protected DeleteResult(User user) {
+        errorMessage = null;
         this.user = user;
     }
 
     /**
-     * Returns the status of the account deletion.
+     * Constructs a {@link DeleteResult} instance for a failed deletion.
      *
+     * @param errorMessage: the {@link String} error message to be displayed.
+     */
+    protected DeleteResult(String errorMessage) {
+        this.errorMessage = errorMessage;
+        user = null;
+    }
+
+    /**
      * @return whether the account deletion was successful.
      */
-    protected boolean isSuccess() {
-        return success;
+    public boolean isSuccess() {
+        return errorMessage == null;
     }
 
     /**
-     * Sets the status of the account deletion.
-     *
-     * @param success: whether the account deletion was successful.
+     * @return the {@link User} to be deleted.
      */
-    protected void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    /**
-     * Returns the user to be deleted.
-     *
-     * @return the user to be deleted.
-     */
-    protected User getUser() {
+    public User getUser() {
         return user;
     }
 
     /**
-     * Sets the user to be deleted.
-     *
-     * @param user: the user to be deleted.
+     * @return the {@link String} error message of the deletion.
      */
-    protected void setUser(User user) {
-        this.user = user;
+    public String getErrorMessage() {
+        return errorMessage;
     }
 
 }
