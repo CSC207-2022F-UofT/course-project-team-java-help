@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="10dp"
-    android:background="@drawable/sky"
+    android:background="@drawable/b2"
     tools:context=".frontend.MainActivity">
 
 
@@ -16,9 +16,10 @@
         android:layout_height="50dp"
         android:layout_marginTop="100dp"
         android:gravity="center"
-        android:text="JH Mental Helper"
+        android:text="Please Login in..."
+        android:maxLines="1"
         android:textSize="20sp"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         />
 
     <EditText
@@ -26,8 +27,10 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="80dp"
-        android:gravity="center"
         android:hint="Username"
+        android:drawableLeft="@drawable/user48"
+        android:paddingLeft="2dp"
+        android:drawablePadding="5dp"
         android:maxLines="1"
         android:textSize="20sp"
         android:textColor="@color/black"
@@ -40,9 +43,11 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="5dp"
-        android:gravity="center"
         android:hint="Password"
+        android:drawableLeft="@drawable/passwordicon"
         android:inputType="textPassword"
+        android:paddingLeft="2dp"
+        android:drawablePadding="5dp"
         android:maxLines="1"
         android:textSize="20sp"
         android:background="@drawable/border_bg"
@@ -74,6 +79,7 @@
             android:layout_weight="1"
             android:text=" Client     Register"
 
+
             />
 
         <Button
@@ -87,7 +93,28 @@
             />
 
 
+
+
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="200dp" />
+
+    <TextView
+        android:layout_width="90dp"
+        android:layout_height="30dp"
+        android:layout_gravity="right"
+        android:gravity="bottom"
+        android:text="By Java Help"
+        />
 
 
 </LinearLayout>

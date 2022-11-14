@@ -14,7 +14,14 @@
         android:theme="@style/Theme.JavaHelpFrontend"
         tools:targetApi="31">
         <activity
-            android:name=".frontend.FunctionActivity"
+            android:name=".frontend.PRegActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".frontend.FrontPageActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

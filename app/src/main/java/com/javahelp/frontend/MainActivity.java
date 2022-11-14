@@ -12,47 +12,43 @@ import com.javahelp.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    //control statement of login botton
-    private Button Buttomcg;
-    private EditText inputUsername;
-    private EditText inputPassword;
-
-
+    private Button buttonLogin;
+    private  Button buttoncr;
+    private  Button buttonpr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //find the control
-        Buttomcg = findViewById(R.id.bot_c_reg);
-        inputUsername = findViewById(R.id.et_1);
-        inputPassword = findViewById(R.id.et_2);
+        //find the login button by its id
+        buttonLogin = (Button) findViewById(R.id.bot_login);
+        //find the client register button by its id
+        buttoncr = (Button) findViewById(R.id.bot_c_reg);
+        //find the provider register button by its id
+        buttonpr = (Button) findViewById(R.id.bot_p_reg);
 
-        //implement the jump
-        Buttomcg.setOnClickListener(new View.OnClickListener() {
+        // link the button to the second acticity(front page)
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = null;
-                intent = new Intent(MainActivity.this,FunctionActivity.class);
+                intent = new Intent(MainActivity.this,FrontPageActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // link the button to the second acticity(front page)
+        buttonpr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = null;
+                intent = new Intent(MainActivity.this,PRegActivity.class);
                 startActivity(intent);
             }
         });
 
 
-
-    }
-    private void onClick(View v){
-        String username = inputUsername.getText().toString();
-        String password = inputPassword.getText().toString();
-        Intent intent = null;
-
-        if(username.equals("123") && password.equals("321")){
-            intent = new Intent(MainActivity.this, FunctionActivity.class);
-            startActivity(intent);
-        }else{
-
-        }
 
     }
 

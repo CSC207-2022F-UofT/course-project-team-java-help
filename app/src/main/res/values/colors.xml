@@ -10,5 +10,12 @@
     <color name="Red">#C10C0C</color>
     <color name="Yellow">#F4E561</color>
     <color name="Blue">#0080FF</color>
+    <color name="Cyan">#00FFFF</color>
+    <color name="DarkBlue">#00008B</color>
+    <color name="LightBlue">#ADD8E6</color>
+    <color name="Lime">#00FF00</color>
+    <color name="Pink">#FFC0CB</color>
+    <color name="Green">#008000</color>
+
 
 </resources>
