@@ -11,9 +11,9 @@ class DeleteResult {
     private final User user;
 
     /**
-     * Constructs a {@link DeleteResult} instance for a successful deletion.
+     * Constructs a {@link DeleteResult} instance for a successful account deletion.
      *
-     * @param user: the {@link User} to be deleted.
+     * @param user: the deleted {@link User}.
      */
     protected DeleteResult(User user) {
         errorMessage = null;
@@ -21,7 +21,7 @@ class DeleteResult {
     }
 
     /**
-     * Constructs a {@link DeleteResult} instance for a failed deletion.
+     * Constructs a {@link DeleteResult} instance for a failed account deletion.
      *
      * @param errorMessage: the {@link String} error message to be displayed.
      */
@@ -38,14 +38,14 @@ class DeleteResult {
     }
 
     /**
-     * @return the {@link User} to be deleted.
+     * @return the deleted {@link User}.
      */
     public User getUser() {
         return user;
     }
 
     /**
-     * @return the {@link String} error message of the deletion.
+     * @return the {@link String} error message for the deletion.
      */
     public String getErrorMessage() {
         return errorMessage;

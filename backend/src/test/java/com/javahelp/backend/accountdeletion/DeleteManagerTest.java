@@ -27,6 +27,9 @@ public class DeleteManagerTest {
 
     DeleteManager deleteManager;
 
+    IDeleteInputBoundary correctPasswordInputBoundary;
+    IDeleteInputBoundary incorrectPasswordInputBoundary;
+
     byte[] salt1;
     byte[] salt2;
 
@@ -62,9 +65,11 @@ public class DeleteManagerTest {
         enteredCorrectPassword = new UserPassword(salt1, password1);
         enteredIncorrectPassword = new UserPassword(salt1, password2);
         deleteManager = new DeleteManager(userStore);
+        correctPasswordInputBoundary = new DeleteInputBoundaryImplementation(user.getStringID(), enteredCorrectPassword);
+        incorrectPasswordInputBoundary = new DeleteInputBoundaryImplementation(user.getStringID(), enteredIncorrectPassword);
     }
 
-    @Test(timeout = 50)
+    @Test
     public void testPassword(){
         Random rand = new Random();
 
@@ -76,23 +81,29 @@ public class DeleteManagerTest {
         assertEquals(registeredPassword.getHash(), enteredCorrectPassword.getHash());
         assertNotEquals(registeredPassword.getHash(), enteredIncorrectPassword.getHash());
         assertEquals(registeredPassword.getSalt(), enteredCorrectPassword.getSalt());
+        assertEquals(registeredPassword.getBase64SaltHash(), enteredCorrectPassword.getBase64SaltHash());
+        assertNotEquals(registeredPassword.getBase64SaltHash(), enteredIncorrectPassword.getBase64SaltHash());
     }
 
     @Test
     public void testDeleteManagerCorrectPassword() {
         userStore.create(user, registeredPassword);
         assertNotNull(userStore.read(user.getStringID()));
-        // DeleteResult deleteResult = deleteManager.delete(user.getStringID(), enteredCorrectPassword);
-        // assertTrue(deleteResult.isSuccess());
-        // assertNull(iUserStore.read(user.getStringID()));
+        DeleteResult deleteResult = deleteManager.delete(correctPasswordInputBoundary);
+        assertTrue(deleteResult.isSuccess());
+        assertNull(deleteResult.getErrorMessage());
+        assertNotNull(deleteResult.getUser());
+        assertNull(userStore.read(user.getStringID()));
     }
 
     @Test
     public void testDeleteManagerIncorrectPassword() {
         userStore.create(user, registeredPassword);
         assertNotNull(userStore.read(user.getStringID()));
-        // DeleteResult deleteResult = deleteManager.delete(user.getStringID(), enteredIncorrectPassword);
-        // assertFalse(deleteResult.isSuccess());
+        DeleteResult deleteResult = deleteManager.delete(incorrectPasswordInputBoundary);
+        assertFalse(deleteResult.isSuccess());
+        assertEquals("The password is incorrect", deleteResult.getErrorMessage());
+        assertNull(deleteResult.getUser());
         assertNotNull(userStore.read(user.getStringID()));
     }
 }
