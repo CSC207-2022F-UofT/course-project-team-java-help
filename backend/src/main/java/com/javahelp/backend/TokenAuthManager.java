@@ -6,8 +6,8 @@ import com.javahelp.model.token.Token;
 import com.javahelp.model.user.User;
 
 public class TokenAuthManager {
-    private IUserStore userStore;
-    private ITokenStore tokenStore;
+    private final IUserStore userStore;
+    private final ITokenStore tokenStore;
     private TokenAuthResult authenticate;
 
     /**
@@ -21,7 +21,7 @@ public class TokenAuthManager {
         this.tokenStore =tokenStore;
     }
 
-    private void setAuthenticate(User desiredUser, Token token) {
+    public void setAuthenticate(User desiredUser, Token token) {
         this.authenticate = new TokenAuthResult(desiredUser, token);
     }
 
