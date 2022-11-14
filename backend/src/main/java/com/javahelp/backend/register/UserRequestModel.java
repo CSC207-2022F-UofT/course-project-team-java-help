@@ -3,43 +3,16 @@ package com.javahelp.backend.register;
 import com.javahelp.model.user.UserInfo;
 
 /**
- * The User request model that a User uses to register their new account
+ * The abstract input data passed by a User to create a new RequestModel
  */
 public abstract class UserRequestModel{
 
-    /**
-     * An inserted username
-     */
     private String username;
-
-    /**
-     * An inserted new account password
-     */
     private byte[] password;
-
-    /**
-     * A re-entered new password (when registering only)
-     */
     private byte[] password2;
-
-    /**
-     * The user's phone number
-     */
     private String phoneNumber;
-
-    /**
-     * The email address of this user
-     */
     private String emailAddress;
-
-    /**
-     * The living address of this user
-     */
     private String address;
-
-    /**
-     * The stringID of this user (randomly generated but only once)
-     */
     private String stringID;
 
     /**
@@ -115,6 +88,6 @@ public abstract class UserRequestModel{
     /**
      * @return the type of this request model
      */
-    public abstract UserType getType();
+    protected abstract UserType getType();
 }
 

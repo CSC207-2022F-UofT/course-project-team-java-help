@@ -4,23 +4,12 @@ import com.javahelp.backend.register.UserRequestModel;
 import com.javahelp.backend.register.UserType;
 
 /**
- * The UI that a Client uses to register their new account
+ * The input data passed by a Client to create a new RequestModel
  */
 public class ClientRequestModel extends UserRequestModel {
 
-    /**
-     * This client's first name
-     */
     private String firstName;
-
-    /**
-     * This client's last name
-     */
     private String lastName;
-
-    /**
-     * The gender of this client
-     */
     private String gender;
 
     /**

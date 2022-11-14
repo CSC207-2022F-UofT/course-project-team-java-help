@@ -4,18 +4,11 @@ import com.javahelp.backend.register.UserRequestModel;
 import com.javahelp.backend.register.UserType;
 
 /**
- * The input data passed by a Provider to create their new Provider model
+ * The input data passed by a Provider to create a new RequestModel
  */
 public class ProviderRequestModel extends UserRequestModel {
 
-    /**
-     * This provider's practice name
-     */
     private String practiceName;
-
-    /**
-     * The certification status of this provider (True = already, False = not yet)
-     */
     private boolean certified;
 
     public ProviderRequestModel(String username, byte[] password, byte[] password2,
