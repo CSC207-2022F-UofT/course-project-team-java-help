@@ -1,6 +1,8 @@
 package com.javahelp.backend.query;
 
 import com.javahelp.model.user.User;
+import com.javahelp.backend.data.DynamoDBUserStore;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,10 +14,10 @@ import java.util.List;
  * The query constraints are indicated using filters (multiple choice) or searches (text name).
  */
 public class UserQueryConstraint {
-    private final DbQuery dbQuery;
+    private DynamoDBUserStore dbUserStore;
 
-    public UserQueryConstraint(DbQuery dbQuery) {
-        this.dbQuery = dbQuery;
+    public UserQueryConstraint(DynamoDBUserStore dbUserStore) {
+        this.dbUserStore = dbUserStore;
     }
 
     public HashSet<User> getProvidersWithMultiConstraints(ArrayList<Constraint> constraints) {
@@ -23,7 +25,7 @@ public class UserQueryConstraint {
         HashSet<User> providers = new HashSet<>();
 
         for (int i = 0; i < constraints.size(); i++) {
-            HashMap<String, ArrayList<Integer>> constraint = constraints.get(i).getConstraint();
+            Constraint constraint = constraints.get(i);
             subsetProviders = getProvidersWithConstraint(constraint);
             if (providers.isEmpty()) {
                 providers = subsetProviders;
@@ -40,8 +42,9 @@ public class UserQueryConstraint {
      * @param constraint: the specified key-value pair required for the provider
      * @return subset of providers based on the given constraint
      */
-    public HashSet<User> getProvidersWithConstraint(HashMap<String, ArrayList<Integer>> constraint) {
-        List<User> providersList = this.dbQuery.query(constraint);
+    public HashSet<User> getProvidersWithConstraint(Constraint constraint) {
+        HashMap<String, ArrayList<Integer>> constraintMap = constraint.getConstraint();
+        List<User> providersList = this.dbUserStore.query(constraintMap);
 
         return new HashSet<>(providersList);
     }
