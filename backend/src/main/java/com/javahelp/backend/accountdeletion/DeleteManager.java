@@ -35,5 +35,4 @@ class DeleteManager {
         userStore.delete(input.getUserID());
         return new DeleteResult(user);
     }
-
 }

@@ -20,12 +20,11 @@ import java.util.Random;
 public class DeleteManagerTest {
     IUserStore userStore;
     User user;
+    String userID;
 
     ClientUserInfo clientUserInfo;
 
     DeleteManager deleteManager;
-
-    IDeleteInputBoundary input;
 
     byte[] salt;
     byte[] password;
@@ -35,19 +34,11 @@ public class DeleteManagerTest {
     public void setUp() {
 
         // Setting up user, userStore, and deleteManager.
+        userID = "123456QWERTY";
         userStore = IUserStore.getDefaultImplementation();
         clientUserInfo = new ClientUserInfo("uoft@uoft.ca", "University of Toronto",
                 "123-456-7890", "J", "M");
-        user = new User("123456QWERTY", clientUserInfo, "cs207");
-
-        input = new IDeleteInputBoundary() {
-            final String userID = user.getStringID();
-
-            @Override
-            public String getUserID() {
-                return userID;
-            }
-        };
+        user = new User(userID, clientUserInfo, "cs207");
 
         deleteManager = new DeleteManager(userStore);
 
@@ -65,14 +56,19 @@ public class DeleteManagerTest {
     }
 
     @Test
-    public void testGetUserID() {
-        assertEquals("123456QWERTY", input.getUserID());
-    }
-
-    @Test
     public void testDelete() {
         userStore.create(user, userPassword);
         assertNotNull(userStore.read(user.getStringID()));
+
+        IDeleteInputBoundary input = new IDeleteInputBoundary() {
+            final String id = userID;
+
+            @Override
+            public String getUserID() {
+                return id;
+            }
+        };
+
         DeleteResult deleteResult = deleteManager.delete(input);
         assertNotNull(deleteResult.getUser());
         assertEquals("Account deletion successful", deleteResult.getSuccessMessage());
