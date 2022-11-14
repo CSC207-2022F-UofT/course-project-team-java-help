@@ -15,6 +15,27 @@ public class UserPassword {
     private byte[] hash;
 
     /**
+     * Hashes the provided password
+     * @param password {@link String} password
+     * @param salt byte array with salt to use
+     * @param hasher {@link IPasswordHasher} to use
+     */
+    public UserPassword(String password, byte[] salt, IPasswordHasher hasher) {
+        this.salt = salt;
+        this.hash = hasher.hash(password, salt);
+    }
+
+    /**
+     * Hashes the provided password
+     * @param password {@link String} password
+     * @param hasher {@link IPasswordHasher} to use
+     */
+    public UserPassword(String password, IPasswordHasher hasher) {
+        this.salt = hasher.randomSalt();
+        this.hash = hasher.hash(password, this.salt);
+    }
+
+    /**
      * Creates an instance an {@link UserPassword}.
      *
      * @param salt the salt for the hashed password.
