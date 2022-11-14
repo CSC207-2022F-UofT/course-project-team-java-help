@@ -34,8 +34,7 @@ class DeleteManager {
      */
     private boolean verify(String userID, UserPassword userPassword) {
         UserPassword dbPassword = iUserStore.readPassword(userID);
-        return Arrays.equals(dbPassword.getHash(), userPassword.getHash()) &&
-                Arrays.equals(dbPassword.getSalt(), userPassword.getSalt());
+        return Arrays.equals(dbPassword.getHash(), userPassword.getHash());
     }
 
     /**
