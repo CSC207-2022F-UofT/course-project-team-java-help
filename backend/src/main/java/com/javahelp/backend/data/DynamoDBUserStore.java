@@ -1,11 +1,19 @@
 package com.javahelp.backend.data;
 
 import com.amazonaws.regions.Regions;
+import com.amazonaws.services.dynamodbv2.document.DynamoDB;
+import com.amazonaws.services.dynamodbv2.document.Item;
+import com.amazonaws.services.dynamodbv2.document.ItemCollection;
+import com.amazonaws.services.dynamodbv2.document.QueryOutcome;
+import com.amazonaws.services.dynamodbv2.document.Table;
+import com.amazonaws.services.dynamodbv2.document.spec.QuerySpec;
+import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.DeleteItemRequest;
 import com.amazonaws.services.dynamodbv2.model.GetItemRequest;
 import com.amazonaws.services.dynamodbv2.model.GetItemResult;
 import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
+import com.amazonaws.services.dynamodbv2.model.QueryResult;
 import com.amazonaws.services.dynamodbv2.model.UpdateItemRequest;
 import com.javahelp.model.user.ClientUserInfo;
 import com.javahelp.model.user.ProviderUserInfo;
@@ -20,6 +28,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,7 +61,7 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
      * @param tableName {@link String} table name to be used
      * @param region    {@link Regions} to be used
      */
-    DynamoDBUserStore(String tableName, Regions region) {
+    public DynamoDBUserStore(String tableName, Regions region) {
         super(region);
         this.tableName = tableName;
     }
@@ -71,6 +82,45 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
         }
 
         return userFromDynamo(result.getItem());
+    }
+
+    public List<User> query(HashMap<String, ArrayList<Integer>> constraint) {
+        String keyConditionExpression = String.format("%s = :question", constraint.keySet().toArray()[0]);
+        QuerySpec spec = new QuerySpec().withKeyConditionExpression(keyConditionExpression)
+                .withValueMap(new ValueMap().withString(":question", "0"));
+
+        DynamoDB dynamoDB = new DynamoDB(getClient());
+        Table table = dynamoDB.getTable(this.tableName);
+        ItemCollection<QueryOutcome> items = table.query(spec);
+
+        Iterator<Item> iterator = items.iterator();
+        List<User> userList = new ArrayList<>();
+        while (iterator.hasNext()) {
+            Item item = iterator.next();
+            User user = userFromDynamoDoc(item.asMap());
+            userList.add(user);
+        }
+
+        return userList;
+    }
+
+    /**
+     * @param item {@link Map} containing representation of {@link User} and {@link UserPassword}
+     * @return {@link User} contained or null if invalid representation
+     */
+    private static User userFromDynamoDoc(Map<String, Object> item) {
+        if (!item.containsKey("id") ||
+                !item.containsKey("username") ||
+                !item.containsKey("infotype") || // not actually needed in current implementation
+                !item.containsKey("userinfo")) {
+            return null;
+        }
+
+        String id = (String) item.get("id"), username = (String) item.get("username");
+
+        UserInfo info = (UserInfo) item.get("userinfo");
+
+        return new User(id, info, username);
     }
 
     @Override
