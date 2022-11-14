@@ -95,7 +95,7 @@ public class DeleteManagerTest {
     @Test
     public void testDeleteManagerIncorrectPassword() {
         iUserStore.create(user, registeredPassword);
-        assertEquals(user, iUserStore.read(user.getStringID()));
+        assertNotNull(iUserStore.read(user.getStringID()));
         DeleteResult deleteResult = deleteManager.delete(user.getStringID(), enteredIncorrectPassword);
         assertFalse(deleteResult.isSuccess());
         assertNotNull(iUserStore.read(user.getStringID()));
