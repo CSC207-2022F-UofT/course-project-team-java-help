@@ -4,12 +4,9 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Arrays;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-
-import jdk.internal.org.objectweb.asm.util.CheckSignatureAdapter;
 
 /**
  * Singleton implementation of {@link IPasswordHasher} for hashing passwords with SHA.
@@ -32,7 +29,6 @@ public class SHAPasswordHasher implements IPasswordHasher {
     }
 
     /**
-     *
      * @return Instance of {@link SHAPasswordHasher}
      */
     public static SHAPasswordHasher getInstance() {
@@ -54,8 +50,9 @@ public class SHAPasswordHasher implements IPasswordHasher {
 
     /**
      * Hashes a password
+     *
      * @param password {@link String} password to hash
-     * @param salt 64 byte array containing salt
+     * @param salt     64 byte array containing salt
      * @return the hashed password
      */
     @Override
@@ -64,7 +61,7 @@ public class SHAPasswordHasher implements IPasswordHasher {
             byte[] hash = new byte[HASH_LENGTH + salt.length];
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
             PBEKeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, REPETITIONS,
-                8 * HASH_LENGTH);
+                    8 * HASH_LENGTH);
             Key key = factory.generateSecret(keySpec);
             byte[] keyBytes = key.getEncoded();
             System.arraycopy(salt, 0, hash, 0, salt.length);
