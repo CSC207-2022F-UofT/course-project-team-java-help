@@ -48,12 +48,22 @@ class DeleteManager {
      * @return a {@link DeleteResult} instance encoding whether the deletion is successful.
      */
     protected DeleteResult delete(IDeleteInputBoundary input) {
+
         if (verify(input.getUserID(), input.getUserPassword())) {
             User user = userStore.read(input.getUserID());
             userStore.delete(input.getUserID());
             return new DeleteResult(user);
         }
 
+        return new DeleteResult("The password is incorrect");
+    }
+
+    protected DeleteResult delete(String userID, UserPassword up) {
+        if (verify(userID, up)) {
+            User user = userStore.read(userID);
+            userStore.delete(userID);
+            return new DeleteResult(user);
+        }
         return new DeleteResult("The password is incorrect");
     }
 

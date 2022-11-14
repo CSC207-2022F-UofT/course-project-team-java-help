@@ -89,7 +89,7 @@ public class DeleteManagerTest {
     public void testDeleteManagerCorrectPassword() {
         userStore.create(user, registeredPassword);
         assertNotNull(userStore.read(user.getStringID()));
-        DeleteResult deleteResult = deleteManager.delete(correctPasswordInputBoundary);
+        DeleteResult deleteResult = deleteManager.delete(user.getStringID(), enteredCorrectPassword);
         assertTrue(deleteResult.isSuccess());
         assertNull(deleteResult.getErrorMessage());
         assertNotNull(deleteResult.getUser());
