@@ -25,8 +25,7 @@ public class DeleteManagerTest {
     UserPassword enteredIncorrectPassword;
     ClientUserInfo clientUserInfo;
 
-    DeleteManager deleteManagerCorrect;
-    DeleteManager deleteManagerIncorrect;
+    DeleteManager deleteManager;
 
     IDeleteInputBoundary correctPasswordInputBoundary;
     IDeleteInputBoundary incorrectPasswordInputBoundary;
@@ -67,8 +66,7 @@ public class DeleteManagerTest {
         enteredIncorrectPassword = new UserPassword(salt1, password2);
         correctPasswordInputBoundary = new DeleteInputBoundaryImplementation(user.getStringID(), enteredCorrectPassword);
         incorrectPasswordInputBoundary = new DeleteInputBoundaryImplementation(user.getStringID(), enteredIncorrectPassword);
-        deleteManagerCorrect = new DeleteManager(userStore, correctPasswordInputBoundary);
-        deleteManagerIncorrect = new DeleteManager(userStore, incorrectPasswordInputBoundary);
+        deleteManager = new DeleteManager(userStore);
     }
 
     @Test
@@ -105,7 +103,7 @@ public class DeleteManagerTest {
     public void testDeleteManagerCorrectPassword() {
         userStore.create(user, registeredPassword);
         assertNotNull(userStore.read(user.getStringID()));
-        DeleteResult deleteResult = deleteManagerIncorrect.delete();
+        DeleteResult deleteResult = deleteManager.delete(user.getStringID(), enteredCorrectPassword);
         assertTrue(deleteResult.isSuccess());
         assertNull(deleteResult.getErrorMessage());
         assertNotNull(deleteResult.getUser());
@@ -116,7 +114,7 @@ public class DeleteManagerTest {
     public void testDeleteManagerIncorrectPassword() {
         userStore.create(user, registeredPassword);
         assertNotNull(userStore.read(user.getStringID()));
-        DeleteResult deleteResult = deleteManagerIncorrect.delete();
+        DeleteResult deleteResult = deleteManager.delete(incorrectPasswordInputBoundary);
         assertFalse(deleteResult.isSuccess());
         assertEquals("The password is incorrect", deleteResult.getErrorMessage());
         assertNull(deleteResult.getUser());

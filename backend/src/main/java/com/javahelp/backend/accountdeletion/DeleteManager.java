@@ -13,16 +13,14 @@ class DeleteManager {
      * The {@link IUserStore} to use.
      */
     private final IUserStore userStore;
-    private final IDeleteInputBoundary input;
 
     /**
      * Constructs a {@link DeleteManager} instance.
      *
      * @param userStore: the {@link IUserStore} used to store users.
      */
-    protected DeleteManager(IUserStore userStore, IDeleteInputBoundary input) {
+    protected DeleteManager(IUserStore userStore) {
         this.userStore = userStore;
-        this.input = input;
     }
 
 
@@ -45,9 +43,11 @@ class DeleteManager {
      *
      * Else, the user with the given userID will be deleted from the database.
      *
+     * @param input: an {@link IDeleteInputBoundary} instance that contains the userID of the user to be deleted,
+     *               and the password entered by the user.
      * @return a {@link DeleteResult} instance encoding whether the deletion is successful.
      */
-    protected DeleteResult delete() {
+    protected DeleteResult delete(IDeleteInputBoundary input) {
         String userID = input.getUserID();
         UserPassword userPassword = input.getUserPassword();
 
