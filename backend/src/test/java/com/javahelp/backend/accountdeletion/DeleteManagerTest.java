@@ -60,7 +60,7 @@ public class DeleteManagerTest {
         userStore = IUserStore.getDefaultImplementation();
         clientUserInfo = new ClientUserInfo("uoft@uoft.ca", "University of Toronto",
                 "123-456-7890", "J", "M");
-        user = new User("12345Q6QWERTY", clientUserInfo, "cs207");
+        user = new User("123456QWERTY", clientUserInfo, "cs207");
         registeredPassword = new UserPassword(salt1, password1);
         enteredCorrectPassword = new UserPassword(salt1, password1);
         enteredIncorrectPassword = new UserPassword(salt1, password2);
@@ -94,6 +94,18 @@ public class DeleteManagerTest {
         assertNull(deleteResult.getErrorMessage());
         assertNotNull(deleteResult.getUser());
         assertNull(userStore.read(user.getStringID()));
+    }
+
+    @Test
+    public void testGetUserID() {
+        assertEquals("123456QWERTY", correctPasswordInputBoundary.getUserID());
+        assertEquals("123456QWERTY", incorrectPasswordInputBoundary.getUserID());
+    }
+
+    @Test
+    public void testGetUserPassword() {
+        assertEquals(enteredCorrectPassword, correctPasswordInputBoundary.getUserPassword());
+        assertEquals(enteredIncorrectPassword, incorrectPasswordInputBoundary.getUserPassword());
     }
 
     @Test
