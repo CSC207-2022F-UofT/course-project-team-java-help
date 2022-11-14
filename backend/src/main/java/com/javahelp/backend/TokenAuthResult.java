@@ -9,6 +9,12 @@ public class TokenAuthResult {
     private Token token;
     private String errorMessage;
 
+    /**
+     * Constructs a TokenAuthManager object.
+     *
+     * @param user: the user that needs to be authenticated
+     * @param token: the token used to authenticate the user
+     */
     public TokenAuthResult(User user, Token token) {
         if (user.getStringID().equals(token.getUserID())) {
             this.authenticated = true;
