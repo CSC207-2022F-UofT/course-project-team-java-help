@@ -4,11 +4,11 @@ import com.javahelp.model.token.Token;
 import com.javahelp.model.user.User;
 
 /**
- * A class used by a {@link DeleteManager} that encodes whether an account deletion was successful.
+ * A class used by a {@link DeleteManager} that encodes a successful account deletion result.
  */
 class DeleteResult {
-    private final String errorMessage;
     private final User user;
+    private final String successMessage;
 
     /**
      * Constructs a {@link DeleteResult} instance for a successful account deletion.
@@ -16,25 +16,8 @@ class DeleteResult {
      * @param user: the deleted {@link User}.
      */
     protected DeleteResult(User user) {
-        errorMessage = null;
         this.user = user;
-    }
-
-    /**
-     * Constructs a {@link DeleteResult} instance for a failed account deletion.
-     *
-     * @param errorMessage: the {@link String} error message to be displayed.
-     */
-    protected DeleteResult(String errorMessage) {
-        this.errorMessage = errorMessage;
-        user = null;
-    }
-
-    /**
-     * @return whether the account deletion was successful.
-     */
-    public boolean isSuccess() {
-        return errorMessage == null;
+        successMessage = "Account deletion successful";
     }
 
     /**
@@ -45,10 +28,10 @@ class DeleteResult {
     }
 
     /**
-     * @return the {@link String} error message for the deletion.
+     * @return the {@link String} success message for the deletion.
      */
-    public String getErrorMessage() {
-        return errorMessage;
+    public String getSuccessMessage() {
+        return successMessage;
     }
 
 }

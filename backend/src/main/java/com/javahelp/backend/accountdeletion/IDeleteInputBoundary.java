@@ -12,9 +12,4 @@ interface IDeleteInputBoundary {
      * @return the {@link String} userID of the user to be deleted, or null if none provided.
      */
     String getUserID();
-
-    /**
-     * @return the {@link UserPassword} entered by the user.
-     */
-    UserPassword getUserPassword();
 }
