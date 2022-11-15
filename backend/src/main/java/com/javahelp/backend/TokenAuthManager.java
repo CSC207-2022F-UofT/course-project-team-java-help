@@ -21,17 +21,13 @@ public class TokenAuthManager {
         this.tokenStore = tokenStore;
     }
 
-    public void setAuthenticate(User desiredUser, Token token) {
-        this.authenticate = new TokenAuthResult(desiredUser, token);
-    }
-
     /**
      * compares the input user and token and returns the result of the comparison
      *
      * @return TokenAuthResult object with the results of the comparison
      */
     public TokenAuthResult authenticate(User desiredUser, Token token) {
-        setAuthenticate(desiredUser, token);
+        this.authenticate = new TokenAuthResult(desiredUser, token);
         return authenticate;
     }
 }

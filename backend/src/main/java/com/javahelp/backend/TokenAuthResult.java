@@ -6,12 +6,10 @@ import com.javahelp.model.user.User;
 import org.graalvm.compiler.api.replacements.Snippet;
 
 public class TokenAuthResult {
-    private boolean authenticated;
-    private User user;
-    private Token token;
-    private String errorMessage;
-
-    private String ID;
+    private final boolean authenticated;
+    private final User user;
+    private final Token token;
+    private final String errorMessage;
 
     /**
      * Constructs a TokenAuthResult object.
@@ -30,7 +28,7 @@ public class TokenAuthResult {
         }
     }
 
-    public Boolean getAuthenticated() { return this.authenticated; }
+    public boolean getAuthenticated() { return this.authenticated; }
 
 
 }
