@@ -70,9 +70,15 @@ public class DeleteManagerTest {
             }
         };
 
-        DeleteResult deleteResult = deleteManager.delete(input);
-        assertNotNull(deleteResult.getUser());
-        assertEquals("Account deletion successful", deleteResult.getSuccessMessage());
-        assertNull(userStore.read(user.getStringID()));
+        DeleteResult deleteResult1 = deleteManager.delete(input);
+        assertNotNull(deleteResult1.getUser());
+        assertNull(deleteResult1.getErrorMessage());
+        assertTrue(deleteResult1.isSuccess());
+
+        // Tries to delete again (expected failure).
+        DeleteResult deleteResult2 = deleteManager.delete(input);
+        assertNull(deleteResult2.getUser());
+        assertEquals("User does not exist", deleteResult2.getErrorMessage());
+        assertFalse(deleteResult2.isSuccess());
     }
 }

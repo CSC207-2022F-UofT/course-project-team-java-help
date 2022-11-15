@@ -24,13 +24,18 @@ public class DeleteManager {
 
 
     /**
-     * Deletes the user with the given userID from the database.
+     * Tries to deletes the user with the inputted userID from the database.
      *
      * @param input: an {@link IDeleteInputBoundary} instance that contains the userID of the user to be deleted.
-     * @return a {@link DeleteResult} instance encoding a successful account deletion.
+     * @return a {@link DeleteResult} instance encoding whether the deletion was successful.
      */
     public DeleteResult delete(IDeleteInputBoundary input) {
         User user = userStore.read(input.getUserID());
+
+        if (user == null) {
+            return new DeleteResult("User does not exist");
+        }
+
         userStore.delete(input.getUserID());
         return new DeleteResult(user);
     }

@@ -3,11 +3,11 @@ package com.javahelp.backend.domain.user.delete;
 import com.javahelp.model.user.User;
 
 /**
- * A class used by a {@link DeleteManager} that encodes a successful account deletion result.
+ * A class used by a {@link DeleteManager} that encodes the result of an account deletion action.
  */
 class DeleteResult {
     private final User user;
-    private final String successMessage;
+    private final String errorMessage;
 
     /**
      * Constructs a {@link DeleteResult} instance for a successful account deletion.
@@ -16,7 +16,17 @@ class DeleteResult {
      */
     protected DeleteResult(User user) {
         this.user = user;
-        successMessage = "Account deletion successful";
+        errorMessage = null;
+    }
+
+    /**
+     * Constructs a {@link DeleteResult} instance for a failed account deletion.
+     *
+     * @param errorMessage: the {@link String} error message to be displayed.
+     */
+    protected DeleteResult(String errorMessage) {
+        user = null;
+        this.errorMessage = errorMessage;
     }
 
     /**
@@ -27,10 +37,17 @@ class DeleteResult {
     }
 
     /**
-     * @return the {@link String} success message for the deletion.
+     * @return the {@link String} error message for the deletion.
      */
-    public String getSuccessMessage() {
-        return successMessage;
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    /**
+     * @return whether this account deletion was successful.
+     */
+    public boolean isSuccess() {
+        return errorMessage == null;
     }
 
 }
