@@ -6,6 +6,8 @@ import com.amazonaws.services.dynamodbv2.model.DeleteItemRequest;
 import com.amazonaws.services.dynamodbv2.model.GetItemRequest;
 import com.amazonaws.services.dynamodbv2.model.GetItemResult;
 import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
+import com.amazonaws.services.dynamodbv2.model.QueryRequest;
+import com.amazonaws.services.dynamodbv2.model.QueryResult;
 import com.amazonaws.services.dynamodbv2.model.UpdateItemRequest;
 import com.javahelp.model.user.ClientUserInfo;
 import com.javahelp.model.user.ProviderUserInfo;
@@ -86,12 +88,42 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
 
     @Override
     public User readByUsername(String username) {
-        throw new NotImplementedException();
+        Map<String, AttributeValue> values = new HashMap<>();
+        values.put(":usernameval", new AttributeValue().withS(username));
+
+        QueryRequest request = new QueryRequest()
+                .withTableName(tableName)
+                .withIndexName("username-index")
+                .withKeyConditionExpression("username=:usernameval")
+                .withExpressionAttributeValues(values);
+
+        QueryResult result = getClient().query(request);
+
+        if (result.getCount() == 0) {
+            return null;
+        }
+
+        return userFromDynamo(result.getItems().get(0));
     }
 
     @Override
     public User readByEmail(String email) {
-        throw new NotImplementedException();
+        Map<String, AttributeValue> values = new HashMap<>();
+        values.put(":emailval", new AttributeValue().withS(email));
+
+        QueryRequest request = new QueryRequest()
+                .withTableName(tableName)
+                .withIndexName("email-index")
+                .withKeyConditionExpression("email=:emailval")
+                .withExpressionAttributeValues(values);
+
+        QueryResult result = getClient().query(request);
+
+        if (result.getCount() == 0) {
+            return null;
+        }
+
+        return userFromDynamo(result.getItems().get(0));
     }
 
     @Override
