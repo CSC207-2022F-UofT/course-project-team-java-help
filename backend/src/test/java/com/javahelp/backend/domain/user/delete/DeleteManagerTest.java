@@ -1,4 +1,4 @@
-package com.javahelp.backend.accountdeletion;
+package com.javahelp.backend.domain.user.delete;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -8,6 +8,9 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.javahelp.backend.data.IUserStore;
+import com.javahelp.backend.domain.user.delete.DeleteManager;
+import com.javahelp.backend.domain.user.delete.DeleteResult;
+import com.javahelp.backend.domain.user.delete.IDeleteInputBoundary;
 import com.javahelp.model.user.ClientUserInfo;
 import com.javahelp.model.user.User;
 import com.javahelp.model.user.UserPassword;

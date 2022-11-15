@@ -1,13 +1,12 @@
-package com.javahelp.backend.accountdeletion;
+package com.javahelp.backend.domain.user.delete;
 
 import com.javahelp.backend.data.IUserStore;
 import com.javahelp.model.user.User;
-import com.javahelp.model.user.UserPassword;
 
 /**
  * A class for managing an account deletion action.
  */
-class DeleteManager {
+public class DeleteManager {
 
     /**
      * The {@link IUserStore} to use.
@@ -19,7 +18,7 @@ class DeleteManager {
      *
      * @param userStore: the {@link IUserStore} used to store users.
      */
-    protected DeleteManager(IUserStore userStore) {
+    public DeleteManager(IUserStore userStore) {
         this.userStore = userStore;
     }
 
@@ -30,7 +29,7 @@ class DeleteManager {
      * @param input: an {@link IDeleteInputBoundary} instance that contains the userID of the user to be deleted.
      * @return a {@link DeleteResult} instance encoding a successful account deletion.
      */
-    protected DeleteResult delete(IDeleteInputBoundary input) {
+    public DeleteResult delete(IDeleteInputBoundary input) {
         User user = userStore.read(input.getUserID());
         userStore.delete(input.getUserID());
         return new DeleteResult(user);

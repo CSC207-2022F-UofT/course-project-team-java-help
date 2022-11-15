@@ -1,6 +1,4 @@
-package com.javahelp.backend.accountdeletion;
-
-import com.javahelp.model.user.UserPassword;
+package com.javahelp.backend.domain.user.delete;
 
 /**
  * An interface for classes that want to supply input of a {@link String} userID to a {@link DeleteManager}.

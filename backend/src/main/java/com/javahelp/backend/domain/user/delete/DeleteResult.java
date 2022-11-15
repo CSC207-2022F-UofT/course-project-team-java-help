@@ -1,6 +1,5 @@
-package com.javahelp.backend.accountdeletion;
+package com.javahelp.backend.domain.user.delete;
 
-import com.javahelp.model.token.Token;
 import com.javahelp.model.user.User;
 
 /**
