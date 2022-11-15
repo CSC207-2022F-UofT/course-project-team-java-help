@@ -18,7 +18,7 @@ public class TokenAuthManager {
      */
     public TokenAuthManager(IUserStore userStore, ITokenStore tokenStore) {
         this.userStore = userStore;
-        this.tokenStore =tokenStore;
+        this.tokenStore = tokenStore;
     }
 
     public void setAuthenticate(User desiredUser, Token token) {
@@ -30,7 +30,7 @@ public class TokenAuthManager {
      *
      * @return TokenAuthResult object with the results of the comparison
      */
-    private TokenAuthResult authenticate(User desiredUser, Token token) {
+    public TokenAuthResult authenticate(User desiredUser, Token token) {
         setAuthenticate(desiredUser, token);
         return authenticate;
     }
