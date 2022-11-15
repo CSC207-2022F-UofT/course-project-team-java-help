@@ -14,17 +14,9 @@ import com.javahelp.model.user.UserInfo;
 import com.javahelp.model.user.UserPassword;
 import com.javahelp.model.user.UserType;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Supplier;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -36,13 +28,30 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  * - username: The string username of the user
  * - infotype: The type of the user, either CLIENT or PROVIDER
  * - salthash: Base64 string of the concatenated salt and hash (+ salt length)
- * - userinfo: lazy Base64 serialized UserInfo
+ * - user info attributes with corresponding names
  * <p></p>
  * The structure of the items in this table should not be depended on outside of this class
  * as elements, especially the Base64 encoded serialization of {@link UserInfo} may change in the
  * future
  */
 public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
+
+    private static final String CLIENT_UPDATE = "SET username=:unameval, " +
+            "infotype=:typeval, " +
+            "firstName=:firstnameval, " +
+            "lastName=:lastnameval, " +
+            "address=:addressval, " +
+            "phoneNumber=:phonenumberval, " +
+            "email=:emailval " +
+            "REMOVE certified, practiceName",
+            PROVIDER_UPDATE = "SET username=:unameval, " +
+                    "infotype=:typeval, " +
+                    "practiceName=:practicenameval, " +
+                    "certified=:certifiedval, " +
+                    "address=:addressval, " +
+                    "phoneNumber=:phonenumberval, " +
+                    "email=:emailval " +
+                    "REMOVE firstName, lastName";
 
     private String tableName;
 
@@ -94,9 +103,7 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
         UpdateItemRequest request = new UpdateItemRequest()
                 .withTableName(tableName)
                 .withKey(key)
-                .withUpdateExpression("SET username=:unameval, " +
-                        "infotype=:typeval, " +
-                        "userinfo=:infoval")
+                .withUpdateExpression(getUpdateString(object))
                 .withExpressionAttributeValues(updateFromUser(object));
 
         getClient().updateItem(request);
@@ -164,6 +171,16 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
     }
 
     /**
+     * Gets the update {@link String} for the specified {@link User}
+     *
+     * @param u {@link User} to update
+     * @return {@link String} for update
+     */
+    private static String getUpdateString(User u) {
+        return u.getUserInfo().getType() == UserType.CLIENT ? CLIENT_UPDATE : PROVIDER_UPDATE;
+    }
+
+    /**
      * Represents a {@link User} and {@link UserPassword} as an object in a DynamoDB table
      *
      * @param u {@link User} to represent
@@ -177,15 +194,23 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
         user.put("username", new AttributeValue().withS(u.getUsername()));
         user.put("infotype", new AttributeValue().withS(u.getUserInfo().getType().name()));
 
-        String userInfoValue = encodeUserInfo(u.getUserInfo());
+        UserInfo info = u.getUserInfo();
 
-        if (userInfoValue == null) {
-            // fail fast on invalid userinfo representation
-            throw new IllegalArgumentException("User must have a UserInfo supported by this" +
-                    "implementation");
+        if (info.getType() == UserType.CLIENT) {
+            ClientUserInfo c = (ClientUserInfo) info;
+            user.put("firstName", new AttributeValue().withS(c.getFirstName()));
+            user.put("lastName", new AttributeValue().withS(c.getLastName()));
+            user.put("address", new AttributeValue().withS(c.getAddress()));
+            user.put("phoneNumber", new AttributeValue().withS(c.getPhoneNumber()));
+            user.put("email", new AttributeValue().withS(c.getEmailAddress()));
+        } else {
+            ProviderUserInfo i = (ProviderUserInfo) info;
+            user.put("practiceName", new AttributeValue().withS(i.getPracticeName()));
+            user.put("certified", new AttributeValue().withN(i.isCertified() ? "1" : "0"));
+            user.put("address", new AttributeValue().withS(i.getAddress()));
+            user.put("phoneNumber", new AttributeValue().withS(i.getPhoneNumber()));
+            user.put("email", new AttributeValue().withS(i.getEmailAddress()));
         }
-
-        user.put("userinfo", new AttributeValue().withS(userInfoValue));
 
         user.put("salthash", new AttributeValue().withS(p.getBase64SaltHash()));
 
@@ -234,10 +259,20 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
 
         UserInfo info = u.getUserInfo();
 
-        String infoVal = encodeUserInfo(info);
-
-        if (infoVal != null) {
-            user.put(":infoval", new AttributeValue().withS(infoVal));
+        if (info.getType() == UserType.CLIENT) {
+            ClientUserInfo c = (ClientUserInfo) info;
+            user.put(":firstnameval", new AttributeValue().withS(c.getFirstName()));
+            user.put(":lastnameval", new AttributeValue().withS(c.getLastName()));
+            user.put(":addressval", new AttributeValue().withS(c.getAddress()));
+            user.put(":phonenumberval", new AttributeValue().withS(c.getPhoneNumber()));
+            user.put(":emailval", new AttributeValue().withS(c.getEmailAddress()));
+        } else {
+            ProviderUserInfo p = (ProviderUserInfo) info;
+            user.put(":practicenameval", new AttributeValue().withS(p.getPracticeName()));
+            user.put(":certifiedval", new AttributeValue().withN(p.isCertified() ? "1" : "0"));
+            user.put(":addressval", new AttributeValue().withS(p.getAddress()));
+            user.put(":phonenumberval", new AttributeValue().withS(p.getPhoneNumber()));
+            user.put(":emailval", new AttributeValue().withS(p.getEmailAddress()));
         }
 
         return user;
@@ -248,145 +283,62 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
      * @return {@link User} contained or null if invalid representation
      */
     private static User userFromDynamo(Map<String, AttributeValue> item) {
+        boolean isClient;
         if (!item.containsKey("id") ||
+                !item.containsKey("email") ||
                 !item.containsKey("username") ||
-                !item.containsKey("infotype") || // not actually needed in current implementation
-                !item.containsKey("userinfo")) {
+                !item.containsKey("infotype") ||
+                (!(isClient = matchesClient(item)) && !matchesProvider(item))) {
             return null;
         }
 
         String id = item.get("id").getS(), username = item.get("username").getS();
 
-        String encodedUserInfo = item.get("userinfo").getS();
+        UserInfo info;
 
-        UserInfo info = decodeUserInfo(encodedUserInfo);
-
-        if (info == null) {
-            return null;
+        if (isClient) {
+            String email = item.get("email").getS(),
+                    phoneNumber = item.get("phoneNumber").getS(),
+                    firstName = item.get("firstName").getS(),
+                    lastName = item.get("lastName").getS(),
+                    address = item.get("address").getS();
+            info = new ClientUserInfo(email, address, phoneNumber, firstName, lastName);
+        } else {
+            String email = item.get("email").getS(),
+                    phoneNumber = item.get("phoneNumber").getS(),
+                    practiceName = item.get("practiceName").getS(),
+                    address = item.get("address").getS();
+            boolean certified = !"0".equals(item.get("certified").getN());
+            info = new ProviderUserInfo(email, address, phoneNumber, practiceName);
+            ((ProviderUserInfo) info).setCertified(certified);
         }
 
         return new User(id, info, username);
     }
 
     /**
-     * Encodes a {@link UserInfo} as a Base64 {@link String}
-     *
-     * @param u {@link UserInfo} to encode
-     * @return Base64 encoded {@link String} representing a {@link UserInfo}
-     * or null if the encoding fails
+     * @param item {@link Map} to consider
+     * @return whether the map matches the expected fields in a provider
      */
-    private static String encodeUserInfo(UserInfo u) {
-        boolean isClient = u.getType() == UserType.CLIENT;
-
-        Serializable s = isClient ?
-                new SerializableClientUserInfo((ClientUserInfo) u) :
-                new SerializableProviderUserInfo((ProviderUserInfo) u);
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-        try {
-            ObjectOutputStream objectStream = new ObjectOutputStream(outputStream);
-            objectStream.writeObject(s);
-            objectStream.flush();
-            objectStream.close();
-
-            byte[] serialized = outputStream.toByteArray();
-
-            return Base64.getEncoder().encodeToString(serialized);
-        } catch (IOException e) {
-            return null;
-        }
+    private static boolean matchesProvider(Map<String, AttributeValue> item) {
+        return item.containsKey("infotype") &&
+                "PROVIDER".equals(item.get("infotype").getS()) &&
+                item.containsKey("address") &&
+                item.containsKey("phoneNumber") &&
+                item.containsKey("certified") &&
+                item.containsKey("practiceName");
     }
 
     /**
-     * Decodes a {@link UserInfo} from a Base64 encoded {@link String}
-     *
-     * @param s {@link String} to decode from
-     * @return {@link UserInfo} created, or null
+     * @param item {@link Map} to consider
+     * @return whether the map matches the expected fields in a provider
      */
-    private static UserInfo decodeUserInfo(String s) {
-        byte[] serialized = Base64.getDecoder().decode(s);
-
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(serialized);
-
-        try {
-            ObjectInputStream objectStream = new ObjectInputStream(inputStream);
-            Supplier<UserInfo> info = (Supplier<UserInfo>) objectStream.readObject();
-            objectStream.close();
-
-            return info.get();
-        } catch (IOException | ClassNotFoundException e) {
-            return null;
-        }
-    }
-
-    /**
-     * Serializable wrapper around fields of a {@link ProviderUserInfo}
-     */
-    private static class SerializableProviderUserInfo implements Serializable, Supplier<UserInfo> {
-
-        String email, practice, address, phoneNumber;
-
-        boolean certified;
-
-        /**
-         * Instantiates a {@link SerializableProviderUserInfo}
-         */
-        public SerializableProviderUserInfo() {
-
-        }
-
-        /**
-         * Constructs a {@link SerializableProviderUserInfo} object
-         *
-         * @param base {@link ProviderUserInfo} to construct from
-         */
-        public SerializableProviderUserInfo(ProviderUserInfo base) {
-            email = base.getEmailAddress();
-            practice = base.getPracticeName();
-            address = base.getAddress();
-            phoneNumber = base.getPhoneNumber();
-            certified = base.isCertified();
-        }
-
-        @Override
-        public UserInfo get() {
-            ProviderUserInfo p = new ProviderUserInfo(email, address, phoneNumber, practice);
-            p.setCertified(certified);
-            return p;
-        }
-    }
-
-    /**
-     * Serializable wrapper around fields of a {@link ClientUserInfo}
-     */
-    private static class SerializableClientUserInfo implements Serializable, Supplier<UserInfo> {
-
-        String email, first, last, address, phoneNumber;
-
-        /**
-         * Constructs a {@link SerializableClientUserInfo} object
-         *
-         * @param base {@link ClientUserInfo} to construct from
-         */
-        public SerializableClientUserInfo(ClientUserInfo base) {
-            email = base.getEmailAddress();
-            first = base.getFirstName();
-            last = base.getLastName();
-            address = base.getAddress();
-            phoneNumber = base.getPhoneNumber();
-        }
-
-        /**
-         * Instantiates a {@link SerializableClientUserInfo}
-         */
-        public SerializableClientUserInfo() {
-
-        }
-
-        @Override
-        public UserInfo get() {
-            return new ClientUserInfo(email, address, phoneNumber, first, last);
-        }
+    private static boolean matchesClient(Map<String, AttributeValue> item) {
+        return item.containsKey("infotype") &&
+                "CLIENT".equals(item.get("infotype").getS()) &&
+                item.containsKey("address") &&
+                item.containsKey("firstName") &&
+                item.containsKey("lastName") &&
+                item.containsKey("phoneNumber");
     }
 }
