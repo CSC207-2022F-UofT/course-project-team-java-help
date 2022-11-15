@@ -140,6 +140,46 @@ public class DynamoDBUserStoreTest {
         db.delete(u.getStringID());
     }
 
+    @Test
+    public void testReadByEmail() {
+        UserPassword p = randomUserPassword();
+        ClientUserInfo clientInfo = new ClientUserInfo(
+                "test.client@mail.com",
+                "123  client road",
+                "289375034875093",
+                "Erin",
+                "McDonald");
+        User u = new User("test", clientInfo, "test_user");
+
+        db.create(u, p);
+
+        User read = db.readByEmail("test.client@mail.com");
+
+        assertEquals(u.getStringID(), read.getStringID());
+
+        db.delete(read.getStringID());
+    }
+
+    @Test
+    public void testReadByUsername() {
+        UserPassword p = randomUserPassword();
+        ClientUserInfo clientInfo = new ClientUserInfo(
+                "test.client@mail.com",
+                "123  client road",
+                "289375034875093",
+                "Erin",
+                "McDonald");
+        User u = new User("test", clientInfo, "test_user");
+
+        db.create(u, p);
+
+        User read = db.readByUsername("test_user");
+
+        assertEquals(u.getStringID(), read.getStringID());
+
+        db.delete(read.getStringID());
+    }
+
     /**
      * @return A randomly generated {@link UserPassword}
      */
