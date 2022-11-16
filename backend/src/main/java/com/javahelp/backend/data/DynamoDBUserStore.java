@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 /**
  * Implementation of {@link IUserStore} through DynamoDB.
  * <p>
@@ -71,6 +73,16 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
         }
 
         return userFromDynamo(result.getItem());
+    }
+
+    @Override
+    public User readByUsername(String username) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public User readByEmail(String email) {
+        throw new NotImplementedException();
     }
 
     @Override

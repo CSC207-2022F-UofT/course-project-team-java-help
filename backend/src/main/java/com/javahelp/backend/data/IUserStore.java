@@ -33,6 +33,20 @@ public interface IUserStore {
     User read(String id);
 
     /**
+     *
+     * @param username {@link String} username of the {@link User} to get
+     * @return {@link User} with the specified username
+     */
+    User readByUsername(String username);
+
+    /**
+     *
+     * @param email {@link String} email of the {@link User} to get
+     * @return {@link User} with the specified email
+     */
+    User readByEmail(String email);
+
+    /**
      * Updates the specified {@link User}
      *
      * @param u {@link User} to update
