@@ -46,7 +46,7 @@ public class TokenAuthResultTest {
     }
 
 
-    @Test
+    @Test(timeout = 50)
     public void testClientAuthenticate() {
         TokenAuthResult auth1 = new TokenAuthResult(user1, token1);
         System.out.println(auth1.getAuthenticated());
@@ -57,7 +57,7 @@ public class TokenAuthResultTest {
         assertEquals(false, auth2.getAuthenticated());
     }
 
-    @Test
+    @Test(timeout = 50)
     public void testProviderAuthenticate() {
         TokenAuthResult auth1 = new TokenAuthResult(user3, token2);
         assertEquals(true, auth1.getAuthenticated());

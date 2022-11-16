@@ -38,7 +38,7 @@ public class TokenAuthManagerTest {
 
     }
 
-    @Test
+    @Test(timeout = 50)
     public void testAuthenticate() {
         TokenAuthManager manager = new TokenAuthManager(userStore, tokenStore);
         assertEquals(result.getAuthenticated(), manager.authenticate(user, token).getAuthenticated());
