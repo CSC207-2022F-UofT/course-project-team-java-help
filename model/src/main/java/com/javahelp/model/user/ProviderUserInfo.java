@@ -8,6 +8,7 @@ public class ProviderUserInfo extends UserInfo {
     private boolean certified;
     private String address;
     private String phoneNumber;
+    private String gender;
 
     /**
      * Constructs a ProviderInfo object.
@@ -18,12 +19,18 @@ public class ProviderUserInfo extends UserInfo {
      * @param practiceName: the name of the provider.
      */
     public ProviderUserInfo(String emailAddress, String address, String phoneNumber,
-                            String practiceName) {
+                            String practiceName, String gender) {
         super(emailAddress);
         this.practiceName = practiceName;
         this.certified = false;
         this.address = address;
         this.phoneNumber = phoneNumber;
+        if (!(gender.toUpperCase().equals("MALE") || gender.toUpperCase().equals("FEMALE") ||
+                gender.toUpperCase().equals("OTHERS"))){
+            throw new IllegalArgumentException("This is not a valid input. Please try \"MALE\"" +
+                    "or \"FEMALE\" or \"OTHERS\"");
+        }
+        this.gender = gender.toUpperCase();
     }
 
     /**
@@ -96,6 +103,24 @@ public class ProviderUserInfo extends UserInfo {
      */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    /**
+     * Gets the gender of this provider
+     *
+     * @return the current gender of this client
+     */
+    public String getGender(){
+        return gender;
+    }
+
+    /**
+     * Sets a new gender to this client
+     *
+     * @param gender an updated gender of this client
+     */
+    public void setGender(String gender){
+        this.gender = gender.toUpperCase();
     }
 
     @Override

@@ -13,7 +13,7 @@ public class ProviderUserInfoTest {
     @Before
     public void setUp() {
         p = new ProviderUserInfo("uoft@utoronto.ca", "St. George",
-                "111-234-5678", "University of Toronto");
+                "111-234-5678", "University of Toronto", "male");
     }
 
     @Test(timeout = 50)
@@ -49,6 +49,12 @@ public class ProviderUserInfoTest {
         assertFalse(p.isCertified());
         p.setCertified(true);
         assertTrue(p.isCertified());
+    }
+
+    @Test(timeout = 50)
+    public void testSetGender(){
+        p.setGender("female");
+        assertEquals("FEMALE", p.getGender());
     }
 
     @Test(timeout = 50)
