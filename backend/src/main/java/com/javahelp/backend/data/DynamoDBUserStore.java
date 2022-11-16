@@ -341,7 +341,7 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
                     practiceName = item.get("practiceName").getS(),
                     address = item.get("address").getS();
             boolean certified = !"0".equals(item.get("certified").getN());
-            info = new ProviderUserInfo(email, address, phoneNumber, practiceName);
+            info = new ProviderUserInfo(email, address, phoneNumber, practiceName, "OTHERS");
             ((ProviderUserInfo) info).setCertified(certified);
         }
 
