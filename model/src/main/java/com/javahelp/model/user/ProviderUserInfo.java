@@ -25,12 +25,7 @@ public class ProviderUserInfo extends UserInfo {
         this.certified = false;
         this.address = address;
         this.phoneNumber = phoneNumber;
-        if (!(gender.toUpperCase().equals("MALE") || gender.toUpperCase().equals("FEMALE") ||
-                gender.toUpperCase().equals("OTHERS"))){
-            throw new IllegalArgumentException("This is not a valid input. Please try \"MALE\"" +
-                    "or \"FEMALE\" or \"OTHERS\"");
-        }
-        this.gender = gender.toUpperCase();
+        this.setGender(gender);
     }
 
     /**
