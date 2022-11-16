@@ -114,14 +114,14 @@ public class ProviderUserInfo extends UserInfo {
      *
      * @param gender an updated gender of this client
      */
-    public String setGender(String gender){
-        if (!(gender.toUpperCase().equals("MALE") || gender.toUpperCase().equals("FEMALE") ||
-                gender.toUpperCase().equals("OTHERS"))){
+    public void setGender(String gender){
+        if (!(Gender.FEMALE.toString().equals(gender.toUpperCase()) ||
+                Gender.MALE.toString().equals(gender.toUpperCase()) ||
+                Gender.OTHERS.toString().equals(gender.toUpperCase()))){
             throw new IllegalArgumentException("This is not a valid input. Please try \"MALE\"" +
                     "or \"FEMALE\" or \"OTHERS\"");
         }
         this.gender = gender.toUpperCase();
-        return null;
     }
 
     @Override
