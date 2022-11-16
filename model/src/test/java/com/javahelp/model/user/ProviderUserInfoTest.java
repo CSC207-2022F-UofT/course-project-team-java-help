@@ -55,6 +55,13 @@ public class ProviderUserInfoTest {
     public void testSetGender(){
         p.setGender("female");
         assertEquals("FEMALE", p.getGender());
+
+        try{
+            p.setGender("ABC");
+        }
+        catch(IllegalArgumentException e){
+            System.out.println("Invalid input for gender. Please try again");
+        }
     }
 
     @Test(timeout = 50)
