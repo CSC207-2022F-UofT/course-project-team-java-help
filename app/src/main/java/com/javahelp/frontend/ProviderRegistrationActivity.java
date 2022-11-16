@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.javahelp.R;
 
-public class PRegActivity extends AppCompatActivity {
+public class ProviderRegistrationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

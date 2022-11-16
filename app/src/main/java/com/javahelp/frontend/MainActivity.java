@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = null;
-                intent = new Intent(MainActivity.this,PRegActivity.class);
+                intent = new Intent(MainActivity.this,ProviderRegistrationActivity.class);
                 startActivity(intent);
             }
         });
