@@ -51,9 +51,16 @@ public class UserQueryConstraintTest {
         UserQueryConstraint userQueryConstraint = new UserQueryConstraint(db);
         Set<User> providers = userQueryConstraint.getProvidersWithConstraint(constraint);
 
-        Set<User> providersSet = new HashSet<User>();
-        providersSet.add(u1);
+        Set<User> providersSet = new HashSet<>();
         providersSet.add(u2);
+
+        try {
+            assertEquals(providersSet, providers);
+        }
+        catch (AssertionError e) {
+            db.delete(u1.getStringID());
+            db.delete(u2.getStringID());
+        }
 
         assertEquals(providersSet, providers);
 

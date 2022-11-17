@@ -1,19 +1,13 @@
 package com.javahelp.backend.data;
 
 import com.amazonaws.regions.Regions;
-import com.amazonaws.services.dynamodbv2.document.DynamoDB;
-import com.amazonaws.services.dynamodbv2.document.Item;
-import com.amazonaws.services.dynamodbv2.document.ItemCollection;
-import com.amazonaws.services.dynamodbv2.document.QueryOutcome;
-import com.amazonaws.services.dynamodbv2.document.Table;
-import com.amazonaws.services.dynamodbv2.document.spec.QuerySpec;
-import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.DeleteItemRequest;
 import com.amazonaws.services.dynamodbv2.model.GetItemRequest;
 import com.amazonaws.services.dynamodbv2.model.GetItemResult;
 import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
-import com.amazonaws.services.dynamodbv2.model.QueryResult;
+import com.amazonaws.services.dynamodbv2.model.ScanRequest;
+import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.amazonaws.services.dynamodbv2.model.UpdateItemRequest;
 import com.javahelp.model.user.ClientUserInfo;
 import com.javahelp.model.user.ProviderUserInfo;
@@ -85,19 +79,23 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
     }
 
     public List<User> query(HashMap<String, ArrayList<Integer>> constraint) {
-        String keyConditionExpression = String.format("%s = :question", constraint.keySet().toArray()[0]);
-        QuerySpec spec = new QuerySpec().withKeyConditionExpression(keyConditionExpression)
-                .withValueMap(new ValueMap().withString(":question", "0"));
+        String question = (String) constraint.keySet().toArray()[0];
+        Integer answer = constraint.get(question).get(0);
 
-        DynamoDB dynamoDB = new DynamoDB(getClient());
-        Table table = dynamoDB.getTable(this.tableName);
-        ItemCollection<QueryOutcome> items = table.query(spec);
+        String keyConditionExpression = String.format("%s = :question", question);
+        Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
+        expressionAttributeValues.put(":question", new AttributeValue(String.valueOf(answer)));
 
-        Iterator<Item> iterator = items.iterator();
+        ScanRequest scanRequest = new ScanRequest()
+                .withTableName(this.tableName)
+                .withFilterExpression(keyConditionExpression)
+                .withExpressionAttributeValues(expressionAttributeValues);
+
+        ScanResult result = getClient().scan(scanRequest);
+
         List<User> userList = new ArrayList<>();
-        while (iterator.hasNext()) {
-            Item item = iterator.next();
-            User user = userFromDynamoDoc(item.asMap());
+        for (Map<String, AttributeValue> item : result.getItems()) {
+            User user = userFromDynamo(item);
             userList.add(user);
         }
 
@@ -364,6 +362,7 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
     private static class SerializableProviderUserInfo implements Serializable, Supplier<UserInfo> {
 
         String email, practice, address, phoneNumber;
+        HashMap<String, Integer> attributeMap;
 
         boolean certified;
 
@@ -385,6 +384,7 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
             address = base.getAddress();
             phoneNumber = base.getPhoneNumber();
             certified = base.isCertified();
+            attributeMap = base.getAllAttribute();
         }
 
         @Override

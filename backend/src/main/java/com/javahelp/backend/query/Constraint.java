@@ -13,7 +13,8 @@ public abstract class Constraint {
     }
 
     public HashMap<String, ArrayList<Integer>> getConstraint() {
-        ArrayList<Integer> answerList = new ArrayList<>(query);
+        ArrayList<Integer> answerList = new ArrayList<>();
+        answerList.add(this.query);
         HashMap<String, ArrayList<Integer>> constraint = new HashMap<>();
         constraint.put(question, answerList);
         return constraint;
