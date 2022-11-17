@@ -25,7 +25,7 @@ public class DynamoDBUserStoreTest {
 
     DynamoDBUserStore db = new DynamoDBUserStore(tableName, regions);
 
-    @Test
+    @Test(timeout = 5000)
     public void testCreateRead() {
         UserPassword p = randomUserPassword();
         ClientUserInfo clientInfo = new ClientUserInfo(
@@ -56,7 +56,7 @@ public class DynamoDBUserStoreTest {
         db.delete(u.getStringID());
     }
 
-    @Test
+    @Test(timeout = 5000)
     public void testUpdate() {
         UserPassword p = randomUserPassword();
         ClientUserInfo clientInfo = new ClientUserInfo(
@@ -87,7 +87,7 @@ public class DynamoDBUserStoreTest {
         db.delete(u.getStringID());
     }
 
-    @Test
+    @Test(timeout = 5000)
     public void testDelete() {
 
         UserPassword p = randomUserPassword();
@@ -112,7 +112,7 @@ public class DynamoDBUserStoreTest {
         assertNull(deleted);
     }
 
-    @Test
+    @Test(timeout = 5000)
     public void testPasswordUpdateRead() {
         UserPassword p = randomUserPassword();
         ClientUserInfo clientInfo = new ClientUserInfo(
@@ -138,6 +138,46 @@ public class DynamoDBUserStoreTest {
         assertEquals(newPassword.getBase64SaltHash(), read.getBase64SaltHash());
 
         db.delete(u.getStringID());
+    }
+
+    @Test(timeout = 5000)
+    public void testReadByEmail() {
+        UserPassword p = randomUserPassword();
+        ClientUserInfo clientInfo = new ClientUserInfo(
+                "test.client@mail.com",
+                "123  client road",
+                "289375034875093",
+                "Erin",
+                "McDonald");
+        User u = new User("test", clientInfo, "test_user");
+
+        db.create(u, p);
+
+        User read = db.readByEmail("test.client@mail.com");
+
+        assertEquals(u.getStringID(), read.getStringID());
+
+        db.delete(read.getStringID());
+    }
+
+    @Test(timeout = 5000)
+    public void testReadByUsername() {
+        UserPassword p = randomUserPassword();
+        ClientUserInfo clientInfo = new ClientUserInfo(
+                "test.client@mail.com",
+                "123  client road",
+                "289375034875093",
+                "Erin",
+                "McDonald");
+        User u = new User("test", clientInfo, "test_user");
+
+        db.create(u, p);
+
+        User read = db.readByUsername("test_user");
+
+        assertEquals(u.getStringID(), read.getStringID());
+
+        db.delete(read.getStringID());
     }
 
     /**
