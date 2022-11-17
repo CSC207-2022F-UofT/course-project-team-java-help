@@ -10,6 +10,7 @@ import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
 import com.amazonaws.services.dynamodbv2.model.UpdateItemRequest;
 import com.javahelp.model.user.ClientUserInfo;
+import com.javahelp.model.user.Gender;
 import com.javahelp.model.user.ProviderUserInfo;
 import com.javahelp.model.user.User;
 import com.javahelp.model.user.UserInfo;
@@ -45,14 +46,15 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
             "address=:addressval, " +
             "phoneNumber=:phonenumberval, " +
             "email=:emailval " +
-            "REMOVE certified, practiceName",
+            "REMOVE certified, practiceName, gender",
             PROVIDER_UPDATE = "SET username=:unameval, " +
                     "infotype=:typeval, " +
                     "practiceName=:practicenameval, " +
                     "certified=:certifiedval, " +
                     "address=:addressval, " +
                     "phoneNumber=:phonenumberval, " +
-                    "email=:emailval " +
+                    "email=:emailval, " +
+                    "gender=:genderval " +
                     "REMOVE firstName, lastName";
 
     private String tableName;
@@ -242,6 +244,7 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
             user.put("address", new AttributeValue().withS(i.getAddress()));
             user.put("phoneNumber", new AttributeValue().withS(i.getPhoneNumber()));
             user.put("email", new AttributeValue().withS(i.getEmailAddress()));
+            user.put("gender", new AttributeValue().withS(i.getGender().name()));
         }
 
         user.put("salthash", new AttributeValue().withS(p.getBase64SaltHash()));
@@ -305,6 +308,7 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
             user.put(":addressval", new AttributeValue().withS(p.getAddress()));
             user.put(":phonenumberval", new AttributeValue().withS(p.getPhoneNumber()));
             user.put(":emailval", new AttributeValue().withS(p.getEmailAddress()));
+            user.put(":genderval", new AttributeValue().withS(p.getGender().name()));
         }
 
         return user;
@@ -339,9 +343,11 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
             String email = item.get("email").getS(),
                     phoneNumber = item.get("phoneNumber").getS(),
                     practiceName = item.get("practiceName").getS(),
-                    address = item.get("address").getS();
+                    address = item.get("address").getS(),
+                    genderString = item.get("gender").getS();
             boolean certified = !"0".equals(item.get("certified").getN());
-            info = new ProviderUserInfo(email, address, phoneNumber, practiceName, "OTHERS");
+            Gender gender = Enum.valueOf(Gender.class, genderString);
+            info = new ProviderUserInfo(email, address, phoneNumber, practiceName, gender);
             ((ProviderUserInfo) info).setCertified(certified);
         }
 
@@ -358,7 +364,8 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
                 item.containsKey("address") &&
                 item.containsKey("phoneNumber") &&
                 item.containsKey("certified") &&
-                item.containsKey("practiceName");
+                item.containsKey("practiceName")
+                && item.containsKey("gender");
     }
 
     /**
