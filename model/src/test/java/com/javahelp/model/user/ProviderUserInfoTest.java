@@ -57,11 +57,6 @@ public class ProviderUserInfoTest {
         assertEquals(Gender.FEMALE, p.getGender());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testSetGenderException(){
-        p.setGender(null);
-    }
-
     @Test(timeout = 50)
     public void testGetType() {
         assertEquals(UserType.PROVIDER, p.getType());
