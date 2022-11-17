@@ -28,9 +28,12 @@ public class TokenAuthResult {
         }
     }
 
-    public TokenAuthResult() {
+    /**
+     * Constructor for when fetching the token from the database fails
+     */
+    public TokenAuthResult(String desiredUserID) {
         this.errorMessage = "Could not fetch from database";
-        this.desiredUserID = null;
+        this.desiredUserID = desiredUserID;
         this.token = null;
         this.authenticated = false;
     }
