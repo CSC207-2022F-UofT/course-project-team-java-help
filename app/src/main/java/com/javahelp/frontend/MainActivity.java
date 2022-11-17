@@ -32,8 +32,7 @@ public class MainActivity extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = null;
-                intent = new Intent(MainActivity.this,FrontPageActivity.class);
+                Intent intent = new Intent(MainActivity.this,FrontPageActivity.class);
                 startActivity(intent);
             }
         });
@@ -42,8 +41,7 @@ public class MainActivity extends AppCompatActivity {
         buttonpr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = null;
-                intent = new Intent(MainActivity.this,ProviderRegistrationActivity.class);
+                Intent intent = new Intent(MainActivity.this,ProviderRegistrationActivity.class);
                 startActivity(intent);
             }
         });
@@ -52,8 +50,7 @@ public class MainActivity extends AppCompatActivity {
         buttoncr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = null;
-                intent = new Intent(MainActivity.this,ClientRegistrationActivity.class);
+                Intent intent = new Intent(MainActivity.this,ClientRegistrationActivity.class);
                 startActivity(intent);
             }
         });
