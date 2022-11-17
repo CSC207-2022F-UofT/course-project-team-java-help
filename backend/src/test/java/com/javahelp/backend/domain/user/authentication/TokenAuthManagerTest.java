@@ -50,7 +50,7 @@ public class TokenAuthManagerTest {
 
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 100)
     public void testAuthenticate() {
         TokenAuthManager manager = new TokenAuthManager(userStore, tokenStore);
         TokenAuthResult testResult = manager.authenticate("testID", token.getToken());
