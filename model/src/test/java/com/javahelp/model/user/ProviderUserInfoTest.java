@@ -6,8 +6,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.internal.runners.statements.ExpectException;
-import org.junit.rules.ExpectedException;
 
 public class ProviderUserInfoTest {
     ProviderUserInfo p;
@@ -15,7 +13,7 @@ public class ProviderUserInfoTest {
     @Before
     public void setUp() {
         p = new ProviderUserInfo("uoft@utoronto.ca", "St. George",
-                "111-234-5678", "University of Toronto", "male");
+                "111-234-5678", "University of Toronto", Gender.MALE);
     }
 
     @Test(timeout = 50)
@@ -55,13 +53,13 @@ public class ProviderUserInfoTest {
 
     @Test(timeout = 50)
     public void testSetGender(){
-        p.setGender("female");
-        assertEquals("FEMALE", p.getGender());
+        p.setGender(Gender.FEMALE);
+        assertEquals(Gender.FEMALE, p.getGender());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testSetGenderException(){
-        p.setGender("ABC");
+        p.setGender(null);
     }
 
     @Test(timeout = 50)
