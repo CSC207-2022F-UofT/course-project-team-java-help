@@ -25,7 +25,7 @@ public class DynamoDBUserStoreTest {
 
     DynamoDBUserStore db = new DynamoDBUserStore(tableName, regions);
 
-    @Test
+    @Test(timeout = 5000)
     public void testCreateRead() {
         UserPassword p = randomUserPassword();
         ClientUserInfo clientInfo = new ClientUserInfo(
@@ -56,7 +56,7 @@ public class DynamoDBUserStoreTest {
         db.delete(u.getStringID());
     }
 
-    @Test
+    @Test(timeout = 5000)
     public void testUpdate() {
         UserPassword p = randomUserPassword();
         ClientUserInfo clientInfo = new ClientUserInfo(
@@ -87,7 +87,7 @@ public class DynamoDBUserStoreTest {
         db.delete(u.getStringID());
     }
 
-    @Test
+    @Test(timeout = 5000)
     public void testDelete() {
 
         UserPassword p = randomUserPassword();
@@ -112,7 +112,7 @@ public class DynamoDBUserStoreTest {
         assertNull(deleted);
     }
 
-    @Test
+    @Test(timeout = 5000)
     public void testPasswordUpdateRead() {
         UserPassword p = randomUserPassword();
         ClientUserInfo clientInfo = new ClientUserInfo(
@@ -140,7 +140,7 @@ public class DynamoDBUserStoreTest {
         db.delete(u.getStringID());
     }
 
-    @Test
+    @Test(timeout = 5000)
     public void testReadByEmail() {
         UserPassword p = randomUserPassword();
         ClientUserInfo clientInfo = new ClientUserInfo(
@@ -160,7 +160,7 @@ public class DynamoDBUserStoreTest {
         db.delete(read.getStringID());
     }
 
-    @Test
+    @Test(timeout = 5000)
     public void testReadByUsername() {
         UserPassword p = randomUserPassword();
         ClientUserInfo clientInfo = new ClientUserInfo(
