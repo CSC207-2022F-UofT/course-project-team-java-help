@@ -28,6 +28,13 @@ public class TokenAuthResult {
         }
     }
 
+    public TokenAuthResult() {
+        this.errorMessage = "Could not fetch from database";
+        this.user = null;
+        this.token = null;
+        this.authenticated = false;
+    }
+
     public boolean getAuthenticated() { return this.authenticated; }
 
 

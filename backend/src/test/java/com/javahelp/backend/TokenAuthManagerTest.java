@@ -7,12 +7,14 @@ import com.javahelp.backend.data.IUserStore;
 import com.javahelp.model.token.Token;
 import com.javahelp.model.user.ClientUserInfo;
 import com.javahelp.model.user.User;
+import com.javahelp.model.user.UserPassword;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Random;
 import java.util.TimeZone;
 
 public class TokenAuthManagerTest {
@@ -21,6 +23,7 @@ public class TokenAuthManagerTest {
     TokenAuthResult result;
     ITokenStore tokenStore;
     IUserStore userStore;
+
 
     @Before
     public void setUp() {
@@ -36,12 +39,20 @@ public class TokenAuthManagerTest {
         token = new Token("wasd!@", issued, expiry, "Token Tag", user.getStringID());
         result = new TokenAuthResult(user, token);
 
+        byte[] salt = {1};
+        byte[] password = {'a'};
+
+        ITokenStore tokenStore = ITokenStore.getDefaultImplementation();
+        IUserStore userStore = IUserStore.getDefaultImplementation();
+        tokenStore.create(token);
+        userStore.create(user, new UserPassword(salt, password));
+
     }
 
     @Test(timeout = 50)
     public void testAuthenticate() {
         TokenAuthManager manager = new TokenAuthManager(userStore, tokenStore);
-        assertEquals(result.getAuthenticated(), manager.authenticate(user, token).getAuthenticated());
+        assertEquals(result.getAuthenticated(), manager.authenticate(user.getStringID(), token.getToken()).getAuthenticated());
     }
 
 }

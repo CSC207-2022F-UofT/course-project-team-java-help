@@ -26,8 +26,10 @@ public class TokenAuthManager {
      *
      * @return TokenAuthResult object with the results of the comparison
      */
-    public TokenAuthResult authenticate(User desiredUser, Token token) {
-        this.authenticate = new TokenAuthResult(desiredUser, token);
+    public TokenAuthResult authenticate(String desiredUserID, String token) {
+        User u = userStore.read(desiredUserID);
+        Token t = tokenStore.read(token);
+        this.authenticate = new TokenAuthResult(u, t);
         return authenticate;
     }
 }
