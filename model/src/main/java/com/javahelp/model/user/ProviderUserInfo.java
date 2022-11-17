@@ -1,5 +1,7 @@
 package com.javahelp.model.user;
 
+import java.security.Provider;
+
 /**
  * Stores the information of a provider.
  */
@@ -8,7 +10,7 @@ public class ProviderUserInfo extends UserInfo {
     private boolean certified;
     private String address;
     private String phoneNumber;
-    private String gender;
+    private Gender gender;
 
     /**
      * Constructs a ProviderInfo object.
@@ -17,12 +19,23 @@ public class ProviderUserInfo extends UserInfo {
      * @param address: the address of the provider.
      * @param phoneNumber: the phone number of the provider.
      * @param practiceName: the name of the provider.
+     * @param gender: the gender of the provider.
      */
     public ProviderUserInfo(String emailAddress, String address, String phoneNumber,
-                            String practiceName, String gender) {
+                            String practiceName, Gender gender) {
         super(emailAddress);
         this.practiceName = practiceName;
         this.certified = false;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.setGender(gender);
+    }
+
+    public ProviderUserInfo(String emailAddress, String address, String phoneNumber,
+                            String practiceName, Gender gender, boolean certified){
+        super(emailAddress);
+        this.practiceName = practiceName;
+        this.certified = certified;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.setGender(gender);
@@ -105,7 +118,7 @@ public class ProviderUserInfo extends UserInfo {
      *
      * @return the current gender of this client
      */
-    public String getGender(){
+    public Gender getGender(){
         return gender;
     }
 
@@ -114,14 +127,13 @@ public class ProviderUserInfo extends UserInfo {
      *
      * @param gender an updated gender of this client
      */
-    public void setGender(String gender){
-        if (!(Gender.FEMALE.toString().equals(gender.toUpperCase()) ||
-                Gender.MALE.toString().equals(gender.toUpperCase()) ||
-                Gender.OTHERS.toString().equals(gender.toUpperCase()))){
+    public void setGender(Gender gender){
+        if (!(Gender.FEMALE.equals(gender) || Gender.MALE.equals(gender) ||
+                Gender.OTHERS.equals(gender))){
             throw new IllegalArgumentException("This is not a valid input. Please try \"MALE\"" +
                     "or \"FEMALE\" or \"OTHERS\"");
         }
-        this.gender = gender.toUpperCase();
+        this.gender = gender;
     }
 
     @Override
