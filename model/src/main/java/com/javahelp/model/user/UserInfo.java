@@ -9,7 +9,7 @@ public abstract class UserInfo {
     /**
      * Constructs a UserInfo object.
      *
-     * @param emailAddress: the email address of the user.
+     * @param emailAddress the email address of the user.
      */
     public UserInfo(String emailAddress) {
         this.emailAddress = emailAddress;

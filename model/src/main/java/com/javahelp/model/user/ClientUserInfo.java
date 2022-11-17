@@ -12,11 +12,11 @@ public class ClientUserInfo extends UserInfo {
     /**
      * Constructs a ClientInfo object.
      *
-     * @param emailAddress: the email address of this client.
-     * @param address: the address of this client.
-     * @param phoneNumber: the phone number of this client.
-     * @param firstName: the first name of this client.
-     * @param lastName: the last name of this client.
+     * @param emailAddress the email address of this client.
+     * @param address the address of this client.
+     * @param phoneNumber the phone number of this client.
+     * @param firstName the first name of this client.
+     * @param lastName the last name of this client.
      */
     public ClientUserInfo(String emailAddress, String address, String phoneNumber, String firstName,
                           String lastName) {
