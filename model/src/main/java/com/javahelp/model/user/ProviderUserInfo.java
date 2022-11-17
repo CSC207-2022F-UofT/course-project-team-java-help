@@ -13,11 +13,11 @@ public class ProviderUserInfo extends UserInfo {
     /**
      * Constructs a ProviderInfo object.
      *
-     * @param emailAddress: the email address of the provider.
-     * @param address: the address of the provider.
-     * @param phoneNumber: the phone number of the provider.
-     * @param practiceName: the name of the provider.
-     * @param gender: the gender of the provider.
+     * @param emailAddress the email address of the provider.
+     * @param address the address of the provider.
+     * @param phoneNumber the phone number of the provider.
+     * @param practiceName the name of the provider.
+     * @param gender the gender of the provider.
      */
     public ProviderUserInfo(String emailAddress, String address, String phoneNumber,
                             String practiceName, Gender gender) {
@@ -69,7 +69,7 @@ public class ProviderUserInfo extends UserInfo {
     /**
      * Sets the certification status of this provider.
      *
-     * @param certified: true or false; whether this provider is certified.
+     * @param certified true or false; whether this provider is certified.
      */
     public void setCertified(boolean certified) {
         this.certified = certified;
@@ -87,7 +87,7 @@ public class ProviderUserInfo extends UserInfo {
     /**
      * Sets the address of this provider.
      *
-     * @param address: the new address of this provider.
+     * @param address the new address of this provider.
      */
     public void setAddress(String address) {
         this.address = address;
