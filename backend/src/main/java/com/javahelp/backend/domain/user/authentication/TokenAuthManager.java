@@ -1,4 +1,4 @@
-package com.javahelp.backend;
+package com.javahelp.backend.domain.user.authentication;
 
 import com.javahelp.backend.data.ITokenStore;
 import com.javahelp.backend.data.IUserStore;
@@ -27,9 +27,7 @@ public class TokenAuthManager {
      * @return TokenAuthResult object with the results of the comparison
      */
     public TokenAuthResult authenticate(String desiredUserID, String token) {
-        User u = userStore.read(desiredUserID);
-        Token t = tokenStore.read(token);
-        this.authenticate = new TokenAuthResult(u, t);
+        this.authenticate = new TokenAuthResult(desiredUserID, tokenStore.read(token));
         return authenticate;
     }
 }

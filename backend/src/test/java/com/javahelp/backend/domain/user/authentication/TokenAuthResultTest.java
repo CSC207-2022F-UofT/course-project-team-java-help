@@ -1,7 +1,10 @@
-package com.javahelp.backend;
+package com.javahelp.backend.domain.user.authentication;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import com.javahelp.backend.domain.user.authentication.TokenAuthResult;
 import com.javahelp.model.token.Token;
 import com.javahelp.model.user.ClientUserInfo;
 import com.javahelp.model.user.ProviderUserInfo;
@@ -48,21 +51,20 @@ public class TokenAuthResultTest {
 
     @Test(timeout = 50)
     public void testClientAuthenticate() {
-        TokenAuthResult auth1 = new TokenAuthResult(user1, token1);
+        TokenAuthResult auth1 = new TokenAuthResult(user1.getStringID(), token1);
         System.out.println(auth1.getAuthenticated());
-        assertEquals(true, auth1.getAuthenticated());
+        assertTrue(auth1.getAuthenticated());
 
-
-        TokenAuthResult auth2 = new TokenAuthResult(user2, token1);
-        assertEquals(false, auth2.getAuthenticated());
+        TokenAuthResult auth2 = new TokenAuthResult(user2.getStringID(), token1);
+        assertFalse(auth2.getAuthenticated());
     }
 
     @Test(timeout = 50)
     public void testProviderAuthenticate() {
-        TokenAuthResult auth1 = new TokenAuthResult(user3, token2);
-        assertEquals(true, auth1.getAuthenticated());
+        TokenAuthResult auth1 = new TokenAuthResult(user3.getStringID(), token2);
+        assertTrue(auth1.getAuthenticated());
 
-        TokenAuthResult auth2 = new TokenAuthResult(user4, token2);
-        assertEquals(false, auth2.getAuthenticated());
+        TokenAuthResult auth2 = new TokenAuthResult(user4.getStringID(), token2);
+        assertFalse(auth2.getAuthenticated());
     }
 }
