@@ -1,7 +1,5 @@
 package com.javahelp.model.user;
 
-import java.security.Provider;
-
 /**
  * Stores the information of a provider.
  */
@@ -128,11 +126,6 @@ public class ProviderUserInfo extends UserInfo {
      * @param gender an updated gender of this client
      */
     public void setGender(Gender gender){
-        if (!(Gender.FEMALE.equals(gender) || Gender.MALE.equals(gender) ||
-                Gender.OTHERS.equals(gender))){
-            throw new IllegalArgumentException("This is not a valid input. Please try \"MALE\"" +
-                    "or \"FEMALE\" or \"OTHERS\"");
-        }
         this.gender = gender;
     }
 
