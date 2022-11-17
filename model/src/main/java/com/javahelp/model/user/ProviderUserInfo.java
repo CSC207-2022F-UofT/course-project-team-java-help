@@ -29,6 +29,16 @@ public class ProviderUserInfo extends UserInfo {
         this.setGender(gender);
     }
 
+    /**
+     * Constructs a ProviderInfo object with given status of certification
+     *
+     * @param emailAddress the email address of this provider
+     * @param address the address of this provider
+     * @param phoneNumber the phone number
+     * @param practiceName the name of this provider
+     * @param gender the gender of this provider
+     * @param certified given status of certification
+     */
     public ProviderUserInfo(String emailAddress, String address, String phoneNumber,
                             String practiceName, Gender gender, boolean certified){
         super(emailAddress);
