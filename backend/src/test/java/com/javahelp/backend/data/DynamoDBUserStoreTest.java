@@ -7,8 +7,11 @@ import static org.junit.Assert.assertNull;
 
 import com.amazonaws.regions.Regions;
 import com.javahelp.model.user.ClientUserInfo;
+import com.javahelp.model.user.Gender;
+import com.javahelp.model.user.ProviderUserInfo;
 import com.javahelp.model.user.User;
 import com.javahelp.model.user.UserPassword;
+import com.sun.tools.javac.jvm.Gen;
 
 import org.junit.Test;
 
@@ -54,6 +57,24 @@ public class DynamoDBUserStoreTest {
         assertEquals(base.getLastName(), readUserInfo.getLastName());
 
         db.delete(u.getStringID());
+
+        ProviderUserInfo provider = new ProviderUserInfo("test",
+                "woooo",
+                ":)",
+                "jlkhlkhjsd",
+                Gender.FEMALE);
+
+        u.setUserInfo(provider);
+
+        db.create(u, p);
+
+        u = db.read(u.getStringID());
+
+        provider = (ProviderUserInfo) u.getUserInfo();
+
+        assertEquals(Gender.FEMALE, provider.getGender());
+
+        db.delete(u.getStringID());
     }
 
     @Test(timeout = 5000)
@@ -83,6 +104,24 @@ public class DynamoDBUserStoreTest {
         c = (ClientUserInfo) u.getUserInfo();
 
         assertEquals("john", c.getFirstName());
+
+        ProviderUserInfo provider = new ProviderUserInfo("test",
+                "woooo",
+                ":)",
+                "jlkhlkhjsd",
+                Gender.FEMALE);
+
+        u.setUserInfo(provider);
+
+        db.update(u);
+
+        u = db.read(u.getStringID());
+
+        provider = (ProviderUserInfo) u.getUserInfo();
+
+        assertEquals(Gender.FEMALE, provider.getGender());
+
+        assertEquals(":)", provider.getPhoneNumber());
 
         db.delete(u.getStringID());
     }
