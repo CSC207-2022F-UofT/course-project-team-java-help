@@ -137,6 +137,10 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
         String question = (String) constraint.keySet().toArray()[0];
         List<String> answers = constraint.get(question);
 
+        if (answers.size() == 0) {
+            return readWithoutConstraint();
+        }
+
         Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
         int i = 0;
         for (String answer: answers) {
@@ -153,6 +157,20 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
                 .withTableName(this.tableName)
                 .withFilterExpression(keyConditionExpression)
                 .withExpressionAttributeValues(expressionAttributeValues);
+        ScanResult result = getClient().scan(scanRequest);
+
+        List<User> userList = new ArrayList<>();
+        for (Map<String, AttributeValue> item : result.getItems()) {
+            User user = userFromDynamo(item);
+            userList.add(user);
+        }
+
+        return userList;
+    }
+
+    public List<User> readWithoutConstraint() {
+        ScanRequest scanRequest = new ScanRequest()
+                .withTableName(this.tableName);
         ScanResult result = getClient().scan(scanRequest);
 
         List<User> userList = new ArrayList<>();
