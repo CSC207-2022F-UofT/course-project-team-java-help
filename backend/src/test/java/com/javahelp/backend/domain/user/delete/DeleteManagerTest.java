@@ -12,6 +12,7 @@ import com.javahelp.backend.domain.user.delete.DeleteManager;
 import com.javahelp.backend.domain.user.delete.DeleteResult;
 import com.javahelp.backend.domain.user.delete.IDeleteInputBoundary;
 import com.javahelp.model.user.ClientUserInfo;
+import com.javahelp.model.user.Gender;
 import com.javahelp.model.user.User;
 import com.javahelp.model.user.UserPassword;
 
@@ -38,7 +39,7 @@ public class DeleteManagerTest {
         // Setting up user, userStore, and deleteManager.
         userStore = IUserStore.getDefaultImplementation();
         clientUserInfo = new ClientUserInfo("uoft@uoft.ca", "University of Toronto",
-                "123-456-7890", "J", "M");
+                "123-456-7890", "J", "M", Gender.MALE);
         user = new User("123456QWERTY", clientUserInfo, "cs207");
 
         deleteManager = new DeleteManager(userStore);

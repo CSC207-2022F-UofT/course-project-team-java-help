@@ -36,7 +36,8 @@ public class DynamoDBUserStoreTest {
                 "123  client road",
                 "289375034875093",
                 "Erin",
-                "McDonald");
+                "McDonald",
+                Gender.MALE);
         User u = new User("test", clientInfo, "test_user");
 
         db.create(u, p);
@@ -85,7 +86,8 @@ public class DynamoDBUserStoreTest {
                 "123  client road",
                 "289375034875093",
                 "Erin",
-                "McDonald");
+                "McDonald",
+                Gender.FEMALE);
         User u = new User("test", clientInfo, "test_user");
 
         db.create(u, p);
@@ -135,7 +137,8 @@ public class DynamoDBUserStoreTest {
                 "123  client road",
                 "289375034875093",
                 "Erin",
-                "McDonald");
+                "McDonald",
+                Gender.FEMALE);
         User u = new User("test", clientInfo, "test_user");
 
         db.create(u, p);
@@ -159,7 +162,8 @@ public class DynamoDBUserStoreTest {
                 "123  client road",
                 "289375034875093",
                 "Erin",
-                "McDonald");
+                "McDonald",
+                Gender.FEMALE);
         User u = new User("test", clientInfo, "test_user");
 
         db.create(u, p);
@@ -187,7 +191,8 @@ public class DynamoDBUserStoreTest {
                 "123  client road",
                 "289375034875093",
                 "Erin",
-                "McDonald");
+                "McDonald",
+                Gender.FEMALE);
         User u = new User("test", clientInfo, "test_user");
 
         db.create(u, p);
@@ -207,7 +212,8 @@ public class DynamoDBUserStoreTest {
                 "123  client road",
                 "289375034875093",
                 "Erin",
-                "McDonald");
+                "McDonald",
+                Gender.FEMALE);
         User u = new User("test", clientInfo, "test_user");
 
         db.create(u, p);

@@ -21,11 +21,8 @@ public class ProviderUserInfo extends UserInfo {
      */
     public ProviderUserInfo(String emailAddress, String address, String phoneNumber,
                             String practiceName, Gender gender) {
-        super(emailAddress);
-        this.practiceName = practiceName;
+        this(emailAddress, address, phoneNumber, practiceName);
         this.certified = false;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
         this.setGender(gender);
     }
 
@@ -41,12 +38,45 @@ public class ProviderUserInfo extends UserInfo {
      */
     public ProviderUserInfo(String emailAddress, String address, String phoneNumber,
                             String practiceName, Gender gender, boolean certified){
+        this(emailAddress, address, phoneNumber, practiceName);
+        this.certified = certified;
+        this.setGender(gender);
+    }
+
+    /**
+     * Constructs a ProviderInfo object with given status of certification but without provided
+     * info about their gender
+     *
+     * @param emailAddress the email address of this provider
+     * @param address the address of this provider
+     * @param phoneNumber the phone number
+     * @param practiceName the name of this provider
+     * @param certified given status of certification
+     */
+    public ProviderUserInfo(String emailAddress, String address, String phoneNumber,
+                            String practiceName, boolean certified){
+        this(emailAddress, address, phoneNumber, practiceName);
+        this.certified = certified;
+        // No update on gender because it was done inside the called overloaded method above
+    }
+
+    /**
+     * Constructs a ProviderInfo object with neither given status of certification nor that of
+     * their gender
+     *
+     * @param emailAddress the email address of this provider
+     * @param address the address of this provider
+     * @param phoneNumber the phone number
+     * @param practiceName the name of this provider
+     */
+    public ProviderUserInfo(String emailAddress, String address, String phoneNumber,
+                            String practiceName){
         super(emailAddress);
         this.practiceName = practiceName;
-        this.certified = certified;
+        this.certified = false;
         this.address = address;
         this.phoneNumber = phoneNumber;
-        this.setGender(gender);
+        this.setGender(Gender.UNMENTIONED);
     }
 
     /**
