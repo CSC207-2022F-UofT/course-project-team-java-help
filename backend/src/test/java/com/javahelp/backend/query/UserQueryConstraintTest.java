@@ -13,6 +13,8 @@ import com.javahelp.model.user.UserPassword;
 
 import com.javahelp.backend.data.DynamoDBUserStore;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.HashSet;
@@ -30,16 +32,16 @@ public class UserQueryConstraintTest {
                 "123 provider road",
                 "6667771052",
                 "John");
-        providerInfo1.setAttribute("Age", 35);
-        providerInfo1.setAttribute("Specialty", 1);
+        providerInfo1.setAttribute("Age", "35");
+        providerInfo1.setAttribute("Specialty", "Pain");
 
         ProviderUserInfo providerInfo2 = new ProviderUserInfo(
                 "jenifer@gmail.com",
                 "321 provider road",
                 "7776661052",
                 "Jenifer");
-        providerInfo2.setAttribute("Age", 55);
-        providerInfo2.setAttribute("Specialty", 2);
+        providerInfo2.setAttribute("Age", "55");
+        providerInfo2.setAttribute("Specialty", "Extreme Pain");
 
         User u1 = new User("test1", providerInfo1, "test_user_1");
         User u2 = new User("test2", providerInfo2, "test_user_2");
@@ -47,7 +49,8 @@ public class UserQueryConstraintTest {
         db.create(u1, p);
         db.create(u2, p);
 
-        Constraint constraint = new VanillaConstraint("Specialty", 2);
+        Constraint constraint = new VanillaConstraint("Specialty");
+        constraint.setConstraint("Extreme Pain");
         UserQueryConstraint userQueryConstraint = new UserQueryConstraint(db);
         Set<User> providers = userQueryConstraint.getProvidersWithConstraint(constraint);
 
@@ -63,6 +66,149 @@ public class UserQueryConstraintTest {
         db.delete(u1.getStringID());
         db.delete(u2.getStringID());
     }
+
+    @Test
+    public void testQueryMultiConstraint() {
+        UserPassword p = randomUserPassword();
+        ProviderUserInfo providerInfo1 = new ProviderUserInfo(
+                "johndoe@gmail.com",
+                "123 provider road",
+                "6667771052",
+                "John");
+        providerInfo1.setAttribute("Age", "35");
+        providerInfo1.setAttribute("Specialty", "Pain");
+
+        ProviderUserInfo providerInfo2 = new ProviderUserInfo(
+                "jenifer@gmail.com",
+                "321 provider road",
+                "7776661052",
+                "Jenifer");
+        providerInfo2.setAttribute("Age", "35");
+        providerInfo2.setAttribute("Specialty", "Extreme Pain");
+
+        User u1 = new User("test1", providerInfo1, "test_user_1");
+        User u2 = new User("test2", providerInfo2, "test_user_2");
+
+        db.create(u1, p);
+        db.create(u2, p);
+
+        Constraint constraint1 = new VanillaConstraint("Age");
+        constraint1.setConstraint("35");
+        Constraint constraint2 = new VanillaConstraint("Specialty");
+        constraint2.setConstraint("Pain");
+
+        List<Constraint> constraintList = new ArrayList<>();
+        constraintList.add(constraint1);
+        constraintList.add(constraint2);
+
+        UserQueryConstraint userQueryConstraint = new UserQueryConstraint(db);
+        Set<User> providers = userQueryConstraint.getProvidersWithMultiConstraints(constraintList);
+
+        Set<String> expectedProvidersSet = new HashSet<>();
+        expectedProvidersSet.add(u1.getStringID());
+        Set<String> actualProvidersSet = new HashSet<>();
+        for (User user : providers) {
+            actualProvidersSet.add(user.getStringID());
+        }
+
+        assertEquals(expectedProvidersSet, actualProvidersSet);
+
+        db.delete(u1.getStringID());
+        db.delete(u2.getStringID());
+    }
+
+    @Test
+    public void testQueryMultiOptionConstraint() {
+        UserPassword p = randomUserPassword();
+        ProviderUserInfo providerInfo1 = new ProviderUserInfo(
+                "johndoe@gmail.com",
+                "123 provider road",
+                "6667771052",
+                "John");
+        providerInfo1.setAttribute("Age", "35");
+        providerInfo1.setAttribute("Specialty", "Extreme Pain");
+
+        ProviderUserInfo providerInfo2 = new ProviderUserInfo(
+                "jenifer@gmail.com",
+                "321 provider road",
+                "7776661052",
+                "Jenifer");
+        providerInfo2.setAttribute("Age", "55");
+        providerInfo2.setAttribute("Specialty", "Pain");
+
+        User u1 = new User("test1", providerInfo1, "test_user_1");
+        User u2 = new User("test2", providerInfo2, "test_user_2");
+
+        db.create(u1, p);
+        db.create(u2, p);
+
+        MultiOptionConstraint constraint = new MultiOptionConstraint("Specialty");
+        List<String> multipleConstraints = new ArrayList<>();
+        multipleConstraints.add("Extreme Pain");
+        multipleConstraints.add("Pain");
+        constraint.setMultiConstraint(multipleConstraints);
+
+        UserQueryConstraint userQueryConstraint = new UserQueryConstraint(db);
+        Set<User> providers = userQueryConstraint.getProvidersWithConstraint(constraint);
+
+        Set<String> expectedProvidersSet = new HashSet<>();
+        expectedProvidersSet.add(u1.getStringID());
+        expectedProvidersSet.add(u2.getStringID());
+        Set<String> actualProvidersSet = new HashSet<>();
+        for (User user : providers) {
+            actualProvidersSet.add(user.getStringID());
+        }
+
+        assertEquals(expectedProvidersSet, actualProvidersSet);
+
+        db.delete(u1.getStringID());
+        db.delete(u2.getStringID());
+    }
+
+    @Test
+    public void testQueryRangeConstraint() {
+        UserPassword p = randomUserPassword();
+        ProviderUserInfo providerInfo1 = new ProviderUserInfo(
+                "johndoe@gmail.com",
+                "123 provider road",
+                "6667771052",
+                "John");
+        providerInfo1.setAttribute("Age", "35");
+        providerInfo1.setAttribute("Specialty", "Pain");
+
+        ProviderUserInfo providerInfo2 = new ProviderUserInfo(
+                "jenifer@gmail.com",
+                "321 provider road",
+                "7776661052",
+                "Jenifer");
+        providerInfo2.setAttribute("Age", "55");
+        providerInfo2.setAttribute("Specialty", "Pain");
+
+        User u1 = new User("test1", providerInfo1, "test_user_1");
+        User u2 = new User("test2", providerInfo2, "test_user_2");
+
+        db.create(u1, p);
+        db.create(u2, p);
+
+        RangeConstraint constraint = new RangeConstraint("Age");
+        constraint.setRangeConstraint(25, 60);
+        UserQueryConstraint userQueryConstraint = new UserQueryConstraint(db);
+        Set<User> providers = userQueryConstraint.getProvidersWithConstraint(constraint);
+
+        Set<String> expectedProvidersSet = new HashSet<>();
+        expectedProvidersSet.add(u1.getStringID());
+        expectedProvidersSet.add(u2.getStringID());
+        Set<String> actualProvidersSet = new HashSet<>();
+        for (User user : providers) {
+            actualProvidersSet.add(user.getStringID());
+        }
+
+        assertEquals(expectedProvidersSet, actualProvidersSet);
+
+        db.delete(u1.getStringID());
+        db.delete(u2.getStringID());
+    }
+
 
     /**
      * @return A randomly generated {@link UserPassword}
