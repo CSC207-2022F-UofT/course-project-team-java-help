@@ -55,20 +55,20 @@ public class ProviderUserInfoTest {
 
     @Test(timeout = 50)
     public void testSetSingleAttributeNonExist() {
-        p.setAttribute("Gender", 0);
-        assertEquals(Integer.valueOf(-1), p.getSingleAttribute("Age"));
+        p.setAttribute("Gender", "0");
+        assertEquals("-1", p.getSingleAttribute("Age"));
     }
 
     @Test(timeout = 50)
     public void testSetMultipleAttribute() {
-        p.setAttribute("Gender", 0);
-        p.setAttribute("Age", 20);
-        p.setAttribute("Symptom", 3);
+        p.setAttribute("Gender", "Female");
+        p.setAttribute("Age", "20");
+        p.setAttribute("Symptom", "Pain");
 
-        HashMap<String, Integer> attributes = new HashMap<String, Integer>();
-        attributes.put("Gender", 0);
-        attributes.put("Age", 20);
-        attributes.put("Symptom", 3);
+        HashMap<String, String> attributes = new HashMap<>();
+        attributes.put("Gender", "Male");
+        attributes.put("Age", "20");
+        attributes.put("Symptom", "Pain");
 
         assertEquals(attributes, p.getAllAttribute());
     }

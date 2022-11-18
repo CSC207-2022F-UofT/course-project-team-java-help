@@ -55,26 +55,26 @@ public class ClientUserInfoTest {
 
     @Test(timeout = 50)
     public void testSetSingleAttributeExist() {
-        c.setAttribute("Gender", 0);
-        assertEquals(Integer.valueOf(0), c.getSingleAttribute("Gender"));
+        c.setAttribute("Gender", "Male");
+        assertEquals("Male", c.getSingleAttribute("Gender"));
     }
 
     @Test(timeout = 50)
     public void testSetSingleAttributeNonExist() {
-        c.setAttribute("Gender", 0);
-        assertEquals(Integer.valueOf(-1), c.getSingleAttribute("Age"));
+        c.setAttribute("Gender", "Male");
+        assertEquals("-1", c.getSingleAttribute("Age"));
     }
 
     @Test(timeout = 50)
     public void testSetMultipleAttribute() {
-        c.setAttribute("Gender", 0);
-        c.setAttribute("Age", 20);
-        c.setAttribute("Symptom", 3);
+        c.setAttribute("Gender", "Male");
+        c.setAttribute("Age", "20");
+        c.setAttribute("Symptom", "Pain");
 
-        HashMap<String, Integer> attributes = new HashMap<String, Integer>();
-        attributes.put("Gender", 0);
-        attributes.put("Age", 20);
-        attributes.put("Symptom", 3);
+        HashMap<String, String> attributes = new HashMap<>();
+        attributes.put("Gender", "Male");
+        attributes.put("Age", "20");
+        attributes.put("Symptom", "Pain");
 
         assertEquals(attributes, c.getAllAttribute());
     }
