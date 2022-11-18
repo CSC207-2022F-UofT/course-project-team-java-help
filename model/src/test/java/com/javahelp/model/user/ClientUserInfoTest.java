@@ -1,6 +1,7 @@
 package com.javahelp.model.user;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -8,12 +9,16 @@ import org.junit.Test;
 public class ClientUserInfoTest {
 
     ClientUserInfo c;
+    ClientUserInfo c2;
 
     @Before
     public void setUp() {
         c = new ClientUserInfo("uoft@utoronto.ca",
                 "University of Toronto", "000-123-4567",
-                "Johnny", "Meng");
+                "Johnny", "Meng", Gender.MALE);
+
+        c2 = new ClientUserInfo("uoft@utoronto.ca", "University of Toronto",
+                "123-489-5555", "Lam", "Diep");
     }
 
     @Test(timeout = 50)
@@ -49,6 +54,14 @@ public class ClientUserInfoTest {
         assertEquals("University of Toronto", c.getAddress());
         c.setAddress("Bahen Center");
         assertEquals("Bahen Center", c.getAddress());
+    }
+
+    @Test(timeout = 50)
+    public void testSetGender(){
+        assertEquals(Gender.MALE, c.getGender());
+        assertEquals(Gender.UNMENTIONED, c2.getGender());
+        c2.setGender(Gender.MALE);
+        assertNotEquals(Gender.UNMENTIONED, c2.getGender());
     }
 
     @Test(timeout = 50)

@@ -8,9 +8,27 @@ public class ClientUserInfo extends UserInfo {
     private String lastName;
     private String address;
     private String phoneNumber;
+    private Gender gender;
 
     /**
      * Constructs a ClientInfo object.
+     *
+     * @param emailAddress the email address of this client.
+     * @param address the address of this client.
+     * @param phoneNumber the phone number of this client.
+     * @param firstName the first name of this client.
+     * @param lastName the last name of this client.
+     * @param gender the gender of this client
+     */
+    public ClientUserInfo(String emailAddress, String address, String phoneNumber, String firstName,
+                          String lastName, Gender gender) {
+        this(emailAddress, address, phoneNumber, firstName, lastName);
+        this.setGender(gender);
+    }
+
+    /**
+     * Constructs a ClientInfo object but without given Gender, so the Gender will be set as
+     * UNMENTIONED as a default
      *
      * @param emailAddress the email address of this client.
      * @param address the address of this client.
@@ -25,6 +43,7 @@ public class ClientUserInfo extends UserInfo {
         this.lastName = lastName;
         this.address = address;
         this.phoneNumber = phoneNumber;
+        this.setGender(Gender.UNMENTIONED);
     }
 
     /**
@@ -97,6 +116,24 @@ public class ClientUserInfo extends UserInfo {
      */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    /**
+     * Gets the gender of this provider
+     *
+     * @return the current gender of this client
+     */
+    public Gender getGender(){
+        return gender;
+    }
+
+    /**
+     * Sets a new gender to this client
+     *
+     * @param gender an updated gender of this client
+     */
+    public void setGender(Gender gender){
+        this.gender = gender;
     }
 
     @Override

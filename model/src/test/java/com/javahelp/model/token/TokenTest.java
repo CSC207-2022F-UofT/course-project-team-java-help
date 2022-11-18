@@ -1,6 +1,7 @@
 package com.javahelp.model.token;
 
 import com.javahelp.model.user.ClientUserInfo;
+import com.javahelp.model.user.Gender;
 import com.javahelp.model.user.User;
 import java.time.*;
 import static org.junit.Assert.assertEquals;
@@ -20,7 +21,7 @@ public class TokenTest {
     Instant expiry = LocalDate.of(2022, 11, 20).atStartOfDay()
             .atZone(TimeZone.getDefault().toZoneId()).toInstant();
     ClientUserInfo info = new ClientUserInfo("user@example.com", "NY",
-            "111","David", "Smith");
+            "111","David", "Smith", Gender.MALE);
     User user1 = new User("123", info, "user1");
     Token token = new Token("[!jkl123", issued, expiry, "This is Test token", user1.getStringID());
 

@@ -33,11 +33,11 @@ public class UserEntityTest {
     public void setUp() {
         this.userinfo1 = new ClientUserInfo("abcdef@mail.utoronto.ca",
                 "1 Yonge St., Toronto", "0123459876",
-                "Client", "Info");
+                "Client", "Info", Gender.FEMALE);
 
         this.userinfo2 = new ClientUserInfo("myself1@gmail.com",
                 "0 This St., Porters Lake", "0000000001",
-                "First", "Last");
+                "First", "Last", Gender.OTHERS);
 
         this.user1 = new User("ABC75736", userinfo1, "OnceInABlueMoon101");
         this.user2 = new User(" ", userinfo2, "S6C0ND57687378");
@@ -66,7 +66,7 @@ public class UserEntityTest {
     public void testSetUserInfo(){
         ClientUserInfo newInfo = new ClientUserInfo("abcdef2@mail.utoronto.ca",
                 "100 Yonge St., Toronto", "0123459876",
-                "Client", "Info");
+                "Client", "Info", Gender.MALE);
         user1.setUserInfo(newInfo);
         assertNotEquals("The information has not been updated!",
                 userinfo1, user1.getUserInfo());

@@ -338,7 +338,8 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
                     firstName = item.get("firstName").getS(),
                     lastName = item.get("lastName").getS(),
                     address = item.get("address").getS();
-            info = new ClientUserInfo(email, address, phoneNumber, firstName, lastName);
+            info = new ClientUserInfo(email, address, phoneNumber, firstName, lastName,
+                    Gender.FEMALE);
         } else {
             String email = item.get("email").getS(),
                     phoneNumber = item.get("phoneNumber").getS(),
