@@ -7,7 +7,7 @@ import java.util.HashMap;
  */
 public abstract class UserInfo {
     private String emailAddress;
-    private HashMap<String, Integer> attributeMap = new HashMap<>();
+    private HashMap<String, String> attributeMap = new HashMap<>();
 
     /**
      * Constructs a UserInfo object.
@@ -43,23 +43,23 @@ public abstract class UserInfo {
      * @param question: one question from the Survey.
      * @param answer: one integer answer from the Survey. (only integers answers are allowed for now)
      */
-    public void setAttribute(String question, Integer answer) {
+    public void setAttribute(String question, String answer) {
         this.attributeMap.put(question, answer);
     }
 
     /**
      * Gets one attribute of this client.
-     * @return the answer to a question (attribute) of this client (or -1 if question does not exist).
+     * @return the answer to a question (attribute) of this client (or "-1" if question does not exist).
      */
-    public Integer getSingleAttribute(String question) {
-        return this.attributeMap.getOrDefault(question, -1);
+    public String getSingleAttribute(String question) {
+        return this.attributeMap.getOrDefault(question, "-1");
     }
 
     /**
      * Gets the an attribute of this client.
      * @return the answer to a question (attribute) of this client (or -1 if question does not exist).
      */
-    public HashMap<String, Integer> getAllAttribute() {
+    public HashMap<String, String> getAllAttribute() {
         return this.attributeMap;
     }
 
