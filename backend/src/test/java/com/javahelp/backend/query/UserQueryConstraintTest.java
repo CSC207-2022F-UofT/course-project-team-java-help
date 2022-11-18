@@ -24,7 +24,7 @@ public class UserQueryConstraintTest {
     Regions regions = Regions.US_EAST_1;
     DynamoDBUserStore db = new DynamoDBUserStore(tableName, regions);
 
-    @Test
+    @Test(timeout = 5000)
     public void testQuerySingleConstraint() {
         UserPassword p = randomUserPassword();
         ProviderUserInfo providerInfo1 = new ProviderUserInfo(
@@ -67,7 +67,7 @@ public class UserQueryConstraintTest {
         db.delete(u2.getStringID());
     }
 
-    @Test
+    @Test(timeout = 5000)
     public void testQueryMultiConstraint() {
         UserPassword p = randomUserPassword();
         ProviderUserInfo providerInfo1 = new ProviderUserInfo(
@@ -117,7 +117,7 @@ public class UserQueryConstraintTest {
         db.delete(u2.getStringID());
     }
 
-    @Test
+    @Test(timeout = 5000)
     public void testQueryMultiOptionConstraint() {
         UserPassword p = randomUserPassword();
         ProviderUserInfo providerInfo1 = new ProviderUserInfo(
@@ -165,7 +165,7 @@ public class UserQueryConstraintTest {
         db.delete(u2.getStringID());
     }
 
-    @Test
+    @Test(timeout = 5000)
     public void testQueryRangeConstraint() {
         UserPassword p = randomUserPassword();
         ProviderUserInfo providerInfo1 = new ProviderUserInfo(
