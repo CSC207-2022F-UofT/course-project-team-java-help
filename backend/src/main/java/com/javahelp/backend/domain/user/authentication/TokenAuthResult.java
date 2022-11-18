@@ -38,7 +38,13 @@ public class TokenAuthResult {
         this.authenticated = false;
     }
 
-    public boolean getAuthenticated() { return this.authenticated; }
-
+    /**
+     * Gets the result of the authentication
+     *
+     * @return the result of the authentication
+     */
+    public boolean getAuthenticated() {
+        return this.authenticated;
+    }
 
 }
