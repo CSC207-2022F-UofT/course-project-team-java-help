@@ -45,7 +45,7 @@ public class UserQueryConstraint {
      */
     public HashSet<User> getProvidersWithConstraint(Constraint constraint) {
         HashMap<String, ArrayList<Integer>> constraintMap = constraint.getConstraint();
-        List<User> providersList = this.dbUserStore.query(constraintMap);
+        List<User> providersList = this.dbUserStore.readByConstraint(constraintMap);
 
         return new HashSet<>(providersList);
     }

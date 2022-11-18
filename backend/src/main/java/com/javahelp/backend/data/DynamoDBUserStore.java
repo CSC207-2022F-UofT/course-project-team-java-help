@@ -8,6 +8,8 @@ import com.amazonaws.services.dynamodbv2.model.GetItemResult;
 import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
+import com.amazonaws.services.dynamodbv2.model.ScanRequest;
+import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.amazonaws.services.dynamodbv2.model.UpdateItemRequest;
 import com.javahelp.model.user.ClientUserInfo;
 import com.javahelp.model.user.ProviderUserInfo;
@@ -16,9 +18,14 @@ import com.javahelp.model.user.UserInfo;
 import com.javahelp.model.user.UserPassword;
 import com.javahelp.model.user.UserType;
 
+import java.lang.reflect.Array;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import javax.management.Attribute;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -63,7 +70,7 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
      * @param tableName {@link String} table name to be used
      * @param region    {@link Regions} to be used
      */
-    DynamoDBUserStore(String tableName, Regions region) {
+    public DynamoDBUserStore(String tableName, Regions region) {
         super(region);
         this.tableName = tableName;
     }
@@ -124,6 +131,28 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
         }
 
         return userFromDynamo(result.getItems().get(0));
+    }
+
+    public List<User> readByConstraint(HashMap<String, ArrayList<Integer>> constraint) {
+        String question = (String) constraint.keySet().toArray()[0];
+        Integer answer = constraint.get(question).get(0);
+
+        String keyConditionExpression = String.format("attr_%s = :question", question);
+        Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
+        expressionAttributeValues.put(":question", new AttributeValue().withN(String.valueOf(answer)));
+
+        ScanRequest scanRequest = new ScanRequest()
+                .withTableName(this.tableName)
+                .withFilterExpression(keyConditionExpression)
+                .withExpressionAttributeValues(expressionAttributeValues);
+        ScanResult result = getClient().scan(scanRequest);
+
+        List<User> userList = new ArrayList<>();
+        for (Map<String, AttributeValue> item : result.getItems()) {
+            User user = userFromDynamo(item);
+            userList.add(user);
+        }
+        return userList;
     }
 
     @Override
@@ -235,6 +264,8 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
             user.put("address", new AttributeValue().withS(c.getAddress()));
             user.put("phoneNumber", new AttributeValue().withS(c.getPhoneNumber()));
             user.put("email", new AttributeValue().withS(c.getEmailAddress()));
+
+            setUserAttributes(user, c);
         } else {
             ProviderUserInfo i = (ProviderUserInfo) info;
             user.put("practiceName", new AttributeValue().withS(i.getPracticeName()));
@@ -242,12 +273,15 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
             user.put("address", new AttributeValue().withS(i.getAddress()));
             user.put("phoneNumber", new AttributeValue().withS(i.getPhoneNumber()));
             user.put("email", new AttributeValue().withS(i.getEmailAddress()));
+
+            setUserAttributes(user, i);
         }
 
         user.put("salthash", new AttributeValue().withS(p.getBase64SaltHash()));
 
         return user;
     }
+
 
     /**
      * Represents the update fields for an {@link UpdateItemRequest} for a
@@ -298,6 +332,8 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
             user.put(":addressval", new AttributeValue().withS(c.getAddress()));
             user.put(":phonenumberval", new AttributeValue().withS(c.getPhoneNumber()));
             user.put(":emailval", new AttributeValue().withS(c.getEmailAddress()));
+
+            setUserAttributes(user, c);
         } else {
             ProviderUserInfo p = (ProviderUserInfo) info;
             user.put(":practicenameval", new AttributeValue().withS(p.getPracticeName()));
@@ -305,6 +341,8 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
             user.put(":addressval", new AttributeValue().withS(p.getAddress()));
             user.put(":phonenumberval", new AttributeValue().withS(p.getPhoneNumber()));
             user.put(":emailval", new AttributeValue().withS(p.getEmailAddress()));
+
+            setUserAttributes(user, p);
         }
 
         return user;
@@ -335,6 +373,7 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
                     lastName = item.get("lastName").getS(),
                     address = item.get("address").getS();
             info = new ClientUserInfo(email, address, phoneNumber, firstName, lastName);
+            setInfoAttributes(info, item);
         } else {
             String email = item.get("email").getS(),
                     phoneNumber = item.get("phoneNumber").getS(),
@@ -343,6 +382,7 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
             boolean certified = !"0".equals(item.get("certified").getN());
             info = new ProviderUserInfo(email, address, phoneNumber, practiceName);
             ((ProviderUserInfo) info).setCertified(certified);
+            setInfoAttributes(info, item);
         }
 
         return new User(id, info, username);
@@ -372,5 +412,41 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
                 item.containsKey("firstName") &&
                 item.containsKey("lastName") &&
                 item.containsKey("phoneNumber");
+    }
+
+    private static void setUserAttributes(Map<String, AttributeValue> user, UserInfo info) {
+        Map<String, Integer> attributeMap = info.getAllAttribute();
+        for (String key : attributeMap.keySet()) {
+            String keyIndex = String.format("attr_%s", key);
+            user.put(keyIndex, new AttributeValue().withN(String.valueOf(attributeMap.get(key))));
+        }
+    }
+
+    /**
+     * Finds all key-value pairs that represent a User's attributes and save them as an attributeMap
+     * @param info: UserInfo to be called with setAttribute
+     * @param item: containing representation of {@link User} and {@link UserPassword}
+     */
+    private static void setInfoAttributes(UserInfo info, Map<String, AttributeValue> item) {
+        Map<String, AttributeValue> attributeMap = getAttributesFromMap(item);
+        for (String attributeKey : attributeMap.keySet()) {
+            String attribute = attributeKey.substring(5);
+            AttributeValue answer = attributeMap.get(attributeKey);
+            info.setAttribute(attribute, Integer.valueOf(answer.getN()));
+        }
+    }
+
+    /**
+     * @param item: containing representation of {@link User} and {@link UserPassword}
+     * @return sub-map of item that only contains key-value pairs representing attributes
+     */
+    private static Map<String, AttributeValue> getAttributesFromMap(Map<String, AttributeValue> item) {
+        Map<String, AttributeValue> attributeMap = new HashMap<>();
+        for (String key : item.keySet()) {
+            if (key.startsWith("attr_")) {
+                attributeMap.put(key, item.get(key));
+            }
+        }
+        return attributeMap;
     }
 }

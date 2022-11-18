@@ -42,7 +42,7 @@ public class UserQueryConstraintTest {
         providerInfo2.setAttribute("Specialty", 2);
 
         User u1 = new User("test1", providerInfo1, "test_user_1");
-        User u2 = new User("test2", providerInfo1, "test_user_2");
+        User u2 = new User("test2", providerInfo2, "test_user_2");
 
         db.create(u1, p);
         db.create(u2, p);
@@ -51,18 +51,14 @@ public class UserQueryConstraintTest {
         UserQueryConstraint userQueryConstraint = new UserQueryConstraint(db);
         Set<User> providers = userQueryConstraint.getProvidersWithConstraint(constraint);
 
-        Set<User> providersSet = new HashSet<>();
-        providersSet.add(u2);
-
-        try {
-            assertEquals(providersSet, providers);
-        }
-        catch (AssertionError e) {
-            db.delete(u1.getStringID());
-            db.delete(u2.getStringID());
+        Set<String> expectedProvidersSet = new HashSet<>();
+        expectedProvidersSet.add(u2.getStringID());
+        Set<String> actualProvidersSet = new HashSet<>();
+        for (User user : providers) {
+            actualProvidersSet.add(user.getStringID());
         }
 
-        assertEquals(providersSet, providers);
+        assertEquals(expectedProvidersSet, actualProvidersSet);
 
         db.delete(u1.getStringID());
         db.delete(u2.getStringID());

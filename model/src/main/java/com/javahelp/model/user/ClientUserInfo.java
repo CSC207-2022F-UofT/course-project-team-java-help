@@ -103,33 +103,6 @@ public class ClientUserInfo extends UserInfo {
         this.phoneNumber = phoneNumber;
     }
 
-    /**
-     * Adds an attribute to this client.
-     * Should be called when SurveyResponse is updated.
-     *
-     * @param question: one question from the Survey.
-     * @param answer: one integer answer from the Survey. (only integers answers are allowed for now)
-     */
-    public void setAttribute(String question, Integer answer) {
-        this.attributeMap.put(question, answer);
-    }
-
-    /**
-     * Gets one attribute of this client.
-     * @return the answer to a question (attribute) of this client (or -1 if question does not exist).
-     */
-    public Integer getSingleAttribute(String question) {
-        return this.attributeMap.getOrDefault(question, -1);
-    }
-
-    /**
-     * Gets the an attribute of this client.
-     * @return the answer to a question (attribute) of this client (or -1 if question does not exist).
-     */
-    public HashMap<String, Integer> getAllAttribute() {
-        return this.attributeMap;
-    }
-
     @Override
     public UserType getType() {
         return UserType.CLIENT;

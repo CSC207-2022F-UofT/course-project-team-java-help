@@ -7,11 +7,15 @@ import static org.junit.Assert.assertNull;
 
 import com.amazonaws.regions.Regions;
 import com.javahelp.model.user.ClientUserInfo;
+import com.javahelp.model.user.ProviderUserInfo;
 import com.javahelp.model.user.User;
 import com.javahelp.model.user.UserPassword;
 
 import org.junit.Test;
 
+import java.security.Provider;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -34,6 +38,8 @@ public class DynamoDBUserStoreTest {
                 "289375034875093",
                 "Erin",
                 "McDonald");
+        clientInfo.setAttribute("Age", 35);
+        clientInfo.setAttribute("Specialty", 1);
         User u = new User("test", clientInfo, "test_user");
 
         db.create(u, p);
@@ -52,6 +58,11 @@ public class DynamoDBUserStoreTest {
         assertEquals(base.getAddress(), readUserInfo.getAddress());
         assertEquals(base.getFirstName(), readUserInfo.getFirstName());
         assertEquals(base.getLastName(), readUserInfo.getLastName());
+
+        Map<String, Integer> questionAnswers = new HashMap<>();
+        questionAnswers.put("Age", 35);
+        questionAnswers.put("Specialty", 1);
+        assertEquals(questionAnswers, readUserInfo.getAllAttribute());
 
         db.delete(u.getStringID());
     }

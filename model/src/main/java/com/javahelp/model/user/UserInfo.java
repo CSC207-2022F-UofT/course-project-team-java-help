@@ -1,10 +1,13 @@
 package com.javahelp.model.user;
 
+import java.util.HashMap;
+
 /**
  * Stores the information of a user.
  */
 public abstract class UserInfo {
     private String emailAddress;
+    private HashMap<String, Integer> attributeMap = new HashMap<>();
 
     /**
      * Constructs a UserInfo object.
@@ -31,6 +34,33 @@ public abstract class UserInfo {
      */
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
+    }
+
+    /**
+     * Adds an attribute to this client.
+     * Should be called when SurveyResponse is updated.
+     *
+     * @param question: one question from the Survey.
+     * @param answer: one integer answer from the Survey. (only integers answers are allowed for now)
+     */
+    public void setAttribute(String question, Integer answer) {
+        this.attributeMap.put(question, answer);
+    }
+
+    /**
+     * Gets one attribute of this client.
+     * @return the answer to a question (attribute) of this client (or -1 if question does not exist).
+     */
+    public Integer getSingleAttribute(String question) {
+        return this.attributeMap.getOrDefault(question, -1);
+    }
+
+    /**
+     * Gets the an attribute of this client.
+     * @return the answer to a question (attribute) of this client (or -1 if question does not exist).
+     */
+    public HashMap<String, Integer> getAllAttribute() {
+        return this.attributeMap;
     }
 
     /**
