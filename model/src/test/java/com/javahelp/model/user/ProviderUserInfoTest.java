@@ -66,7 +66,7 @@ public class ProviderUserInfoTest {
         p.setAttribute("Symptom", "Pain");
 
         HashMap<String, String> attributes = new HashMap<>();
-        attributes.put("Gender", "Male");
+        attributes.put("Gender", "Female");
         attributes.put("Age", "20");
         attributes.put("Symptom", "Pain");
 
