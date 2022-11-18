@@ -38,8 +38,8 @@ public class DynamoDBUserStoreTest {
                 "289375034875093",
                 "Erin",
                 "McDonald");
-        clientInfo.setAttribute("Age", 35);
-        clientInfo.setAttribute("Specialty", 1);
+        clientInfo.setAttribute("Age", "35");
+        clientInfo.setAttribute("Specialty", "Pain");
         User u = new User("test", clientInfo, "test_user");
 
         db.create(u, p);
@@ -59,9 +59,9 @@ public class DynamoDBUserStoreTest {
         assertEquals(base.getFirstName(), readUserInfo.getFirstName());
         assertEquals(base.getLastName(), readUserInfo.getLastName());
 
-        Map<String, Integer> questionAnswers = new HashMap<>();
-        questionAnswers.put("Age", 35);
-        questionAnswers.put("Specialty", 1);
+        Map<String, String> questionAnswers = new HashMap<>();
+        questionAnswers.put("Age", "35");
+        questionAnswers.put("Specialty", "Pain");
         assertEquals(questionAnswers, readUserInfo.getAllAttribute());
 
         db.delete(u.getStringID());

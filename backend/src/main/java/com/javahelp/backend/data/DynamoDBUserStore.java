@@ -133,13 +133,21 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
         return userFromDynamo(result.getItems().get(0));
     }
 
-    public List<User> readByConstraint(HashMap<String, ArrayList<Integer>> constraint) {
+    public List<User> readByConstraint(HashMap<String, ArrayList<String>> constraint) {
         String question = (String) constraint.keySet().toArray()[0];
-        Integer answer = constraint.get(question).get(0);
+        List<String> answers = constraint.get(question);
 
-        String keyConditionExpression = String.format("attr_%s = :question", question);
         Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
-        expressionAttributeValues.put(":question", new AttributeValue().withN(String.valueOf(answer)));
+        int i = 0;
+        for (String answer: answers) {
+            String keyString = String.format(":question_%s", i);
+            expressionAttributeValues.put(keyString, new AttributeValue().withS(answer));
+            i = i + 1;
+        }
+
+        String attrKeyString = String.format("attr_%s", question);
+        String attrKeySetString = String.format("(%s)", String.join(", ", expressionAttributeValues.keySet()));
+        String keyConditionExpression = attrKeyString + " IN " + attrKeySetString;
 
         ScanRequest scanRequest = new ScanRequest()
                 .withTableName(this.tableName)
@@ -152,6 +160,7 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
             User user = userFromDynamo(item);
             userList.add(user);
         }
+
         return userList;
     }
 
@@ -415,10 +424,10 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
     }
 
     private static void setUserAttributes(Map<String, AttributeValue> user, UserInfo info) {
-        Map<String, Integer> attributeMap = info.getAllAttribute();
+        Map<String, String> attributeMap = info.getAllAttribute();
         for (String key : attributeMap.keySet()) {
             String keyIndex = String.format("attr_%s", key);
-            user.put(keyIndex, new AttributeValue().withN(String.valueOf(attributeMap.get(key))));
+            user.put(keyIndex, new AttributeValue().withS(attributeMap.get(key)));
         }
     }
 
@@ -432,7 +441,7 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
         for (String attributeKey : attributeMap.keySet()) {
             String attribute = attributeKey.substring(5);
             AttributeValue answer = attributeMap.get(attributeKey);
-            info.setAttribute(attribute, Integer.valueOf(answer.getN()));
+            info.setAttribute(attribute, answer.getS());
         }
     }
 
