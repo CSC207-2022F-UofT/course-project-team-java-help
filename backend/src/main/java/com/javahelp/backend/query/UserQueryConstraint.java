@@ -21,18 +21,23 @@ public class UserQueryConstraint {
         this.dbUserStore = dbUserStore;
     }
 
-    public HashSet<User> getProvidersWithMultiConstraints(ArrayList<Constraint> constraints) {
-        HashSet<User> subsetProviders;
+    public HashSet<User> getProvidersWithMultiConstraints(List<Constraint> constraints) {
         HashSet<User> providers = new HashSet<>();
+        HashSet<String> providersId;
 
         for (int i = 0; i < constraints.size(); i++) {
+            providersId = IdSet(providers);
+
             Constraint constraint = constraints.get(i);
-            subsetProviders = getProvidersWithConstraint(constraint);
+
+            HashSet<User> subsetProviders = getProvidersWithConstraint(constraint);
+            HashSet<String> subsetProvidersId = IdSet(subsetProviders);
             if (providers.isEmpty()) {
                 providers = subsetProviders;
             }
             else {
-                providers.retainAll(subsetProviders);
+                providersId.retainAll(subsetProvidersId);
+                providers = getUserSetFromIdSet(providers, providersId);
             }
         }
         return providers;
@@ -44,9 +49,27 @@ public class UserQueryConstraint {
      * @return subset of providers based on the given constraint
      */
     public HashSet<User> getProvidersWithConstraint(Constraint constraint) {
-        HashMap<String, ArrayList<Integer>> constraintMap = constraint.getConstraint();
+        HashMap<String, ArrayList<String>> constraintMap = constraint.getConstraint();
         List<User> providersList = this.dbUserStore.readByConstraint(constraintMap);
 
         return new HashSet<>(providersList);
+    }
+
+    private HashSet<String> IdSet(HashSet<User> userSet) {
+        HashSet<String> idSet = new HashSet<>();
+        for (User user : userSet) {
+            idSet.add(user.getStringID());
+        }
+        return idSet;
+    }
+
+    private HashSet<User> getUserSetFromIdSet(HashSet<User> userSet, HashSet<String> idSet) {
+        HashSet<User> userSubSet = new HashSet<>();
+        for (User user : userSet) {
+            if (idSet.contains(user.getStringID())) {
+                userSubSet.add(user);
+            }
+        }
+        return userSubSet;
     }
 }
