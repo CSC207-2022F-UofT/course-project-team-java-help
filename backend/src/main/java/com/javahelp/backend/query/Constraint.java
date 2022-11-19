@@ -4,7 +4,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public abstract class Constraint implements IConstraint{
+public abstract class Constraint {
     private String question;
     private ArrayList<String> queryList = new ArrayList<>();
 
