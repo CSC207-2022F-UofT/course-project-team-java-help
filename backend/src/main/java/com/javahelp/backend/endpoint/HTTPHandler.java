@@ -5,19 +5,38 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
 import java.io.StringReader;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
+import jakarta.json.stream.JsonParsingException;
 
 /**
- * Abstract handler that deals with AWS API Gateway events
+ * Abstract handler that deals with AWS API Gateway events with JSON or empty bodies
  *
  * @param <T> type param for response
  */
 public abstract class HTTPHandler<T> implements RequestHandler<Map<String, Object>, T> {
+
+    /**
+     * Response code for unsupported media type errors
+     *
+     * Should be returned by NonJSONBodyResponse
+     */
+    protected static int UNSUPPORTED_MEDIA_TYPE = 415;
+
+    /**
+     * Response code for bad requests
+     */
+    protected static int BAD_REQUEST = 400;
+
+    /**
+     * Response code for internal server errors
+     */
+    protected static int INTERNAL_SERVER_ERROR = 500;
 
     @Override
     public T handleRequest(Map<String, Object> input, Context context) {
@@ -33,16 +52,25 @@ public abstract class HTTPHandler<T> implements RequestHandler<Map<String, Objec
         // parse parameters
         Map<String, String[]> parameters = extractParameters(input);
 
+        // if the body is defined, but not a json, return a
+        if (body != null && !hasJSONHeader(headers)) {
+            return getNonJSONBodyResponse();
+        }
+
         return getResponse(body, method, headers, parameters);
     }
 
     /**
      * @param input {@link Map} of the input
-     * @return {@link JsonObject} body of the request
+     * @return {@link JsonObject} body of the request, or null if the body is not JSON
      */
     private static JsonObject extractBody(Map<String, Object> input) {
         JsonReader reader = Json.createReader(new StringReader((String) input.get("body")));
-        return reader.readObject();
+        try {
+            return reader.readObject();
+        } catch (JsonParsingException e) {
+            return null;
+        }
     }
 
     /**
@@ -82,6 +110,19 @@ public abstract class HTTPHandler<T> implements RequestHandler<Map<String, Objec
     }
 
     /**
+     * @param headers headers for this request
+     * @return whether the content type of the body is JSON
+     */
+    private static boolean hasJSONHeader(Map<String, String[]> headers) {
+        boolean hasJSON = headers.containsKey("Content-Type");
+        if (hasJSON) {
+            String[] header = headers.get("Content-Type");
+            hasJSON = Arrays.asList(header).contains("application/json");
+        }
+        return hasJSON;
+    }
+
+    /**
      * Gets the response to the specified request
      *
      * @param body       {@link JsonObject} request body
@@ -95,4 +136,9 @@ public abstract class HTTPHandler<T> implements RequestHandler<Map<String, Objec
                                   HttpMethod method,
                                   Map<String, String[]> headers,
                                   Map<String, String[]> parameters);
+
+    /**
+     * @return response to send when the body is non JSON, using UNSUPPORTED_MEDIA_TYPE
+     */
+    public abstract T getNonJSONBodyResponse();
 }
