@@ -1,9 +1,8 @@
 <resources>
     <string name="app_name">JH Mental Helper</string>
     <string-array name="genders">
-        <item>Gender</item>
+        <item>Unmentioned</item>
         <item>Female</item>
         <item>Male</item>
-        <item>Unmentioned</item>
     </string-array>
 </resources>
