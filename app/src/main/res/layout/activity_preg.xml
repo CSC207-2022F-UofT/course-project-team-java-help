@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/Green"
+    android:background="@color/white"
     tools:context=".frontend.ProviderRegistrationActivity">
 
     <ScrollView
@@ -27,7 +27,7 @@
                 android:layout_marginBottom="20dp"
                 android:gravity="center"
                 android:text="Sign up"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="35dp"
                 android:textStyle="bold" />
 
@@ -39,12 +39,12 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:background="#30ffffff"
+                android:background="#23857C7C"
                 android:drawablePadding="20dp"
                 android:hint="Username"
                 android:padding="20dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white" />
+                android:textColor="@color/black"
+                android:textColorHint="@color/black" />
 
             <EditText
                 android:id="@+id/firstname"
@@ -54,12 +54,12 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:background="#30ffffff"
+                android:background="#23857C7C"
                 android:drawablePadding="20dp"
                 android:hint="First Name"
                 android:padding="20dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white" />
+                android:textColor="@color/black"
+                android:textColorHint="@color/black" />
 
             <EditText
                 android:id="@+id/lastname"
@@ -69,12 +69,12 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:background="#30ffffff"
+                android:background="#23857C7C"
                 android:drawablePadding="20dp"
                 android:hint="Last Name"
                 android:padding="20dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white" />
+                android:textColor="@color/black"
+                android:textColorHint="@color/black" />
 
             <EditText
                 android:id="@+id/gender"
@@ -84,12 +84,12 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:background="#30ffffff"
+                android:background="#23857C7C"
                 android:drawablePadding="20dp"
                 android:hint="Gender"
                 android:padding="20dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white" />
+                android:textColor="@color/black"
+                android:textColorHint="@color/black" />
 
             <EditText
                 android:id="@+id/phonenumber"
@@ -99,13 +99,13 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:background="#30ffffff"
+                android:background="#23857C7C"
+                android:digits="01234567890"
                 android:drawablePadding="20dp"
                 android:hint="Phone"
-                android:digits="01234567890"
                 android:padding="20dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white" />
+                android:textColor="@color/black"
+                android:textColorHint="@color/black" />
 
             <EditText
                 android:id="@+id/home"
@@ -115,12 +115,12 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:background="#30ffffff"
+                android:background="#23857C7C"
                 android:drawablePadding="20dp"
                 android:hint="Home Address"
                 android:padding="20dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white" />
+                android:textColor="@color/black"
+                android:textColorHint="@color/black" />
 
             <EditText
                 android:id="@+id/email"
@@ -130,12 +130,12 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:background="#30ffffff"
+                android:background="#23857C7C"
                 android:drawablePadding="20dp"
                 android:hint="Email"
                 android:padding="20dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white" />
+                android:textColor="@color/black"
+                android:textColorHint="@color/black" />
 
             <EditText
                 android:id="@+id/password"
@@ -145,25 +145,25 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:background="#30ffffff"
+                android:background="#23857C7C"
                 android:drawablePadding="20dp"
                 android:hint="Password"
                 android:inputType="textPassword"
                 android:padding="20dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white" />
+                android:textColor="@color/black"
+                android:textColorHint="@color/black" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/signupbtn2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="15dp"
-                android:backgroundTint="#7DC1BB"
+                android:backgroundTint="#5F9590"
                 android:text="REGISTER"
                 android:textColor="@color/white"
                 android:textSize="30dp" />

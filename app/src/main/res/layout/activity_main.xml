@@ -13,23 +13,61 @@
     <TextView
         android:id="@+id/tv_1"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:gravity="center"
-        android:text="Please Login in..."
+        android:text="Welcome"
         android:maxLines="1"
-        android:textSize="20sp"
+        android:textSize="30dp"
         android:textColor="@color/white"
         />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:orientation="horizontal"
+        >
+
+        <Button
+            android:id="@+id/bot_c_reg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:backgroundTint="#08FFFFFF"
+            android:text=" Client
+             Register"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
+
+        <Button
+            android:id="@+id/bot_p_reg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:backgroundTint="#0CFFFFFF"
+            android:text="Provider Register"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
+    </LinearLayout>
 
     <EditText
         android:id="@+id/et_1"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
         android:hint="Username"
         android:drawableLeft="@drawable/user48"
-        android:paddingLeft="2dp"
+        android:paddingLeft="5dp"
         android:drawablePadding="5dp"
         android:maxLines="1"
         android:textSize="20sp"
@@ -43,10 +81,12 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
         android:hint="Password"
         android:drawableLeft="@drawable/passwordicon"
         android:inputType="textPassword"
-        android:paddingLeft="2dp"
+        android:paddingLeft="5dp"
         android:drawablePadding="5dp"
         android:maxLines="1"
         android:textSize="20sp"
@@ -56,57 +96,26 @@
 
     <Button
         android:id="@+id/bot_login"
-        android:layout_width="180dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="#19ECEBEB"
+        android:gravity="center"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
         android:text="Login"
+        android:textColor="#C1676767"
+        android:textSize="20dp"
 
         />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-
-
-
-        <Button
-            android:id="@+id/bot_c_reg"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:text=" Client     Register"
-
-
-            />
-
-        <Button
-            android:id="@+id/bot_p_reg"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:text="Provider Register"
-
-            />
-
-
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-
-    </LinearLayout>
-
     <View
         android:layout_width="wrap_content"
-        android:layout_height="200dp" />
+        android:layout_height="150dp" />
 
     <TextView
         android:layout_width="90dp"

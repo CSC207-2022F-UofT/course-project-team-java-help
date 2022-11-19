@@ -28,27 +28,32 @@ public class MainActivity extends AppCompatActivity {
         //find the provider register button by its id
         buttonpr = (Button) findViewById(R.id.bot_p_reg);
 
-        // link the button to the second acticity(front page)
+        // link the button to the second activity(front page)
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = null;
-                intent = new Intent(MainActivity.this,FrontPageActivity.class);
+                Intent intent = new Intent(MainActivity.this,FrontPageActivity.class);
                 startActivity(intent);
             }
         });
 
-        // link the button to the second acticity(front page)
+        // link the button to the second activity(front page)
         buttonpr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = null;
-                intent = new Intent(MainActivity.this,ProviderRegistrationActivity.class);
+                Intent intent = new Intent(MainActivity.this,ProviderRegistrationActivity.class);
                 startActivity(intent);
             }
         });
 
-
+        // link the button to the second activity(front page)
+        buttoncr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,ClientRegistrationActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
