@@ -4,6 +4,6 @@
         <item>Gender</item>
         <item>Female</item>
         <item>Male</item>
-        <item>Other</item>
+        <item>Unmentioned</item>
     </string-array>
 </resources>
