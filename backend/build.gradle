@@ -19,6 +19,8 @@ dependencies {
     implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.1000')
     implementation 'com.amazonaws:aws-java-sdk-dynamodb'
 
+    implementation 'org.glassfish:jakarta.json:2.0.1'
+
     api project(path: ':model')
     testImplementation 'junit:junit:4.13.2'
 }
