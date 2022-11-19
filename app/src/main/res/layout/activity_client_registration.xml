@@ -4,8 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/teal_700"
+    android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".frontend.ClientRegistrationActivity">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,7 +28,7 @@
                 android:layout_marginBottom="20dp"
                 android:gravity="center"
                 android:text="Sign up"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="35dp"
                 android:textStyle="bold" />
 
@@ -38,87 +40,19 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:background="#30ffffff"
+                android:background="#23857C7C"
                 android:drawablePadding="20dp"
                 android:hint="Username"
                 android:padding="20dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white" />
+                android:textColor="@color/black"
+                android:textColorHint="@color/black" />
 
-            <EditText
-                android:id="@+id/firstname"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/userAlert"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="#30ffffff"
-                android:drawablePadding="20dp"
-                android:hint="First Name"
-                android:padding="20dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white" />
-
-            <EditText
-                android:id="@+id/lastname"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="#30ffffff"
-                android:drawablePadding="20dp"
-                android:hint="Last Name"
-                android:padding="20dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white" />
-
-            <EditText
-                android:id="@+id/gender"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="#30ffffff"
-                android:drawablePadding="20dp"
-                android:hint="Gender"
-                android:padding="20dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white" />
-
-            <EditText
-                android:id="@+id/phonenumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="#30ffffff"
-                android:drawablePadding="20dp"
-                android:hint="Phone"
-                android:padding="20dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white" />
-
-            <EditText
-                android:id="@+id/home"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="#30ffffff"
-                android:drawablePadding="20dp"
-                android:hint="Home Address"
-                android:padding="20dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white" />
+                android:layout_marginStart="20dp"
+                android:textColor="@color/Red"/>
 
             <EditText
                 android:id="@+id/email"
@@ -128,12 +62,19 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:background="#30ffffff"
+                android:background="#23857C7C"
                 android:drawablePadding="20dp"
                 android:hint="Email"
                 android:padding="20dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white" />
+                android:textColor="@color/black"
+                android:textColorHint="@color/black" />
+
+            <TextView
+                android:id="@+id/emailAlert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:textColor="@color/Red"/>
 
             <EditText
                 android:id="@+id/password"
@@ -143,31 +84,173 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:background="#30ffffff"
+                android:background="#23857C7C"
                 android:drawablePadding="20dp"
                 android:hint="Password"
                 android:inputType="textPassword"
                 android:padding="20dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white" />
+                android:textColor="@color/black"
+                android:textColorHint="@color/black" />
+            <TextView
+                android:id="@+id/passAlert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:textColor="@color/Red"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/repassword"
+                android:background="#23857C7C"
+                android:hint="Confirm Password"
+                android:textColorHint="@color/black"
+                android:textColor="@color/black"
+                android:layout_margin="10dp"
+                android:padding="20dp"
+                android:drawablePadding="20dp"
+                android:inputType="textPassword"/>
+
+            <TextView
+                android:id="@+id/confirmAlert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:textColor="@color/Red"/>
+
+            <TextView
+                android:id="@+id/personalinfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"
+                android:text="Personal information"
+                android:textColor="@color/black"
+                android:textSize="28dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/firstname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="#23857C7C"
+                android:drawablePadding="20dp"
+                android:hint="First Name"
+                android:padding="20dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black" />
+
+            <TextView
+                android:id="@+id/firstnameAlert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:textColor="@color/Red"/>
+            <EditText
+                android:id="@+id/lastname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="#23857C7C"
+                android:drawablePadding="20dp"
+                android:hint="Last Name"
+                android:padding="20dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black" />
+
+            <TextView
+                android:id="@+id/lastnameAlert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:textColor="@color/Red"/>
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dropdown"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="#23857C7C"
+                android:padding="25dp"
+                android:paddingLeft="@dimen/cardview_default_radius"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"/>
+
+            <EditText
+                android:id="@+id/phonenumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="#23857C7C"
+                android:drawablePadding="20dp"
+                android:hint="+1 Phone number"
+                android:padding="20dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black" />
+            <TextView
+                android:id="@+id/phoneAlert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:textColor="@color/Red"/>
+
+            <EditText
+                android:id="@+id/home"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="#23857C7C"
+                android:drawablePadding="20dp"
+                android:hint="Home Address"
+                android:padding="20dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black" />
+            <TextView
+                android:id="@+id/homeAlert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:textColor="@color/Red" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/signupbtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="15dp"
-                android:backgroundTint="#7DC1BB"
+                android:backgroundTint="#5F9590"
                 android:text="REGISTER"
                 android:textColor="@color/white"
                 android:textSize="30dp" />
 
         </LinearLayout>
     </ScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
