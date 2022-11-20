@@ -11,6 +11,23 @@ import jakarta.json.JsonObject;
  */
 public class ClientUserInfoConverter implements IJSONConverter<ClientUserInfo> {
 
+    private static ClientUserInfoConverter instance = new ClientUserInfoConverter();
+
+    /**
+     * Private constructor
+     */
+    private ClientUserInfoConverter() {
+
+
+    }
+
+    /**
+     * @return {@link ClientUserInfoConverter} instance
+     */
+    public static ClientUserInfoConverter getInstance() {
+        return instance;
+    }
+
     @Override
     public JsonObject toJSON(ClientUserInfo input) {
         return Json.createObjectBuilder()
