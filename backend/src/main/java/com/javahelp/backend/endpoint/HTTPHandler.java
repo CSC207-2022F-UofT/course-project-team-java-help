@@ -8,6 +8,7 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
 import java.io.StringReader;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,10 +25,6 @@ public abstract class HTTPHandler implements RequestHandler<APIGatewayV2ProxyReq
     @Override
     public APIGatewayResponse handleRequest(APIGatewayV2ProxyRequestEvent input, Context context) {
 
-        if (requiresBody() && input.getBody() == null) {
-            return APIGatewayResponse.error(BAD_REQUEST, "Missing body");
-        }
-
         // parse headers
         Map<String, String[]> headers = extractHeaders(input);
 
@@ -42,6 +39,20 @@ public abstract class HTTPHandler implements RequestHandler<APIGatewayV2ProxyReq
             body = extractBody(input);
         } catch (JsonParsingException e) {
             return APIGatewayResponse.error(BAD_REQUEST, "Cannot parse body json");
+        }
+
+        if (requiresBody()) {
+            if (body == null) {
+                return APIGatewayResponse.error(BAD_REQUEST, "Missing body");
+            }
+
+            String missing = Arrays.stream(requiredBodyFields())
+                    .filter(required -> !body.containsKey(required))
+                    .reduce(null, (x, y) -> x + ", " + y);
+
+            if (missing != null) {
+                return APIGatewayResponse.error(BAD_REQUEST, "Body missing " + missing + "fields");
+            }
         }
 
         // parse methods
@@ -120,6 +131,14 @@ public abstract class HTTPHandler implements RequestHandler<APIGatewayV2ProxyReq
      */
     public boolean requiresBody() {
         return true;
+    }
+
+    /**
+     * Will only be checked if body is required
+     * @return the fields required in the body
+     */
+    public String[] requiredBodyFields() {
+        return new String[0];
     }
 
     /**
