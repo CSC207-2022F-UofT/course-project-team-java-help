@@ -12,9 +12,12 @@ import com.javahelp.backend.domain.user.login.LoginResult;
 import com.javahelp.backend.endpoint.APIGatewayResponse;
 import com.javahelp.backend.endpoint.HTTPHandler;
 import com.javahelp.model.user.UserPassword;
+import com.javahelp.model.util.json.TokenConverter;
+import com.javahelp.model.util.json.UserConverter;
 
 import java.util.Map;
 
+import jakarta.json.Json;
 import jakarta.json.JsonObject;
 
 /**
@@ -60,12 +63,21 @@ public class LoginHandler extends HTTPHandler implements ILoginInput {
 
         LoginResult result = interactor.login(this);
 
-        LoginResponse response;
+        String response;
 
         if (result.isSuccess()) {
-            response = new LoginResponse(result.getUser(), result.getToken());
+            JsonObject user = UserConverter.getInstance().toJSON(result.getUser());
+            JsonObject token = TokenConverter.getInstance().toJSON(result.getToken());
+            response = Json.createObjectBuilder()
+                    .add("user", user)
+                    .add("token", token)
+                    .add("success", true)
+                    .build().toString();
         } else {
-            response = new LoginResponse(result.getErrorMessage());
+            response = Json.createObjectBuilder()
+                    .add("errorMessage", result.getErrorMessage())
+                    .add("success", false)
+                    .build().toString();
         }
 
         return APIGatewayResponse.builder()
