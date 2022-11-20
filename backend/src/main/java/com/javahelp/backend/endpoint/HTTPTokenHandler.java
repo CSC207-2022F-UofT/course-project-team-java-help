@@ -32,6 +32,9 @@ public abstract class HTTPTokenHandler extends HTTPHandler implements ITokenAuth
 
     @Override
     public APIGatewayResponse getResponse(JsonObject body, HttpMethod method, Map<String, String[]> headers, Map<String, String[]> parameters) {
+        tokenString = null;
+        userId = null;
+
         if (!headers.containsKey("authorization")) {
             return APIGatewayResponse.error(UNAUTHENTICATED, "Request must authenticate with" +
                     "authorization header");
