@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import com.javahelp.model.user.ProviderUserInfo;
 
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 import jakarta.json.JsonObject;
@@ -23,7 +23,7 @@ public class ProviderUserInfoConverterTest {
             "sldkfjhlsdkfjhgsgfs");
     ProviderUserInfoConverter converter = ProviderUserInfoConverter.getInstance();
 
-    @BeforeClass
+    @Before
     public void setup() {
         a.setCertified(false);
         b.setCertified(true);
