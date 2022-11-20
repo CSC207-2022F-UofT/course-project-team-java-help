@@ -18,16 +18,12 @@ import com.javahelp.model.user.UserInfo;
 import com.javahelp.model.user.UserPassword;
 import com.javahelp.model.user.UserType;
 
-import java.lang.reflect.Array;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
-import javax.management.Attribute;
-
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * Implementation of {@link IUserStore} through DynamoDB.
@@ -133,25 +129,44 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
         return userFromDynamo(result.getItems().get(0));
     }
 
-    public List<User> readByConstraint(HashMap<String, ArrayList<String>> constraint) {
-        String question = (String) constraint.keySet().toArray()[0];
-        List<String> answers = constraint.get(question);
+    public Set<User> readByConstraint(Map<String, Set<String>> constraint) {
+        Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
 
-        if (answers.size() == 0) {
+        int n_questions = 0;
+        int n_answers = 0;
+        StringBuilder conditionBuilder = new StringBuilder();
+        for (String question : constraint.keySet()) {
+            n_questions = n_questions + 1;
+            Set<String> answers = constraint.get(question);
+
+            Set<String> expressions = new HashSet<>();
+            for (String answer: answers) {
+                String keyString = String.format(":answer_%s", n_answers);
+                expressions.add(keyString);
+                expressionAttributeValues.put(keyString, new AttributeValue().withS(answer));
+                n_answers = n_answers + 1;
+            }
+            String attrKeyString = String.format("attr_%s", question);
+            String attrKeySetString = String.format("(%s)", String.join(", ", expressions));
+            conditionBuilder.append("(");
+            conditionBuilder.append(attrKeyString);
+            conditionBuilder.append(" IN ");
+            conditionBuilder.append(attrKeySetString);
+            conditionBuilder.append(")");
+            if (n_questions < constraint.size()) {
+                conditionBuilder.append(" AND ");
+            }
+        }
+
+        /**
+         * keyConditionExpression Format:
+         *  - "(attr_question1 IN (:answer_0, :answer_1, ...)) AND (attr_question2 IN (:answer_3, ...)) AND ..."
+         */
+        String keyConditionExpression = conditionBuilder.toString();
+
+        if (n_answers == 0) {
             return readWithoutConstraint();
         }
-
-        Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
-        int i = 0;
-        for (String answer: answers) {
-            String keyString = String.format(":question_%s", i);
-            expressionAttributeValues.put(keyString, new AttributeValue().withS(answer));
-            i = i + 1;
-        }
-
-        String attrKeyString = String.format("attr_%s", question);
-        String attrKeySetString = String.format("(%s)", String.join(", ", expressionAttributeValues.keySet()));
-        String keyConditionExpression = attrKeyString + " IN " + attrKeySetString;
 
         ScanRequest scanRequest = new ScanRequest()
                 .withTableName(this.tableName)
@@ -159,7 +174,7 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
                 .withExpressionAttributeValues(expressionAttributeValues);
         ScanResult result = getClient().scan(scanRequest);
 
-        List<User> userList = new ArrayList<>();
+        Set<User> userList = new HashSet<>();
         for (Map<String, AttributeValue> item : result.getItems()) {
             User user = userFromDynamo(item);
             userList.add(user);
@@ -168,18 +183,33 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
         return userList;
     }
 
-    public List<User> readWithoutConstraint() {
+    public Set<User> readWithoutConstraint() {
         ScanRequest scanRequest = new ScanRequest()
                 .withTableName(this.tableName);
         ScanResult result = getClient().scan(scanRequest);
 
-        List<User> userList = new ArrayList<>();
+        Set<User> userList = new HashSet<>();
         for (Map<String, AttributeValue> item : result.getItems()) {
             User user = userFromDynamo(item);
-            userList.add(user);
+            if (user != null) {
+                userList.add(user);
+            }
         }
 
         return userList;
+    }
+
+    public void cleanTable() {
+        ScanRequest scanRequest = new ScanRequest()
+                .withTableName(this.tableName);
+        ScanResult result = getClient().scan(scanRequest);
+
+        for (Map<String, AttributeValue> item : result.getItems()) {
+            User user = userFromDynamo(item);
+            if (user != null) {
+                delete(user.getStringID());
+            }
+        }
     }
 
     @Override
