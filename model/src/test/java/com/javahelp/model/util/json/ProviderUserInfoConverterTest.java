@@ -2,7 +2,6 @@ package com.javahelp.model.util.json;
 
 import static org.junit.Assert.assertEquals;
 
-import com.javahelp.model.user.ClientUserInfo;
 import com.javahelp.model.user.ProviderUserInfo;
 
 import org.junit.BeforeClass;
