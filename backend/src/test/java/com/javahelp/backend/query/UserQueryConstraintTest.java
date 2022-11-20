@@ -1,9 +1,6 @@
 package com.javahelp.backend.query;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import org.junit.Test;
 
 import com.amazonaws.regions.Regions;
@@ -25,7 +22,55 @@ public class UserQueryConstraintTest {
     DynamoDBUserStore db = new DynamoDBUserStore(tableName, regions);
 
     @Test(timeout = 5000)
+    public void testQueryEmptyConstraint() {
+        db.cleanTable();
+        UserPassword p = randomUserPassword();
+        ProviderUserInfo providerInfo1 = new ProviderUserInfo(
+                "johndoe@gmail.com",
+                "123 provider road",
+                "6667771052",
+                "John");
+        providerInfo1.setAttribute("Age", "35");
+        providerInfo1.setAttribute("Specialty", "Pain");
+
+        ProviderUserInfo providerInfo2 = new ProviderUserInfo(
+                "jenifer@gmail.com",
+                "321 provider road",
+                "7776661052",
+                "Jenifer");
+        providerInfo2.setAttribute("Age", "55");
+        providerInfo2.setAttribute("Specialty", "Extreme Pain");
+
+        User u1 = new User("test1", providerInfo1, "test_user_1");
+        User u2 = new User("test2", providerInfo2, "test_user_2");
+
+        db.create(u1, p);
+        db.create(u2, p);
+
+        Constraint constraint = new VanillaConstraint("Specialty");
+        List<Constraint> constraintList = new ArrayList<>();
+        constraintList.add(constraint);
+
+        UserQueryConstraint userQueryConstraint = new UserQueryConstraint(db);
+        Set<User> providers = userQueryConstraint.getProvidersWithConstraints(constraintList);
+
+        Set<String> expectedProvidersSet = new HashSet<>();
+        expectedProvidersSet.add(u1.getStringID());
+        expectedProvidersSet.add(u2.getStringID());
+        Set<String> actualProvidersSet = new HashSet<>();
+        for (User user : providers) {
+            actualProvidersSet.add(user.getStringID());
+        }
+
+        assertEquals(expectedProvidersSet, actualProvidersSet);
+
+        db.delete(u1.getStringID());
+        db.delete(u2.getStringID());
+    }
+
+    @Test(timeout = 5000)
     public void testQuerySingleConstraint() {
+        db.cleanTable();
         UserPassword p = randomUserPassword();
         ProviderUserInfo providerInfo1 = new ProviderUserInfo(
                 "johndoe@gmail.com",
@@ -51,8 +96,11 @@ public class UserQueryConstraintTest {
 
         Constraint constraint = new VanillaConstraint("Specialty");
         constraint.setConstraint("Extreme Pain");
+        List<Constraint> constraintList = new ArrayList<>();
+        constraintList.add(constraint);
+
         UserQueryConstraint userQueryConstraint = new UserQueryConstraint(db);
-        Set<User> providers = userQueryConstraint.getProvidersWithConstraint(constraint);
+        Set<User> providers = userQueryConstraint.getProvidersWithConstraints(constraintList);
 
         Set<String> expectedProvidersSet = new HashSet<>();
         expectedProvidersSet.add(u2.getStringID());
@@ -69,6 +117,7 @@ public class UserQueryConstraintTest {
 
     @Test(timeout = 5000)
     public void testQueryMultiConstraint() {
+        db.cleanTable();
         UserPassword p = randomUserPassword();
         ProviderUserInfo providerInfo1 = new ProviderUserInfo(
                 "johndoe@gmail.com",
@@ -102,7 +151,7 @@ public class UserQueryConstraintTest {
         constraintList.add(constraint2);
 
         UserQueryConstraint userQueryConstraint = new UserQueryConstraint(db);
-        Set<User> providers = userQueryConstraint.getProvidersWithMultiConstraints(constraintList);
+        Set<User> providers = userQueryConstraint.getProvidersWithConstraints(constraintList);
 
         Set<String> expectedProvidersSet = new HashSet<>();
         expectedProvidersSet.add(u1.getStringID());
@@ -119,6 +168,7 @@ public class UserQueryConstraintTest {
 
     @Test(timeout = 5000)
     public void testQueryMultiOptionConstraint() {
+        db.cleanTable();
         UserPassword p = randomUserPassword();
         ProviderUserInfo providerInfo1 = new ProviderUserInfo(
                 "johndoe@gmail.com",
@@ -147,9 +197,11 @@ public class UserQueryConstraintTest {
         multipleConstraints.add("Extreme Pain");
         multipleConstraints.add("Pain");
         constraint.setMultiConstraint(multipleConstraints);
+        List<Constraint> constraintList = new ArrayList<>();
+        constraintList.add(constraint);
 
         UserQueryConstraint userQueryConstraint = new UserQueryConstraint(db);
-        Set<User> providers = userQueryConstraint.getProvidersWithConstraint(constraint);
+        Set<User> providers = userQueryConstraint.getProvidersWithConstraints(constraintList);
 
         Set<String> expectedProvidersSet = new HashSet<>();
         expectedProvidersSet.add(u1.getStringID());
@@ -167,6 +219,7 @@ public class UserQueryConstraintTest {
 
     @Test(timeout = 5000)
     public void testQueryRangeConstraint() {
+        db.cleanTable();
         UserPassword p = randomUserPassword();
         ProviderUserInfo providerInfo1 = new ProviderUserInfo(
                 "johndoe@gmail.com",
@@ -192,8 +245,11 @@ public class UserQueryConstraintTest {
 
         RangeConstraint constraint = new RangeConstraint("Age");
         constraint.setRangeConstraint(25, 60);
+        List<Constraint> constraintList = new ArrayList<>();
+        constraintList.add(constraint);
+
         UserQueryConstraint userQueryConstraint = new UserQueryConstraint(db);
-        Set<User> providers = userQueryConstraint.getProvidersWithConstraint(constraint);
+        Set<User> providers = userQueryConstraint.getProvidersWithConstraints(constraintList);
 
         Set<String> expectedProvidersSet = new HashSet<>();
         expectedProvidersSet.add(u1.getStringID());
