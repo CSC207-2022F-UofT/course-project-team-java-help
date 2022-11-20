@@ -22,6 +22,8 @@ dependencies {
     implementation 'org.glassfish:jakarta.json:2.0.1'
 
     api project(path: ':model')
+
+    testImplementation 'io.rest-assured:rest-assured:5.3.0'
     testImplementation 'junit:junit:4.13.2'
 }
 
