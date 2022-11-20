@@ -18,6 +18,19 @@ public class APIGatewayV2ProxyRequestEvent implements Serializable {
 
     private Map<String, String> queryStringParameters;
 
+    private Map<String, String> pathParameters;
+
+    private String rawPath;
+
+    /**
+     * Sets the path parameters for this request
+     *
+     * @param pathParameters {@link Map} of path parameters
+     */
+    public void setPathParameters(Map<String, String> pathParameters) {
+        this.pathParameters = pathParameters;
+    }
+
     /**
      * Sets the request context for this request
      *
@@ -25,6 +38,15 @@ public class APIGatewayV2ProxyRequestEvent implements Serializable {
      */
     public void setRequestContext(ProxyRequestContext requestContext) {
         this.requestContext = requestContext;
+    }
+
+    /**
+     * Sets the raw path for this request
+     *
+     * @param rawPath {@link String} raw path to assign
+     */
+    public void setRawPath(String rawPath) {
+        this.rawPath = rawPath;
     }
 
     /**
@@ -81,7 +103,20 @@ public class APIGatewayV2ProxyRequestEvent implements Serializable {
      */
     public Map<String, String> getQueryStringParameters() {
         return queryStringParameters;
+    }
 
+    /**
+     * @return {@link Map} of path parameters
+     */
+    public Map<String, String> getPathParameters() {
+        return pathParameters;
+    }
+
+    /**
+     * @return the {@link String} raw path for this request
+     */
+    public String getRawPath() {
+        return rawPath;
     }
 
     /**

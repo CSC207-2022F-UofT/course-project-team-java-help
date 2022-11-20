@@ -39,7 +39,7 @@ public class LoginHandler extends HTTPHandler implements ILoginInput {
     private UserPassword password;
 
     @Override
-    public APIGatewayResponse getResponse(JsonObject body, HttpMethod method, Map<String, String[]> headers, Map<String, String[]> parameters) {
+    public APIGatewayResponse getResponse(JsonObject body, HttpMethod method, Map<String, String[]> headers, Map<String, String[]> parameters, Map<String, String> pathParameters) {
 
         email = body.getString("email", null);
         username = body.getString("username", null);
