@@ -12,4 +12,14 @@ public interface ISaltInput {
      */
     String getUserID();
 
+    /**
+     * @return {@link String} username for {@link User} to get salt for
+     */
+    String getUsername();
+
+    /**
+     * @return {@link String} email of {@link User} to get salt for
+     */
+    String getEmail();
+
 }

@@ -33,7 +33,22 @@ public class SaltInteractorTest {
         users.create(u, p);
 
         SaltInteractor interactor = new SaltInteractor(users);
-        SaltResult result = interactor.get(u::getStringID);
+        SaltResult result = interactor.get(new ISaltInput() {
+            @Override
+            public String getUserID() {
+                return u.getStringID();
+            }
+
+            @Override
+            public String getUsername() {
+                return null;
+            }
+
+            @Override
+            public String getEmail() {
+                return null;
+            }
+        });
 
         assertTrue(result.isSuccess());
         assertArrayEquals(p.getSalt(), result.getSalt());
@@ -51,7 +66,22 @@ public class SaltInteractorTest {
         User u = new User("ghfgh", info, "testing_user_login_123");
 
         SaltInteractor interactor = new SaltInteractor(users);
-        SaltResult result = interactor.get(u::getStringID);
+        SaltResult result = interactor.get(new ISaltInput() {
+            @Override
+            public String getUserID() {
+                return null;
+            }
+
+            @Override
+            public String getUsername() {
+                return u.getUsername();
+            }
+
+            @Override
+            public String getEmail() {
+                return null;
+            }
+        });
 
         assertFalse(result.isSuccess());
         assertNull(result.getSalt());
