@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import jakarta.json.Json;
@@ -107,9 +108,14 @@ public class APIGatewayResponse {
 
         JsonObject json = Json.createObjectBuilder().add("message", message).build();
 
+        Map<String, String> headers = new HashMap<>();
+
+        headers.put("Content-Type", "application/json");
+
         return builder()
                 .setStatusCode(code)
-                .setRawBody(json.toString())
+                .setJSONBody(json.toString())
+                .setHeaders(headers)
                 .build();
     }
 
@@ -146,6 +152,15 @@ public class APIGatewayResponse {
         }
 
         /**
+         * Builds the {@link APIGatewayResponse} using the passed JSON string representation
+         */
+        public Builder setJSONBody(String json) {
+            headers.put("Content-Type", "application/json");
+            this.rawBody = json;
+            return this;
+        }
+
+        /**
          * Builds the {@link APIGatewayResponse} using the passed raw body string.
          */
         public Builder setRawBody(String rawBody) {
@@ -157,7 +172,8 @@ public class APIGatewayResponse {
          * Builds the {@link APIGatewayResponse} using the passed object body
          * converted to JSON.
          */
-        public Builder setObjectBody(Object objectBody) {
+        public Builder setJSONBody(Object objectBody) {
+            headers.put("Content-Type", "application/json");
             this.objectBody = objectBody;
             return this;
         }

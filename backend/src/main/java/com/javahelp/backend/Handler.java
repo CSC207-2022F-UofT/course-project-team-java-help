@@ -64,7 +64,7 @@ public class Handler implements RequestHandler<Map<String, Object>, APIGatewayRe
 				.setStatusCode(200) // this line sets the http status code for the response, which basically tells
 												// the receiver whether their request ran properly. 200 means it did
 
-				.setObjectBody(response)		// here we set the actual content of the response, not just whether
+				.setJSONBody(response)		// here we set the actual content of the response, not just whether
 												// it was successful
 
 				.setHeaders(					// ignore this for now

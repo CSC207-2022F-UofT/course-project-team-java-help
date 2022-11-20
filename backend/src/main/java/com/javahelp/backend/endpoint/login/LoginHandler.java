@@ -70,7 +70,7 @@ public class LoginHandler extends HTTPHandler implements ILoginInput {
 
         return APIGatewayResponse.builder()
                 .setStatusCode(OK)
-                .setObjectBody(response)
+                .setJSONBody(response)
                 .build();
     }
 
