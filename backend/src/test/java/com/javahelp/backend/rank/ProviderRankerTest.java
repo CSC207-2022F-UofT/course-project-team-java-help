@@ -28,7 +28,6 @@ public class ProviderRankerTest {
     Regions regions = Regions.US_EAST_1;
     DynamoDBUserStore db = new DynamoDBUserStore(tableName, regions);
 
-    @Test
     public void testProviderRanker() {
         db.cleanTable();
         User client = createTestClient1();
@@ -60,7 +59,6 @@ public class ProviderRankerTest {
         deleteUsersInDB(providersList);
     }
 
-    @Test
     public void testRulseBasedProviderRanker() {
         db.cleanTable();
         User client = createTestClient2();
