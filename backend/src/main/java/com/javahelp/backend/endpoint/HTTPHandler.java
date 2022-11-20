@@ -11,6 +11,7 @@ import java.io.StringReader;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
@@ -46,12 +47,12 @@ public abstract class HTTPHandler implements RequestHandler<APIGatewayV2ProxyReq
                 return APIGatewayResponse.error(BAD_REQUEST, "Missing body");
             }
 
-            String missing = Arrays.stream(requiredBodyFields())
+            Optional<String> missing = Arrays.stream(requiredBodyFields())
                     .filter(required -> !body.containsKey(required))
-                    .reduce(null, (x, y) -> x + ", " + y);
+                    .reduce((x, y) -> x + ", " + y);
 
-            if (missing != null) {
-                return APIGatewayResponse.error(BAD_REQUEST, "Body missing " + missing + "fields");
+            if (missing.isPresent()) {
+                return APIGatewayResponse.error(BAD_REQUEST, "Body missing " + missing.get() + "fields");
             }
         }
 
