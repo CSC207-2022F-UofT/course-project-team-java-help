@@ -31,7 +31,6 @@ public class HTTPHandlerTest {
         given().header(new Header("Content-Type", "application/json"))
                 .body("sjldkgfhsl").when().post(LOGIN).then().statusCode(400)
                 .body("message", equalTo("Cannot parse body json"));
-
     }
 
     @Test
