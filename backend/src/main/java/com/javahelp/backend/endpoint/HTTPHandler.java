@@ -24,6 +24,10 @@ public abstract class HTTPHandler implements RequestHandler<APIGatewayV2ProxyReq
     @Override
     public APIGatewayResponse handleRequest(APIGatewayV2ProxyRequestEvent input, Context context) {
 
+        if (requiresBody() && input.getBody() == null) {
+            return APIGatewayResponse.error(BAD_REQUEST, "Missing body");
+        }
+
         // parse headers
         Map<String, String[]> headers = extractHeaders(input);
 
@@ -109,6 +113,13 @@ public abstract class HTTPHandler implements RequestHandler<APIGatewayV2ProxyReq
             }
         }
         return hasJSON;
+    }
+
+    /**
+     * @return whether this handler requires a body
+     */
+    public boolean requiresBody() {
+        return true;
     }
 
     /**
