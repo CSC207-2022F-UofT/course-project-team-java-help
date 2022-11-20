@@ -1,5 +1,7 @@
 package com.javahelp.backend.domain.user.authentication;
 
+import java.util.Base64;
+
 /**
  * Result from a {@link SaltInteractor}
  */
@@ -46,6 +48,13 @@ public class SaltResult {
      */
     public byte[] getSalt() {
         return salt;
+    }
+
+    /**
+     * @return the base64 encoded salt
+     */
+    public String getSaltBase64() {
+        return Base64.getEncoder().encodeToString(salt);
     }
 
 }
