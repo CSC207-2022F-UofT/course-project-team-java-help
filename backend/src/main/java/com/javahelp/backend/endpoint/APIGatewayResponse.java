@@ -127,7 +127,7 @@ public class APIGatewayResponse {
         private static final ObjectMapper objectMapper = new ObjectMapper();
 
         private int statusCode = 200;
-        private Map<String, String> headers = Collections.emptyMap();
+        private Map<String, String> headers = new HashMap<>();
         private String rawBody;
         private Object objectBody;
         private byte[] binaryBody;
