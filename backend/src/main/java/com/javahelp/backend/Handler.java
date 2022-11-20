@@ -15,13 +15,14 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.regions.Regions;
+import com.javahelp.backend.endpoint.APIGatewayResponse;
 
-public class Handler implements RequestHandler<Map<String, Object>, ApiGatewayResponse> {
+public class Handler implements RequestHandler<Map<String, Object>, APIGatewayResponse> {
 
 	private static final Logger LOG = Logger.getLogger(Handler.class);
 
 	@Override
-	public ApiGatewayResponse handleRequest(Map<String, Object> input, Context context) {
+	public APIGatewayResponse handleRequest(Map<String, Object> input, Context context) {
 		// this function takes in input and context
 		// context gives you some information about the broader environment your
 		// function is running in
@@ -56,7 +57,7 @@ public class Handler implements RequestHandler<Map<String, Object>, ApiGatewayRe
 				"This was pushed by the new CD pipeline that ran on merge to main! " +
 				(item != null ? ("Found a user named " + name + "!") : "Found no user!"));
 
-		return ApiGatewayResponse.builder() 	// this is a little utility class provided by the serverless framework, we
+		return APIGatewayResponse.builder() 	// this is a little utility class provided by the serverless framework, we
 												// can use this
 												// or write our own code to create and format responses
 
