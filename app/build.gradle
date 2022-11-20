@@ -33,6 +33,8 @@ android {
 dependencies {
 
     api project(path: ':model')
+    implementation 'org.apache.httpcomponents.client5:httpclient5:5.1.4'
+    implementation 'org.glassfish:jakarta.json:2.0.1'
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
