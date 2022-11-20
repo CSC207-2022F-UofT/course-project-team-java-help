@@ -24,7 +24,7 @@ import jakarta.json.JsonObject;
  * <ul>
  *      <li>Contains one of email, username, or id keys with string value</li>
  *      <li>Contains boolean stayLoggedIn key</li>
- *      <li>Contains salthash key with base64 encoded salt + hash</li>
+ *      <li>Contains saltHash key with base64 encoded salt + hash</li>
  * </ul>
  */
 public class LoginHandler extends HTTPHandler implements ILoginInput {
@@ -46,7 +46,7 @@ public class LoginHandler extends HTTPHandler implements ILoginInput {
             return APIGatewayResponse.error(BAD_REQUEST, "Request must contain one of \"id\", \"email\", \"username\"");
         }
 
-        String saltHash = body.getString("salthash");
+        String saltHash = body.getString("saltHash");
         password = new UserPassword(saltHash);
 
         stayLoggedIn = body.getBoolean("stayLoggedIn");
@@ -68,6 +68,11 @@ public class LoginHandler extends HTTPHandler implements ILoginInput {
                 .setStatusCode(OK)
                 .setObjectBody(response)
                 .build();
+    }
+
+    @Override
+    public String[] requiredBodyFields() {
+        return new String[] {"saltHash", "stayLoggedIn"};
     }
 
     @Override
