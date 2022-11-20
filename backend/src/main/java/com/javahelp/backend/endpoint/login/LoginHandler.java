@@ -47,7 +47,11 @@ public class LoginHandler extends HTTPHandler implements ILoginInput {
         }
 
         String saltHash = body.getString("saltHash");
-        password = new UserPassword(saltHash);
+        try {
+            password = new UserPassword(saltHash);
+        } catch (RuntimeException e) {
+            return APIGatewayResponse.error(BAD_REQUEST, "Invalid password saltHash, cannot parse");
+        }
 
         stayLoggedIn = body.getBoolean("stayLoggedIn");
 

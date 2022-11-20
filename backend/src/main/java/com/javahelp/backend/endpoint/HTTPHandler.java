@@ -52,7 +52,7 @@ public abstract class HTTPHandler implements RequestHandler<APIGatewayV2ProxyReq
                     .reduce((x, y) -> x + ", " + y);
 
             if (missing.isPresent()) {
-                return APIGatewayResponse.error(BAD_REQUEST, "Body missing " + missing.get() + "fields");
+                return APIGatewayResponse.error(BAD_REQUEST, "Body missing " + missing.get() + " fields");
             }
         }
 
