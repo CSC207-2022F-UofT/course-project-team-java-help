@@ -26,6 +26,7 @@ public class HTTPHandlerTest {
                 .when().post(LOGIN).then().statusCode(415);
     }
 
+    @Test
     public void testParsingError() {
         given().header(new Header("Content-Type", "application/json"))
                 .body("sjldkgfhsl").when().post(LOGIN).then().statusCode(400)
