@@ -15,17 +15,17 @@ public class UserInfoConverter implements IJSONConverter<UserInfo> {
     private static UserInfoConverter instance = new UserInfoConverter(ClientUserInfoConverter.getInstance(),
             ProviderUserInfoConverter.getInstance());
 
-    private IJSONConverter<ClientUserInfo> clientConverter;
+    private ClientUserInfoConverter clientConverter;
 
-    private IJSONConverter<ProviderUserInfo> providerConverter;
+    private ProviderUserInfoConverter providerConverter;
 
     /**
      * Private constructor
      *
-     * @param client   {@link IJSONConverter} for {@link ClientUserInfo}
-     * @param provider {@link IJSONConverter} for {@link ProviderUserInfo}
+     * @param client   {@link ClientUserInfoConverter} for {@link ClientUserInfo}
+     * @param provider {@link ProviderUserInfoConverter} for {@link ProviderUserInfo}
      */
-    private UserInfoConverter(IJSONConverter<ClientUserInfo> client, IJSONConverter<ProviderUserInfo> provider) {
+    private UserInfoConverter(ClientUserInfoConverter client, ProviderUserInfoConverter provider) {
         clientConverter = client;
         providerConverter = provider;
     }
