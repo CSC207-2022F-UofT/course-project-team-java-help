@@ -3,48 +3,61 @@ package com.javahelp.backend.domain.user.authentication;
 import com.javahelp.model.token.Token;
 import com.javahelp.model.user.User;
 
-import org.graalvm.compiler.api.replacements.Snippet;
-
+/**
+ * Result of a request to authenticate with a {@link Token}
+ */
 public class TokenAuthResult {
-    private final String desiredUserID;
-    private final Token token;
-    private final boolean authenticated;
-    private final String errorMessage;
+    private User user;
+    private Token token;
+    private String errorMessage;
 
     /**
-     * Constructs a TokenAuthResult object.
+     * Creates a new {@link TokenAuthResult}
      *
-     * @param desiredUserID: the ID of the user that needs to be authenticated
-     * @param token: the token used to authenticate the user
+     * @param user  {@link User} that authenticated
+     * @param token {@link Token} authenticated with
      */
-    public TokenAuthResult(String desiredUserID, Token token) {
+    public TokenAuthResult(User user, Token token) {
         this.token = token;
-        this.desiredUserID = desiredUserID;
-        this.authenticated = desiredUserID.equals(token.getUserID());
-        if (authenticated) {
-            this.errorMessage = null;
-        } else {
-            this.errorMessage = "Token Authentication failed";
-        }
+        this.user = user;
     }
 
     /**
-     * Constructor for when fetching the token from the database fails
-     */
-    public TokenAuthResult(String desiredUserID) {
-        this.errorMessage = "Could not fetch from database";
-        this.desiredUserID = desiredUserID;
-        this.token = null;
-        this.authenticated = false;
-    }
-
-    /**
-     * Gets the result of the authentication
+     * Creates a new {@link TokenAuthResult}
      *
-     * @return the result of the authentication
+     * @param errorMessage {@link String} error message
      */
-    public boolean getAuthenticated() {
-        return this.authenticated;
+    public TokenAuthResult(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
+    /**
+     * @return whether the authentication was successful
+     */
+    public boolean isSuccess() {
+        return errorMessage == null;
+    }
+
+    /**
+     * @return {@link User} authenticated
+     */
+    public User getUser() {
+        return user;
+    }
+
+    /**
+     * @return {@link String} error message
+     */
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    /**
+     * @return {@link Token} used to authenticate
+     */
+    public Token getToken() {
+        return token;
+
     }
 
 }
