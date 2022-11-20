@@ -38,17 +38,25 @@ public abstract class RESTAPITokenGateway<T> extends RESTAPIGateway<T> {
     @Override
     protected Future<RESTAPIGatewayResponse<T>> getResponse(SimpleHttpRequest request, FutureCallback<RESTAPIGatewayResponse<T>> callback) {
 
-        request.setHeader("Authorization", getAuthString());
+        String token = provider.getTokenString(), id = provider.getUserID();
+
+        if (token == null || id == null) {
+            throw new IllegalStateException("Provider for this TokenGateway is missing token or id");
+        }
+
+        request.setHeader("Authorization", getAuthString(token, id));
 
         return super.getResponse(request, callback);
     }
 
     /**
+     * @param id id {@link String} to use
+     * @param token token {@link String} to use
      * @return Auth {@link String} for a request
      */
-    private String getAuthString() {
+    private String getAuthString(String token, String id) {
         return AUTH_TYPE +
-                " id=" + provider.getUserID() +
-                " token=" + provider.getTokenString();
+                " id=" + id +
+                " token=" + token;
     }
 }
