@@ -19,9 +19,17 @@ import jakarta.json.JsonObject;
 public class APIGatewayResponse {
 
     /**
+     * Response code for unauthorized requests
+     */
+    public static int FORBIDDEN = 403;
+
+    /**
+     * Response code for unauthenticated requests
+     */
+    public static int UNAUTHENTICATED = 401;
+
+    /**
      * Response code for unsupported media type errors
-     * <p>
-     * Should be returned by NonJSONBodyResponse
      */
     public static int UNSUPPORTED_MEDIA_TYPE = 415;
 
