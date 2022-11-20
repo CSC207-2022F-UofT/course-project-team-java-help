@@ -32,7 +32,7 @@ public abstract class RESTAPIGateway<T> {
      * @param callback {@link FutureCallback} to execute
      * @return {@link Future} for the request result
      */
-    public Future<RESTAPIGatewayResponse<T>> getResponse(SimpleHttpRequest request,
+    protected Future<RESTAPIGatewayResponse<T>> getResponse(SimpleHttpRequest request,
                                                          FutureCallback<RESTAPIGatewayResponse<T>> callback) {
         FutureCallback<InternalRESTGatewayResponse> passedCallback =
                 callback == null ? null : new FutureCallback<InternalRESTGatewayResponse>() {
