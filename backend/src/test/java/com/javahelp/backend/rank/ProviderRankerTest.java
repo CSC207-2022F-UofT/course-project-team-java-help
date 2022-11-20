@@ -30,15 +30,55 @@ public class ProviderRankerTest {
 
     @Test
     public void testProviderRanker() {
-        User client = createTestClient();
-        List<User> providersList = createTestProviders();
+        db.cleanTable();
+        User client = createTestClient1();
+        List<User> providersList = createTestProviders1();
         addUsersToDB(providersList);
 
         Constraint constraint = new VanillaConstraint("Specialty");
         UserQueryConstraint userQueryConstraint = new UserQueryConstraint(db);
-        Set<User> providers = userQueryConstraint.getProvidersWithConstraint(constraint);
+        List<Constraint> constraintList = new ArrayList<>();
+        constraintList.add(constraint);
+        Set<User> providers = userQueryConstraint.getProvidersWithConstraints(constraintList);
 
         SimilarityScorer similarityScorer = new VanillaScorer();
+        ProviderRanker providerRanker = new ProviderRanker(client, similarityScorer);
+        List<User> rankedProviderList = providerRanker.rank(providers);
+
+        List<String> expectedSortedProvidersList = new ArrayList<>();
+        for (User user : providersList) {
+            expectedSortedProvidersList.add(user.getStringID());
+        }
+        List<String> actualSortedProvidersList = new ArrayList<>();
+        for (User user : rankedProviderList) {
+            actualSortedProvidersList.add(user.getStringID());
+        }
+
+        assertEquals(expectedSortedProvidersList, actualSortedProvidersList);
+
+        this.db.delete(client.getStringID());
+        deleteUsersInDB(providersList);
+    }
+
+    @Test
+    public void testRulseBasedProviderRanker() {
+        db.cleanTable();
+        User client = createTestClient2();
+        List<User> providersList = createTestProviders2();
+        addUsersToDB(providersList);
+
+        Constraint constraint = new VanillaConstraint("Specialty");
+        List<Constraint> constraintList = new ArrayList<>();
+        constraintList.add(constraint);
+        UserQueryConstraint userQueryConstraint = new UserQueryConstraint(db);
+        Set<User> providers = userQueryConstraint.getProvidersWithConstraints(constraintList);
+
+        RuleBasedScorer similarityScorer = new RuleBasedScorer();
+        List<String> rule1 = new ArrayList<>();
+        rule1.add("Specialty-Counselling");
+        rule1.add("Education-Psychology");
+
+        similarityScorer.setRules("Symptom-Anxiety", rule1);
         ProviderRanker providerRanker = new ProviderRanker(client, similarityScorer);
         List<User> rankedProviderList = providerRanker.rank(providers);
 
@@ -70,7 +110,7 @@ public class ProviderRankerTest {
         }
     }
 
-    private User createTestClient() {
+    private User createTestClient1() {
         ClientUserInfo clientInfo = new ClientUserInfo("uoft@utoronto.ca",
                 "University of Toronto", "000-123-4567",
                 "Johnny", "Meng");
@@ -85,7 +125,22 @@ public class ProviderRankerTest {
         return client;
     }
 
-    private List<User> createTestProviders() {
+    private User createTestClient2() {
+        ClientUserInfo clientInfo = new ClientUserInfo("uoft@utoronto.ca",
+                "University of Toronto", "000-123-4567",
+                "Johnny", "Meng");
+
+        clientInfo.setAttribute("Age", "35");
+        clientInfo.setAttribute("Symptoms", "Anxiety");
+        clientInfo.setAttribute("Location", "US");
+        clientInfo.setAttribute("Language", "English");
+
+        User client = new User("client1", clientInfo, "test_client_1");
+
+        return client;
+    }
+
+    private List<User> createTestProviders1() {
         ProviderUserInfo providerInfo1 = new ProviderUserInfo(
                 "johndoe@gmail.com",
                 "123 provider road",
@@ -114,6 +169,49 @@ public class ProviderRankerTest {
         providerInfo3.setAttribute("Age", "40");
         providerInfo3.setAttribute("Specialty", "Extreme Pain");
         providerInfo3.setAttribute("Location", "US");
+        providerInfo3.setAttribute("Language", "English");
+
+        User u1 = new User("provider1", providerInfo1, "test_provider_1");
+        User u2 = new User("provider2", providerInfo2, "test_provider_2");
+        User u3 = new User("provider3", providerInfo3, "test_provider_3");
+
+        List<User> userList = new ArrayList<>();
+        userList.add(u1);
+        userList.add(u3);
+        userList.add(u2);
+
+        return userList;
+    }
+
+    private List<User> createTestProviders2() {
+        ProviderUserInfo providerInfo1 = new ProviderUserInfo(
+                "johndoe@gmail.com",
+                "123 provider road",
+                "6667771052",
+                "John");
+        providerInfo1.setAttribute("Age", "35");
+        providerInfo1.setAttribute("Specialty", "Counselling");
+        providerInfo1.setAttribute("Education", "Psychology");
+        providerInfo1.setAttribute("Language", "English");
+
+        ProviderUserInfo providerInfo2 = new ProviderUserInfo(
+                "jenifer@gmail.com",
+                "321 provider road",
+                "7776661052",
+                "Jenifer");
+        providerInfo2.setAttribute("Age", "55");
+        providerInfo2.setAttribute("Specialty", "Pain");
+        providerInfo2.setAttribute("Education", "Mathematics");
+        providerInfo2.setAttribute("Language", "French");
+
+        ProviderUserInfo providerInfo3 = new ProviderUserInfo(
+                "jackychan@gmail.com",
+                "999 provider road",
+                "1234567890",
+                "Jacky");
+        providerInfo3.setAttribute("Age", "40");
+        providerInfo3.setAttribute("Specialty", "Counselling");
+        providerInfo3.setAttribute("Education", "Neuroscience");
         providerInfo3.setAttribute("Language", "English");
 
         User u1 = new User("provider1", providerInfo1, "test_provider_1");
