@@ -52,6 +52,10 @@ public class SaltHandler extends HTTPHandler implements ISaltInput {
     @Override
     public APIGatewayResponse getResponse(JsonObject body, HttpMethod method, Map<String, String[]> headers, Map<String, String[]> parameters, Map<String, String> pathParameters) {
 
+        userId = null;
+        username = null;
+        email = null;
+
         if (parameters.containsKey("id")) {
             userId = parameters.get("id")[0];
         }
