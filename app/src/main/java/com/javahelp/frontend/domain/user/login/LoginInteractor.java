@@ -9,7 +9,7 @@ import org.apache.hc.core5.concurrent.FutureCallback;
 /**
  * Use case interactor for logging in a {@link User}
  */
-class LoginInteractor implements ILoginInput {
+public class LoginInteractor implements ILoginInput {
 
     ILoginOutput output;
     ISaltDataAccess saltAccess;
@@ -34,6 +34,11 @@ class LoginInteractor implements ILoginInput {
 
     @Override
     public void login(String id, String username, String email, String password, boolean stayLoggedIn) {
+
+        if (username == null && email == null && id == null) {
+            output.error("Must define one of username, email, and id");
+        }
+
         saltAccess.getSalt(username, email, id, new FutureCallback<byte[]>() {
             @Override
             public void completed(byte[] result) {
