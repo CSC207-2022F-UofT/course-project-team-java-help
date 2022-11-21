@@ -62,7 +62,10 @@ public abstract class HTTPHandler implements RequestHandler<APIGatewayV2ProxyReq
         // parse parameters
         Map<String, String[]> parameters = extractParameters(input);
 
-        return getResponse(body, method, headers, parameters);
+        // parse path parameters
+        Map<String, String> pathParameters = extractPathParameters(input);
+
+        return getResponse(body, method, headers, parameters, pathParameters);
     }
 
     /**
@@ -97,6 +100,18 @@ public abstract class HTTPHandler implements RequestHandler<APIGatewayV2ProxyReq
             input.getHeaders().forEach((header, value) -> headers.put(header, value.split(",")));
         }
         return headers;
+    }
+
+    /**
+     * @param input {@link APIGatewayV2ProxyRequestEvent} input
+     * @return {@link Map} of path parameters
+     */
+    private static Map<String, String> extractPathParameters(APIGatewayV2ProxyRequestEvent input) {
+        Map<String, String> params = new HashMap<>();
+        if (input.getPathParameters() != null) {
+            params.putAll(input.getPathParameters());
+        }
+        return params;
     }
 
     /**
@@ -136,6 +151,7 @@ public abstract class HTTPHandler implements RequestHandler<APIGatewayV2ProxyReq
 
     /**
      * Will only be checked if body is required
+     *
      * @return the fields required in the body
      */
     public String[] requiredBodyFields() {
@@ -145,16 +161,18 @@ public abstract class HTTPHandler implements RequestHandler<APIGatewayV2ProxyReq
     /**
      * Gets the response to the specified request
      *
-     * @param body       {@link JsonObject} request body
-     * @param method     {@link HttpMethod} http method called
-     * @param headers    {@link Map} of {@link String} headers to {@link String} array header values
-     * @param parameters {@link Map} of {@link String} parameters to {@link String}
-     *                   array parameter values
+     * @param body           {@link JsonObject} request body
+     * @param method         {@link HttpMethod} http method called
+     * @param headers        {@link Map} of {@link String} headers to {@link String} array header values
+     * @param parameters     {@link Map} of {@link String} parameters to {@link String}
+     *                       array parameter values
+     * @param pathParameters {@link Map} of {@link String} path parameter names to {@link String} values
      * @return response object
      */
     public abstract APIGatewayResponse getResponse(JsonObject body,
                                                    HttpMethod method,
                                                    Map<String, String[]> headers,
-                                                   Map<String, String[]> parameters);
+                                                   Map<String, String[]> parameters,
+                                                   Map<String, String> pathParameters);
 
 }

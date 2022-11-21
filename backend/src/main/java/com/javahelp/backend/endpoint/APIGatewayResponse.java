@@ -40,6 +40,11 @@ public class APIGatewayResponse {
      */
     public static int OK = 200;
 
+    /**
+     * Response code for resource not found
+     */
+    public static final int NOT_FOUND = 404;
+
     private final int statusCode;
     private final String body;
     private final Map<String, String> headers;
