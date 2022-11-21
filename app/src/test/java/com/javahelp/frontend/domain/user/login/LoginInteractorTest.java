@@ -104,13 +104,13 @@ public class LoginInteractorTest {
         interactor.login(null, user.getUsername(), null, "password", false);
 
         // give enough time for response to come back
-        Thread.sleep(5000);
+        Thread.sleep(15000);
 
         assertTrue(result.isPresent() && !result.get().isSuccess());
     }
 
     @Test
-    public void testReadLogin_RealSalt() throws InterruptedException {
+    public void testRealLogin_RealSalt() throws InterruptedException {
 
         ISaltDataAccess saltAccess = LambdaSaltDataAccess.getInstance();
         ILoginDataAccess loginAccess = LambdaLoginDataAccess.getInstance();
@@ -120,7 +120,7 @@ public class LoginInteractorTest {
         interactor.login(null, user.getUsername(), null, "password", false);
 
         // give enough time for response to come back
-        Thread.sleep(5000);
+        Thread.sleep(15000);
 
         assertFalse(result.isPresent());
         assertEquals("User not found", errorOutput);
