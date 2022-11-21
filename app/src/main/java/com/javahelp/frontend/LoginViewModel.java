@@ -84,14 +84,14 @@ public class LoginViewModel extends AndroidViewModel implements ILoginOutput {
 
     public void attemptLogin() {
         setLoggingIn(true);
-        new Thread(() -> {
+        executor.execute(() -> {
             try {
                 Thread.sleep(250);
             } catch (InterruptedException ignored) {
 
             }
             loginInteractor.login(null, username.getValue(), null, password.getValue(), false);
-        }).start();
+        });
     }
 
     @Override
