@@ -17,7 +17,7 @@
         <activity
             android:name=".frontend.activity.FrontPage2Activity"
             android:exported="false"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -26,7 +26,7 @@
             android:name=".frontend.activity.ClientRegistrationActivity"
             android:exported="false"
             android:parentActivityName=".frontend.activity.LoginActivity"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -35,7 +35,7 @@
             android:name=".frontend.activity.ProviderRegistrationActivity"
             android:exported="false"
             android:parentActivityName=".frontend.activity.LoginActivity"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -44,7 +44,7 @@
             android:name=".frontend.activity.FrontPageActivity"
             android:exported="false"
             android:parentActivityName=".frontend.activity.LoginActivity"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -52,7 +52,7 @@
         <activity
             android:name=".frontend.activity.LoginActivity"
             android:exported="true"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
