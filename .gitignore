@@ -122,3 +122,6 @@ replay_pid*
 
 # node
 node_modules
+
+# NDK files
+.cxx
