@@ -1,87 +1,96 @@
 package com.javahelp.frontend;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.javahelp.BR;
 import com.javahelp.R;
 import com.javahelp.databinding.ActivityMainBinding;
 
 
 public class MainActivity extends AppCompatActivity {
-    MyViewModel myViewModel;
+
+    private static final int REQUEST_INTERNET_LOGIN = 1;
+
+    MyViewModel viewModel;
     ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        myViewModel = new ViewModelProvider(this).get(MyViewModel.class);
-        binding.setData(myViewModel);
+        viewModel = new ViewModelProvider(this).get(MyViewModel.class);
+        binding.setData(viewModel);
         binding.setLifecycleOwner(this);
 
+        viewModel.getUsername().observe(this, o -> {
+//            binding.username.setText(o);
+        });
+        viewModel.getPassword().observe(this, o -> {
+//            binding.password.setText(o);
+        });
+        viewModel.shouldStaySignedIn().observe(this, binding.staySignedIn::setChecked);
+        viewModel.isLoggingIn().observe(this, o -> {
+            binding.progressBar.setVisibility(o ? View.VISIBLE : View.GONE);
 
-        // link the button to the second acticity(front page)
-        binding.botLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = null;
-                if (usernameChecker()) {
-                    intent = new Intent(MainActivity.this,FrontPageActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-                else{
-                    String inv ="username invalid";
-                    Toast.makeText(getApplicationContext(), inv , Toast.LENGTH_SHORT).show();
-                }
-            }
+        });
+        viewModel.getLoginError().observe(this, o -> {
+            binding.loginErrorText.setVisibility(o.isPresent() ? View.VISIBLE : View.GONE);
+            o.ifPresent(s -> binding.loginErrorText.setText(s));
+        });
+
+        binding.loginButton.setOnClickListener(view -> {
+            viewModel.setUsername(binding.username.getText().toString());
+            viewModel.setPassword(binding.password.getText().toString());
+            viewModel.setStaySignedIn(binding.staySignedIn.isChecked());
+            loginAttempt();
         });
 
         // link the button to the provider Registeration page
-        binding.botPReg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = null;
-                intent = new Intent(MainActivity.this,ProviderRegistrationActivity.class);
-                startActivity(intent);
-            }
+        binding.botPReg.setOnClickListener(view -> {
+            Intent intent = null;
+            intent = new Intent(MainActivity.this,ProviderRegistrationActivity.class);
+            startActivity(intent);
         });
 
         // link the button to the client Registeration page
-        binding.botCReg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = null;
-                intent = new Intent(MainActivity.this,ClientRegistrationActivity.class);
-                startActivity(intent);
-            }
+        binding.botCReg.setOnClickListener(view -> {
+            Intent intent = null;
+            intent = new Intent(MainActivity.this,ClientRegistrationActivity.class);
+            startActivity(intent);
         });
-
-
-
-
-
     }
 
     private boolean usernameChecker(){
-        if(binding.et1.getText().toString().isEmpty()){
+        if(binding.username.getText().toString().isEmpty()){
             return false;
         }
         return true;
     }
 
+    private void loginAttempt() {
+        requestPermissions(new String[] {Manifest.permission.INTERNET}, REQUEST_INTERNET_LOGIN);
+    }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_INTERNET_LOGIN:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    viewModel.attemptLogin();
+                } else {
 
+                }
+                return;
+        }
+    }
 }

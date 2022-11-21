@@ -66,45 +66,45 @@
         </LinearLayout>
 
         <EditText
-            android:id="@+id/et_1"
+            android:id="@+id/username"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="50dp"
             android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:hint="Username"
-            android:text="@={data.userName}"
-            android:drawableLeft="@drawable/user48"
-            android:paddingLeft="5dp"
-            android:drawablePadding="5dp"
-            android:maxLines="1"
-            android:textSize="20sp"
-            android:textColor="@color/black"
             android:background="@drawable/border_bg"
+            android:drawableLeft="@drawable/user48"
+            android:drawablePadding="5dp"
+            android:hint="Username"
+            android:maxLines="1"
+            android:paddingLeft="5dp"
+            android:text="@={data.username}"
+            android:textColor="@color/white"
+            android:textSize="20sp"
 
             />
 
         <EditText
-            android:id="@+id/et_2"
+            android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
             android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:hint="Password"
-            android:text="@={data.passWord}"
-            android:drawableLeft="@drawable/passwordicon"
-            android:inputType="textPassword"
-            android:paddingLeft="5dp"
-            android:drawablePadding="5dp"
-            android:maxLines="1"
-            android:textSize="20sp"
             android:background="@drawable/border_bg"
+            android:drawableLeft="@drawable/passwordicon"
+            android:drawablePadding="5dp"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:paddingLeft="5dp"
+            android:text="@={data.password}"
+            android:textColor="@color/white"
 
-            />
+            android:textSize="20sp" />
 
         <Button
-            android:id="@+id/bot_login"
+            android:id="@+id/loginButton"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -117,15 +117,41 @@
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
             android:text="Login"
-            android:textColor="#C1676767"
+            android:textColor="@color/white"
             android:textSize="20dp"
 
 
             />
 
+        <TextView
+            android:id="@+id/loginErrorText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Login Error Message"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="#FFFFFF"
+            android:visibility="gone" />
+
         <View
             android:layout_width="wrap_content"
             android:layout_height="150dp" />
+
+        <CheckBox
+            android:id="@+id/staySignedIn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="#FFFFFF"
+            android:text="Stay Signed In"
+            android:textColor="@color/white" />
 
         <TextView
             android:layout_width="90dp"
