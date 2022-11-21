@@ -26,14 +26,17 @@ import jakarta.json.stream.JsonParsingException;
  */
 public abstract class RESTAPIGateway<T> {
 
+    private CloseableHttpAsyncClient client;
+
     /**
      * Make a request to a REST API and get a response
-     * @param request {@link SimpleHttpRequest} to make
+     *
+     * @param request  {@link SimpleHttpRequest} to make
      * @param callback {@link FutureCallback} to execute
      * @return {@link Future} for the request result
      */
     protected Future<RESTAPIGatewayResponse<T>> getResponse(SimpleHttpRequest request,
-                                                         FutureCallback<RESTAPIGatewayResponse<T>> callback) {
+                                                            FutureCallback<RESTAPIGatewayResponse<T>> callback) {
         FutureCallback<InternalRESTGatewayResponse> passedCallback =
                 callback == null ? null : new FutureCallback<InternalRESTGatewayResponse>() {
                     @Override
@@ -96,21 +99,21 @@ public abstract class RESTAPIGateway<T> {
      * @return {@link Future} for {@link InternalRESTGatewayResponse}
      */
     private Future<InternalRESTGatewayResponse> getInternalResponse(SimpleHttpRequest request, FutureCallback<InternalRESTGatewayResponse> callback) {
-        try (CloseableHttpAsyncClient client = HttpAsyncClients.createDefault()) {
-            client.start();
+        if (client != null) {
+            try {
+                client.close();
+            } catch (IOException ignored) {
 
-            FutureCallback<SimpleHttpResponse> passedCallback = null;
-
-            if (callback != null) {
-                passedCallback = wrapCallback(callback);
             }
-
-            Future<SimpleHttpResponse> responseFuture = client.execute(request, passedCallback);
-
-            return wrapFuture(responseFuture);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to open HTTP client");
         }
+        client = HttpAsyncClients.createDefault();
+        client.start();
+
+        FutureCallback<SimpleHttpResponse> passedCallback = wrapCallback(callback);
+
+        Future<SimpleHttpResponse> responseFuture = client.execute(request, passedCallback);
+
+        return wrapFuture(responseFuture);
     }
 
     /**
@@ -160,17 +163,38 @@ public abstract class RESTAPIGateway<T> {
         passedCallback = new FutureCallback<SimpleHttpResponse>() {
             @Override
             public void completed(SimpleHttpResponse result) {
-                callback.completed(fromSimpleResponse(result));
+                if (callback != null) {
+                    callback.completed(fromSimpleResponse(result));
+                }
+                try {
+                    client.close();
+                } catch (IOException ignored) {
+
+                }
             }
 
             @Override
             public void failed(Exception ex) {
-                callback.failed(ex);
+                if (callback != null) {
+                    callback.failed(ex);
+                }
+                try {
+                    client.close();
+                } catch (IOException ignored) {
+
+                }
             }
 
             @Override
             public void cancelled() {
-                callback.cancelled();
+                if (callback != null) {
+                    callback.cancelled();
+                }
+                try {
+                    client.close();
+                } catch (IOException ignored) {
+
+                }
             }
         };
         return passedCallback;
