@@ -1,5 +1,7 @@
 package com.javahelp.frontend.gateway;
 
+import androidx.annotation.NonNull;
+
 import com.javahelp.frontend.domain.user.login.ISaltDataAccess;
 import com.javahelp.model.user.User;
 
@@ -136,17 +138,27 @@ public class LambdaSaltDataAccess extends RESTAPIGateway<byte[]> implements ISal
         if (response.getResponseCode() == 404) {
             return new RESTAPIGatewayResponse<>("User not found");
         } else if (response.shouldHaveBody() && response.isSuccessfullyParsed()) {
-            JsonObject json = response.getBody();
-            if (response.getResponseCode() == 200 && json.containsKey("salt")) {
-                String saltS = json.getString("salt");
-                byte[] salt = Base64.getDecoder().decode(saltS);
-                return new RESTAPIGatewayResponse<>(salt);
-            } else if (json.containsKey("errorMessage")) {
-                return new RESTAPIGatewayResponse<>(json.getString("errorMessage"));
-            } else {
-                return new RESTAPIGatewayResponse<>("JSON missing relevant fields");
-            }
+            return fromJSONInternal(response);
         }
         return new RESTAPIGatewayResponse<>("Response could not be parsed into JSON");
+    }
+
+    /**
+     * Gets a {@link RESTAPIGatewayResponse} from a {@link com.javahelp.frontend.gateway.RESTAPIGateway.InternalRESTGatewayResponse}
+     * that contains a valid {@link JsonObject} body
+     * @param response {@link com.javahelp.frontend.gateway.RESTAPIGateway.InternalRESTGatewayResponse} to parse
+     * @return {@link RESTAPIGatewayResponse} derived from body
+     */
+    private RESTAPIGatewayResponse<byte[]> fromJSONInternal(InternalRESTGatewayResponse response) {
+        JsonObject json = response.getBody();
+        if (response.getResponseCode() == 200 && json.containsKey("salt")) {
+            String saltS = json.getString("salt");
+            byte[] salt = Base64.getDecoder().decode(saltS);
+            return new RESTAPIGatewayResponse<>(salt);
+        } else if (json.containsKey("errorMessage")) {
+            return new RESTAPIGatewayResponse<>(json.getString("errorMessage"));
+        } else {
+            return new RESTAPIGatewayResponse<>("JSON missing relevant fields");
+        }
     }
 }
