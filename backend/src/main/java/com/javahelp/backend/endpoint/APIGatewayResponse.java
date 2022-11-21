@@ -21,32 +21,32 @@ public class APIGatewayResponse {
     /**
      * Response code for unauthorized requests
      */
-    public static int FORBIDDEN = 403;
+    public static final int FORBIDDEN = 403;
 
     /**
      * Response code for unauthenticated requests
      */
-    public static int UNAUTHENTICATED = 401;
+    public static final int UNAUTHENTICATED = 401;
 
     /**
      * Response code for unsupported media type errors
      */
-    public static int UNSUPPORTED_MEDIA_TYPE = 415;
+    public static final int UNSUPPORTED_MEDIA_TYPE = 415;
 
     /**
      * Response code for bad requests
      */
-    public static int BAD_REQUEST = 400;
+    public static final int BAD_REQUEST = 400;
 
     /**
      * Response code for internal server errors
      */
-    public static int INTERNAL_SERVER_ERROR = 500;
+    public static final int INTERNAL_SERVER_ERROR = 500;
 
     /**
      * Response code for OK status
      */
-    public static int OK = 200;
+    public static final int OK = 200;
 
     /**
      * Response code for resource not found
