@@ -61,7 +61,7 @@ public class SaltHandlerTest {
     public void testError() {
         given().queryParam("username", "sahjldfgo")
                 .when().get(ENDPOINT)
-                .then().statusCode(200)
+                .then().statusCode(404)
                 .body("errorMessage", equalTo("The specified user cannot be found"));
     }
 

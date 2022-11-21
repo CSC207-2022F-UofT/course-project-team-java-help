@@ -2,6 +2,7 @@ package com.javahelp.backend.endpoint.login;
 
 import static com.javahelp.backend.endpoint.APIGatewayResponse.BAD_REQUEST;
 import static com.javahelp.backend.endpoint.APIGatewayResponse.INTERNAL_SERVER_ERROR;
+import static com.javahelp.backend.endpoint.APIGatewayResponse.NOT_FOUND;
 import static com.javahelp.backend.endpoint.APIGatewayResponse.OK;
 
 import com.amazonaws.HttpMethod;
@@ -89,7 +90,7 @@ public class SaltHandler extends HTTPHandler implements ISaltInput {
                     .build().toString();
             return APIGatewayResponse.builder()
                     .setJSONBody(json)
-                    .setStatusCode(OK)
+                    .setStatusCode(NOT_FOUND)
                     .build();
         }
     }
