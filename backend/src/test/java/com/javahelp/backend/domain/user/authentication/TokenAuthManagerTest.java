@@ -2,6 +2,7 @@ package com.javahelp.backend.domain.user.authentication;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeTrue;
 
 import com.javahelp.backend.data.ITokenStore;
 import com.javahelp.backend.data.IUserStore;
@@ -24,8 +25,24 @@ public class TokenAuthManagerTest {
     ITokenStore tokenStore = ITokenStore.getDefaultImplementation();
     IUserStore userStore = IUserStore.getDefaultImplementation();
 
+    /**
+     *
+     * @return whether the database is accessible from the current process
+     */
+    public boolean databaseAccessible() {
+        try {
+            tokenStore.read("test");
+            userStore.read("test");
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     @Test
     public void testAuthenticate() {
+        assumeTrue(databaseAccessible());
+
         Instant issued = LocalDate.of(2022, 11, 15).atStartOfDay()
                 .atZone(TimeZone.getDefault().toZoneId()).toInstant();
         Instant expiry = Instant.now().plus(5, ChronoUnit.DAYS);
@@ -39,29 +56,31 @@ public class TokenAuthManagerTest {
         byte[] salt = {1};
         byte[] password = {'a'};
 
-        userStore.create(user, new UserPassword(salt, password));
-        token.setUserID(user.getStringID());
-        tokenStore.create(token);
+        try {
+            userStore.create(user, new UserPassword(salt, password));
+            token.setUserID(user.getStringID());
+            tokenStore.create(token);
 
-        TokenAuthManager manager = new TokenAuthManager(userStore, tokenStore);
-        TokenAuthResult testResult = manager.authenticate(new ITokenAuthInput() {
-            @Override
-            public String getUserID() {
-                return user.getStringID();
-            }
+            TokenAuthManager manager = new TokenAuthManager(userStore, tokenStore);
+            TokenAuthResult testResult = manager.authenticate(new ITokenAuthInput() {
+                @Override
+                public String getUserID() {
+                    return user.getStringID();
+                }
 
-            @Override
-            public String getToken() {
-                return token.getToken();
-            }
-        });
+                @Override
+                public String getToken() {
+                    return token.getToken();
+                }
+            });
 
-        assertTrue(testResult.isSuccess());
-        assertEquals(user.getStringID(), testResult.getUser().getStringID());
-        assertEquals(token.getToken(), testResult.getToken().getToken());
-
-        tokenStore.delete(token.getToken());
-        userStore.delete(user.getStringID());
+            assertTrue(testResult.isSuccess());
+            assertEquals(user.getStringID(), testResult.getUser().getStringID());
+            assertEquals(token.getToken(), testResult.getToken().getToken());
+        } finally {
+            tokenStore.delete(token.getToken());
+            userStore.delete(user.getStringID());
+        }
     }
 
 }
