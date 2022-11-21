@@ -22,6 +22,8 @@ public class SaltHandlerTest {
 
     private static final String ENDPOINT = "https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/users/salt";
 
+    private static final String USER_ENDPOINT = "https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/users/";
+
     IUserStore store = IUserStore.getDefaultImplementation();
 
     @Test
@@ -47,6 +49,10 @@ public class SaltHandlerTest {
                         .when().get(ENDPOINT)
                         .then().statusCode(200)
                         .body("salt", equalTo(Base64.getEncoder().encodeToString(p.getSalt())));
+
+        when().get(USER_ENDPOINT + u.getStringID() + "/salt")
+                .then().statusCode(200)
+                .body("salt", equalTo(Base64.getEncoder().encodeToString(p.getSalt())));
 
         store.delete(u.getStringID());
     }

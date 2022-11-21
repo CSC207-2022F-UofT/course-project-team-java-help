@@ -47,6 +47,13 @@ functions:
           path: /users/salt
           method: get
 
+  saltByID:
+    handler: com.javahelp.backend.endpoint.login.SaltHandler
+    events:
+      - httpApi:
+          path: /users/{userid}/salt
+          method: get
+
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details

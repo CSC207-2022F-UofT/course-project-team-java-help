@@ -56,8 +56,8 @@ public class SaltHandler extends HTTPHandler implements ISaltInput {
         username = null;
         email = null;
 
-        if (parameters.containsKey("id")) {
-            userId = parameters.get("id")[0];
+        if (pathParameters.containsKey("userid")) {
+            userId = pathParameters.get("userid");
         }
 
         if (parameters.containsKey("username")) {
