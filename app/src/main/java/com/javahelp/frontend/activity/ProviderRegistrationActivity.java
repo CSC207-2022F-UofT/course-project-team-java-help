@@ -1,4 +1,4 @@
-package com.javahelp.frontend;
+package com.javahelp.frontend.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;

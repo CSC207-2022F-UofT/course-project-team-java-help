@@ -1,4 +1,4 @@
-package com.javahelp.frontend;
+package com.javahelp.frontend.activity;
 
 import android.app.Application;
 import android.view.View;
@@ -20,7 +20,6 @@ import com.javahelp.model.user.IPasswordHasher;
 import com.javahelp.model.user.SHAPasswordHasher;
 import com.javahelp.model.user.User;
 
-import java.security.cert.PKIXRevocationChecker;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
