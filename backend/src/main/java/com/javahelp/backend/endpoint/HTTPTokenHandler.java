@@ -31,7 +31,7 @@ public abstract class HTTPTokenHandler extends HTTPHandler implements ITokenAuth
     private String tokenString, userId;
 
     @Override
-    public APIGatewayResponse getResponse(JsonObject body, HttpMethod method, Map<String, String[]> headers, Map<String, String[]> parameters) {
+    public APIGatewayResponse getResponse(JsonObject body, HttpMethod method, Map<String, String[]> headers, Map<String, String[]> parameters, Map<String, String> pathParameters) {
         tokenString = null;
         userId = null;
 
