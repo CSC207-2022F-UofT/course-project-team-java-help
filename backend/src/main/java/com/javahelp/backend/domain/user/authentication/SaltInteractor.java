@@ -39,7 +39,7 @@ public class SaltInteractor {
                 password = users.readPassword(u.getStringID());
             }
         } else if (input.getUsername() != null) {
-            User u = users.readByEmail(input.getUsername());
+            User u = users.readByUsername(input.getUsername());
             if (u != null) {
                 password = users.readPassword(u.getStringID());
             }
