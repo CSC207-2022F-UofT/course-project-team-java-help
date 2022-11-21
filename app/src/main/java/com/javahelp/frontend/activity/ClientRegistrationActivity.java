@@ -1,4 +1,4 @@
-package com.javahelp.frontend;
+package com.javahelp.frontend.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.google.android.material.internal.ViewUtils;
 import com.javahelp.R;
 import com.javahelp.databinding.ActivityClientRegistrationBinding;
 

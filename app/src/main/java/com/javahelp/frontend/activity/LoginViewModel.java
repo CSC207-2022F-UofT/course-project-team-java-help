@@ -1,4 +1,4 @@
-package com.javahelp.frontend;
+package com.javahelp.frontend.activity;
 
 import android.app.Application;
 import android.view.View;
@@ -20,7 +20,6 @@ import com.javahelp.model.user.IPasswordHasher;
 import com.javahelp.model.user.SHAPasswordHasher;
 import com.javahelp.model.user.User;
 
-import java.security.cert.PKIXRevocationChecker;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -138,6 +137,12 @@ public class LoginViewModel extends AndroidViewModel implements ILoginOutput {
         setLoggingIn(true);
         executor.execute(() -> {
             try {
+                // the delay is present in case login immediately returns an error.
+                // in the event that login immediately returns an error, if the user does not
+                // see the error message under the login button, they may not realize anything
+                // has happened. Instead, it is easier to add a small delay so that the user
+                // sees the program 'trying' to log in, sees the progress bar appear, sees it
+                // disappear, and understands that the login has failed.
                 Thread.sleep(250);
             } catch (InterruptedException ignored) {
 

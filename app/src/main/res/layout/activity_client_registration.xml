@@ -6,7 +6,7 @@
     <data>
         <variable
             name="cdata"
-            type="com.javahelp.frontend.ClientRegistrationVm" />
+            type="com.javahelp.frontend.activity.ClientRegistrationVm" />
 
     </data>
 
@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@color/white"
-        tools:context=".frontend.ProviderRegistrationActivity">
+        tools:context=".frontend.activity.ProviderRegistrationActivity">
 
         <ScrollView
             android:layout_width="match_parent"

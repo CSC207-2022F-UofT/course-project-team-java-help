@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeTrue;
 
 import com.javahelp.backend.data.IUserStore;
 import com.javahelp.backend.domain.user.delete.DeleteManager;
@@ -31,6 +32,19 @@ public class DeleteManagerTest {
     byte[] salt;
     byte[] password;
     UserPassword userPassword;
+
+    /**
+     *
+     * @return whether the database is accessible from the current process
+     */
+    public boolean databaseAccessible() {
+        try {
+            userStore.read("test");
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
     @Before
     public void setUp() {
@@ -58,27 +72,33 @@ public class DeleteManagerTest {
 
     @Test
     public void testDelete() {
-        userStore.create(user, userPassword);
-        assertNotNull(userStore.read(user.getStringID()));
+        assumeTrue(databaseAccessible());
 
-        IDeleteInputBoundary input = new IDeleteInputBoundary() {
-            final String userID = user.getStringID();
+        IDeleteInputBoundary input = null;
 
-            @Override
-            public String getUserID() {
-                return userID;
-            }
-        };
+        try {
+            userStore.create(user, userPassword);
+            assertNotNull(userStore.read(user.getStringID()));
 
-        DeleteResult deleteResult1 = deleteManager.delete(input);
-        assertNotNull(deleteResult1.getUser());
-        assertNull(deleteResult1.getErrorMessage());
-        assertTrue(deleteResult1.isSuccess());
+            input = new IDeleteInputBoundary() {
+                final String userID = user.getStringID();
 
-        // Tries to delete again (expected failure).
-        DeleteResult deleteResult2 = deleteManager.delete(input);
-        assertNull(deleteResult2.getUser());
-        assertEquals("User does not exist", deleteResult2.getErrorMessage());
-        assertFalse(deleteResult2.isSuccess());
+                @Override
+                public String getUserID() {
+                    return userID;
+                }
+            };
+        } finally {
+            DeleteResult deleteResult1 = deleteManager.delete(input);
+            assertNotNull(deleteResult1.getUser());
+            assertNull(deleteResult1.getErrorMessage());
+            assertTrue(deleteResult1.isSuccess());
+
+            // Tries to delete again (expected failure).
+            DeleteResult deleteResult2 = deleteManager.delete(input);
+            assertNull(deleteResult2.getUser());
+            assertEquals("User does not exist", deleteResult2.getErrorMessage());
+            assertFalse(deleteResult2.isSuccess());
+        }
     }
 }

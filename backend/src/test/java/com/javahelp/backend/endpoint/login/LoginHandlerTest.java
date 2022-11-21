@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.Matchers.hasProperty;
+import static org.junit.Assume.assumeTrue;
 import static io.restassured.RestAssured.given;
 
 import com.javahelp.backend.data.IUserStore;
@@ -27,6 +28,19 @@ public class LoginHandlerTest {
 
     private static final String LOGIN = "https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/login";
 
+    /**
+     *
+     * @return whether the database is accessible from the current process
+     */
+    public boolean databaseAccessible() {
+        try {
+            IUserStore.getDefaultImplementation().read("test");
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     @Test
     public void testMissingIdentifying() {
         given().header(new Header("Content-Type", "application/json"))
@@ -45,6 +59,8 @@ public class LoginHandlerTest {
 
     @Test
     public void testValidHash_IncorrectPassword() {
+        assumeTrue(databaseAccessible());
+
         UserPassword p = new UserPassword("password", SHAPasswordHasher.getInstance());
         UserPassword q = new UserPassword("wrong_password", SHAPasswordHasher.getInstance());
 
@@ -55,23 +71,27 @@ public class LoginHandlerTest {
 
         User u = new User("", info, "testing_user_login_123");
 
-        db.create(u, p);
+        try {
+            db.create(u, p);
 
-        JsonObject json = Json.createObjectBuilder()
-                .add("username", "testing_user_login_123")
-                .add("saltHash", q.getBase64SaltHash())
-                .add("stayLoggedIn", false)
-                .build();
+            JsonObject json = Json.createObjectBuilder()
+                    .add("username", "testing_user_login_123")
+                    .add("saltHash", q.getBase64SaltHash())
+                    .add("stayLoggedIn", false)
+                    .build();
 
-        given().header(new Header("Content-Type", "application/json"))
-                .body(json.toString()).when().post(LOGIN).then().statusCode(200)
-                .body("success", equalTo(false));
-
-        db.delete(u.getStringID());
+            given().header(new Header("Content-Type", "application/json"))
+                    .body(json.toString()).when().post(LOGIN).then().statusCode(200)
+                    .body("success", equalTo(false));
+        } finally {
+            db.delete(u.getStringID());
+        }
     }
 
     @Test
     public void testValidHash_CorrectPassword() {
+        assumeTrue(databaseAccessible());
+
         UserPassword p = new UserPassword("password", SHAPasswordHasher.getInstance());
 
         IUserStore db = IUserStore.getDefaultImplementation();
@@ -81,20 +101,21 @@ public class LoginHandlerTest {
 
         User u = new User("", info, "testing_user_login_123");
 
-        db.create(u, p);
+        try {
+            db.create(u, p);
 
-        JsonObject json = Json.createObjectBuilder()
-                .add("username", "testing_user_login_123")
-                .add("saltHash", p.getBase64SaltHash())
-                .add("stayLoggedIn", false)
-                .build();
+            JsonObject json = Json.createObjectBuilder()
+                    .add("username", "testing_user_login_123")
+                    .add("saltHash", p.getBase64SaltHash())
+                    .add("stayLoggedIn", false)
+                    .build();
 
-        given().header(new Header("Content-Type", "application/json"))
-                .body(json.toString()).when().post(LOGIN).then().statusCode(200)
-                .contentType(ContentType.JSON)
-                .body("success", equalTo(true));
-
-        db.delete(u.getStringID());
+            given().header(new Header("Content-Type", "application/json"))
+                    .body(json.toString()).when().post(LOGIN).then().statusCode(200)
+                    .contentType(ContentType.JSON)
+                    .body("success", equalTo(true));
+        } finally {
+            db.delete(u.getStringID());
+        }
     }
-
 }

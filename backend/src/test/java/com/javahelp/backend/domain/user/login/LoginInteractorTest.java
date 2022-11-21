@@ -1,6 +1,7 @@
 package com.javahelp.backend.domain.user.login;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeTrue;
 
 import com.javahelp.backend.data.ITokenStore;
 import com.javahelp.backend.data.IUserStore;
@@ -16,8 +17,24 @@ import org.junit.Test;
  */
 public class LoginInteractorTest {
 
+    /**
+     *
+     * @return whether the database is accessible from the current process
+     */
+    public boolean databaseAccessible() {
+        try {
+            IUserStore.getDefaultImplementation().read("test");
+            ITokenStore.getDefaultImplementation().read("test");
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     @Test
     public void testLogin() {
+        assumeTrue(databaseAccessible());
+
         IUserStore db = IUserStore.getDefaultImplementation();
         ITokenStore tokens = ITokenStore.getDefaultImplementation();
 
@@ -28,40 +45,42 @@ public class LoginInteractorTest {
 
         User u = new User("", info, "testing_user_login_123");
 
-        db.create(u, p);
+        try {
+            db.create(u, p);
 
-        LoginInteractor interactor = new LoginInteractor(db, tokens);
+            LoginInteractor interactor = new LoginInteractor(db, tokens);
 
-        LoginResult result = interactor.login(new ILoginInput() {
-            @Override
-            public String getUsername() {
-                return u.getUsername();
-            }
+            LoginResult result = interactor.login(new ILoginInput() {
+                @Override
+                public String getUsername() {
+                    return u.getUsername();
+                }
 
-            @Override
-            public String getID() {
-                return null;
-            }
+                @Override
+                public String getID() {
+                    return null;
+                }
 
-            @Override
-            public String getEmail() {
-                return u.getUserInfo().getEmailAddress();
-            }
+                @Override
+                public String getEmail() {
+                    return u.getUserInfo().getEmailAddress();
+                }
 
-            @Override
-            public UserPassword getPassword() {
-                return p;
-            }
+                @Override
+                public UserPassword getPassword() {
+                    return p;
+                }
 
-            @Override
-            public boolean stayLoggedIn() {
-                return false;
-            }
-        });
+                @Override
+                public boolean stayLoggedIn() {
+                    return false;
+                }
+            });
 
-        assertTrue(result.isSuccess());
-
-        db.delete(u.getStringID());
+            assertTrue(result.isSuccess());
+        } finally {
+            db.delete(u.getStringID());
+        }
     }
 
 }

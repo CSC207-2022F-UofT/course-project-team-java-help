@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assume.assumeTrue;
 
 import com.amazonaws.regions.Regions;
 import com.javahelp.model.user.ClientUserInfo;
@@ -25,8 +26,23 @@ public class DynamoDBUserStoreTest {
 
     DynamoDBUserStore db = new DynamoDBUserStore(tableName, regions);
 
+    /**
+     *
+     * @return whether the database is accessible from the current process
+     */
+    public boolean databaseAccessible() {
+        try {
+            db.read("test");
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     @Test(timeout = 5000)
     public void testCreateRead() {
+        assumeTrue(databaseAccessible());
+
         UserPassword p = randomUserPassword();
         ClientUserInfo clientInfo = new ClientUserInfo(
                 "test.client@mail.com",
@@ -36,28 +52,32 @@ public class DynamoDBUserStoreTest {
                 "McDonald");
         User u = new User("test", clientInfo, "test_user");
 
-        db.create(u, p);
+        try {
+            db.create(u, p);
 
-        assertNotEquals("test", u.getStringID());
+            assertNotEquals("test", u.getStringID());
 
-        User read = db.read(u.getStringID());
+            User read = db.read(u.getStringID());
 
-        assertEquals(u.getStringID(), read.getStringID());
-        assertEquals(u.getUsername(), read.getUsername());
-        assertEquals(u.getUserInfo().getType(), read.getUserInfo().getType());
-        ClientUserInfo base = (ClientUserInfo) u.getUserInfo(),
-                readUserInfo = (ClientUserInfo) read.getUserInfo();
+            assertEquals(u.getStringID(), read.getStringID());
+            assertEquals(u.getUsername(), read.getUsername());
+            assertEquals(u.getUserInfo().getType(), read.getUserInfo().getType());
+            ClientUserInfo base = (ClientUserInfo) u.getUserInfo(),
+                    readUserInfo = (ClientUserInfo) read.getUserInfo();
 
-        assertEquals(base.getEmailAddress(), readUserInfo.getEmailAddress());
-        assertEquals(base.getAddress(), readUserInfo.getAddress());
-        assertEquals(base.getFirstName(), readUserInfo.getFirstName());
-        assertEquals(base.getLastName(), readUserInfo.getLastName());
-
-        db.delete(u.getStringID());
+            assertEquals(base.getEmailAddress(), readUserInfo.getEmailAddress());
+            assertEquals(base.getAddress(), readUserInfo.getAddress());
+            assertEquals(base.getFirstName(), readUserInfo.getFirstName());
+            assertEquals(base.getLastName(), readUserInfo.getLastName());
+        } finally {
+            db.delete(u.getStringID());
+        }
     }
 
     @Test(timeout = 5000)
     public void testUpdate() {
+        assumeTrue(databaseAccessible());
+
         UserPassword p = randomUserPassword();
         ClientUserInfo clientInfo = new ClientUserInfo(
                 "test.client@mail.com",
@@ -67,28 +87,31 @@ public class DynamoDBUserStoreTest {
                 "McDonald");
         User u = new User("test", clientInfo, "test_user");
 
-        db.create(u, p);
+        try {
+            db.create(u, p);
 
-        ClientUserInfo c = (ClientUserInfo) u.getUserInfo();
-        c.setFirstName("john");
+            ClientUserInfo c = (ClientUserInfo) u.getUserInfo();
+            c.setFirstName("john");
 
-        u.setUsername("boo!");
+            u.setUsername("boo!");
 
-        db.update(u);
+            db.update(u);
 
-        u = db.read(u.getStringID());
+            u = db.read(u.getStringID());
 
-        assertEquals("boo!", u.getUsername());
+            assertEquals("boo!", u.getUsername());
 
-        c = (ClientUserInfo) u.getUserInfo();
+            c = (ClientUserInfo) u.getUserInfo();
 
-        assertEquals("john", c.getFirstName());
-
-        db.delete(u.getStringID());
+            assertEquals("john", c.getFirstName());
+        } finally {
+            db.delete(u.getStringID());
+        }
     }
 
     @Test(timeout = 5000)
     public void testDelete() {
+        assumeTrue(databaseAccessible());
 
         UserPassword p = randomUserPassword();
         ClientUserInfo clientInfo = new ClientUserInfo(
@@ -99,21 +122,25 @@ public class DynamoDBUserStoreTest {
                 "McDonald");
         User u = new User("test", clientInfo, "test_user");
 
-        db.create(u, p);
+        try {
+            db.create(u, p);
 
-        User read = db.read(u.getStringID());
+            User read = db.read(u.getStringID());
 
-        assertNotNull(read);
+            assertNotNull(read);
 
-        db.delete(u.getStringID());
+            db.delete(u.getStringID());
+        } finally {
+            User deleted = db.read(u.getStringID());
 
-        User deleted = db.read(u.getStringID());
-
-        assertNull(deleted);
+            assertNull(deleted);
+        }
     }
 
     @Test(timeout = 5000)
     public void testPasswordUpdateRead() {
+        assumeTrue(databaseAccessible());
+
         UserPassword p = randomUserPassword();
         ClientUserInfo clientInfo = new ClientUserInfo(
                 "test.client@mail.com",
@@ -123,25 +150,29 @@ public class DynamoDBUserStoreTest {
                 "McDonald");
         User u = new User("test", clientInfo, "test_user");
 
-        db.create(u, p);
+        try {
+            db.create(u, p);
 
-        UserPassword read = db.readPassword(u.getStringID());
+            UserPassword read = db.readPassword(u.getStringID());
 
-        assertEquals(read.getBase64SaltHash(), p.getBase64SaltHash());
+            assertEquals(read.getBase64SaltHash(), p.getBase64SaltHash());
 
-        UserPassword newPassword = randomUserPassword();
+            UserPassword newPassword = randomUserPassword();
 
-        db.updatePassword(u.getStringID(), newPassword);
+            db.updatePassword(u.getStringID(), newPassword);
 
-        read = db.readPassword(u.getStringID());
+            read = db.readPassword(u.getStringID());
 
-        assertEquals(newPassword.getBase64SaltHash(), read.getBase64SaltHash());
-
-        db.delete(u.getStringID());
+            assertEquals(newPassword.getBase64SaltHash(), read.getBase64SaltHash());
+        } finally {
+            db.delete(u.getStringID());
+        }
     }
 
     @Test(timeout = 5000)
     public void testReadByEmail() {
+        assumeTrue(databaseAccessible());
+
         UserPassword p = randomUserPassword();
         ClientUserInfo clientInfo = new ClientUserInfo(
                 "test.client@mail.com",
@@ -151,17 +182,23 @@ public class DynamoDBUserStoreTest {
                 "McDonald");
         User u = new User("test", clientInfo, "test_user");
 
-        db.create(u, p);
+        User read = u;
 
-        User read = db.readByEmail("test.client@mail.com");
+        try {
+            db.create(u, p);
 
-        assertEquals(u.getStringID(), read.getStringID());
+            read = db.readByEmail("test.client@mail.com");
 
-        db.delete(read.getStringID());
+            assertEquals(u.getStringID(), read.getStringID());
+        } finally {
+            db.delete(read.getStringID());
+        }
     }
 
     @Test(timeout = 5000)
     public void testReadByUsername() {
+        assumeTrue(databaseAccessible());
+
         UserPassword p = randomUserPassword();
         ClientUserInfo clientInfo = new ClientUserInfo(
                 "test.client@mail.com",
@@ -171,13 +208,19 @@ public class DynamoDBUserStoreTest {
                 "McDonald");
         User u = new User("test", clientInfo, "test_user");
 
-        db.create(u, p);
+        User read = u;
 
-        User read = db.readByUsername("test_user");
+        try {
+            db.create(u, p);
 
-        assertEquals(u.getStringID(), read.getStringID());
+            read = db.readByUsername("test_user");
 
-        db.delete(read.getStringID());
+            assertEquals(u.getStringID(), read.getStringID());
+        } finally {
+            db.delete(read.getStringID());
+
+        }
+
     }
 
     /**
