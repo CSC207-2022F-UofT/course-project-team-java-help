@@ -25,11 +25,29 @@ public class LambdaSaltDataAccess extends RESTAPIGateway<byte[]> implements ISal
 
     private static final String ENDPOINT = "https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/";
 
+    private static final LambdaSaltDataAccess instance = new LambdaSaltDataAccess();
+
+    /**
+     * @return an instance of {@link LambdaSaltDataAccess}
+     */
+    public static LambdaSaltDataAccess getInstance() {
+        return instance;
+    }
+
+    /**
+     * Private constructor
+     */
+    private LambdaSaltDataAccess() {
+
+
+    }
+
     /**
      * Gets the {@link URI} to get a {@link User}'s salt
+     *
      * @param username username of {@link User}
-     * @param email email of {@link User}
-     * @param id {@link String} id of {@link User}
+     * @param email    email of {@link User}
+     * @param id       {@link String} id of {@link User}
      * @return {@link URI}
      */
     private static URI getURI(String username, String email, String id) throws URISyntaxException {
@@ -108,9 +126,11 @@ public class LambdaSaltDataAccess extends RESTAPIGateway<byte[]> implements ISal
 
     @Override
     protected RESTAPIGatewayResponse<byte[]> fromInternal(InternalRESTGatewayResponse response) {
-        if (response.shouldHaveBody() && response.isSuccessfullyParsed()) {
+        if (response.getResponseCode() == 404) {
+            return new RESTAPIGatewayResponse<>("User not found");
+        } else if (response.shouldHaveBody() && response.isSuccessfullyParsed()) {
             JsonObject json = response.getBody();
-            if (json.containsKey("salt")) {
+            if (response.getResponseCode() == 200 && json.containsKey("salt")) {
                 String saltS = json.getString("salt");
                 byte[] salt = Base64.getDecoder().decode(saltS);
                 return new RESTAPIGatewayResponse<>(salt);
