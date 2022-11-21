@@ -33,14 +33,18 @@ public class LoginActivity extends AppCompatActivity {
         viewModel.getUsername().observe(this, o -> {
 //            binding.username.setText(o);
         });
+
         viewModel.getPassword().observe(this, o -> {
 //            binding.password.setText(o);
         });
+
         viewModel.shouldStaySignedIn().observe(this, binding.staySignedIn::setChecked);
+
         viewModel.isLoggingIn().observe(this, o -> {
             binding.progressBar.setVisibility(o ? View.VISIBLE : View.GONE);
-
+            binding.loginButton.setEnabled(!o);
         });
+
         viewModel.getLoginError().observe(this, o -> {
             binding.loginErrorText.setVisibility(o.isPresent() ? View.VISIBLE : View.GONE);
             o.ifPresent(s -> binding.loginErrorText.setText(s));
@@ -68,14 +72,11 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private boolean usernameChecker() {
-        if (binding.username.getText().toString().isEmpty()) {
-            return false;
-        }
-        return true;
-    }
-
     private void loginAttempt() {
+        if (binding.username.getText().toString().isEmpty() || binding.password.getText().toString().isEmpty()) {
+            viewModel.setLoginError("Please enter username and password");
+            return; // early return on invalid username or password
+        }
         requestPermissions(new String[]{Manifest.permission.INTERNET}, REQUEST_INTERNET_LOGIN);
     }
 

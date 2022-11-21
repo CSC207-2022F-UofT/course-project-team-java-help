@@ -1,7 +1,6 @@
 package com.javahelp.frontend;
 
 import android.app.Application;
-import android.graphics.Path;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -12,7 +11,6 @@ import com.javahelp.frontend.domain.user.login.ILoginInput;
 import com.javahelp.frontend.domain.user.login.ILoginOutput;
 import com.javahelp.frontend.domain.user.login.ISaltDataAccess;
 import com.javahelp.frontend.domain.user.login.LoginInteractor;
-import com.javahelp.frontend.domain.user.login.LoginResult;
 import com.javahelp.frontend.gateway.LambdaLoginDataAccess;
 import com.javahelp.frontend.gateway.LambdaSaltDataAccess;
 import com.javahelp.model.token.Token;
@@ -59,6 +57,10 @@ public class LoginViewModel extends AndroidViewModel implements ILoginOutput {
         staySignedIn.setValue(b);
     }
 
+    public void setLoginError(String loginError) {
+        this.loginError.setValue(loginError == null ? Optional.empty() : Optional.of(loginError));
+    }
+
     public MutableLiveData<Optional<String>> getLoginError() {
         return loginError;
     }
@@ -81,7 +83,14 @@ public class LoginViewModel extends AndroidViewModel implements ILoginOutput {
 
     public void attemptLogin() {
         setLoggingIn(true);
-        new Thread(() -> loginInteractor.login(null, username.getValue(), null, password.getValue(), false)).start();
+        executor.execute(() -> {
+            try {
+                Thread.sleep(250);
+            } catch (InterruptedException ignored) {
+
+            }
+            loginInteractor.login(null, username.getValue(), null, password.getValue(), false);
+        });
     }
 
     @Override
@@ -97,6 +106,9 @@ public class LoginViewModel extends AndroidViewModel implements ILoginOutput {
 
     @Override
     public void error(String errorMessage) {
+        if (errorMessage == null) {
+            errorMessage = "Connection error, try again";
+        }
         loggingIn.postValue(false);
         loginError.postValue(Optional.of(errorMessage));
     }
