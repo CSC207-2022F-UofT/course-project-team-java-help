@@ -15,6 +15,9 @@ import org.junit.Test;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAmount;
+import java.time.temporal.TemporalUnit;
 import java.util.TimeZone;
 
 public class TokenAuthManagerTest {
@@ -25,8 +28,7 @@ public class TokenAuthManagerTest {
     public void testAuthenticate() {
         Instant issued = LocalDate.of(2022, 11, 15).atStartOfDay()
                 .atZone(TimeZone.getDefault().toZoneId()).toInstant();
-        Instant expiry = LocalDate.of(2022, 11, 16).atStartOfDay()
-                .atZone(TimeZone.getDefault().toZoneId()).toInstant();
+        Instant expiry = Instant.now().plus(5, ChronoUnit.DAYS);
 
         ClientUserInfo client = new ClientUserInfo("email@mail.com",
                 "123 Java St", "000-000-0000", "John", "Doe");

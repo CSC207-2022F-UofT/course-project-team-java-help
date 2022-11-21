@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.javahelp">
-
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -23,7 +23,7 @@
         <activity
             android:name=".frontend.ClientRegistrationActivity"
             android:exported="false"
-            android:parentActivityName=".frontend.MainActivity">
+            android:parentActivityName=".frontend.LoginActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -31,7 +31,7 @@
         <activity
             android:name=".frontend.ProviderRegistrationActivity"
             android:exported="false"
-            android:parentActivityName=".frontend.MainActivity">
+            android:parentActivityName=".frontend.LoginActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -39,13 +39,13 @@
         <activity
             android:name=".frontend.FrontPageActivity"
             android:exported="false"
-            android:parentActivityName=".frontend.MainActivity">
+            android:parentActivityName=".frontend.LoginActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".frontend.MainActivity"
+            android:name=".frontend.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
