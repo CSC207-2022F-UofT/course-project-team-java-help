@@ -20,10 +20,6 @@ import org.junit.Test;
 import java.time.Duration;
 import java.util.Optional;
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 
 /**
@@ -65,7 +61,7 @@ public class LoginInteractorTest {
             }
         };
 
-        salt = new byte[32];
+        salt = new byte[64];
         Random r = new Random();
         r.nextBytes(salt);
 
