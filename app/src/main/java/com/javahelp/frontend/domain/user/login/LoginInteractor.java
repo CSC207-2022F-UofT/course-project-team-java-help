@@ -42,7 +42,7 @@ public class LoginInteractor implements ILoginInput {
         saltAccess.getSalt(username, email, id, new FutureCallback<byte[]>() {
             @Override
             public void completed(byte[] result) {
-                UserPassword p = new UserPassword(password, hasher);
+                UserPassword p = new UserPassword(password, result, hasher);
                 loginWithUserPassword(id, email, username, p, stayLoggedIn);
             }
 
