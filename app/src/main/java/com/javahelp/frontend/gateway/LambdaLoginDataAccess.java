@@ -78,9 +78,9 @@ public class LambdaLoginDataAccess extends RESTAPIGateway<LoginResult> implement
         request.setHeader("Content-Type", "application/json");
 
         request.setConfig(RequestConfig.custom()
-                .setConnectionRequestTimeout(5000, TimeUnit.MILLISECONDS)
-                .setResponseTimeout(5000, TimeUnit.MILLISECONDS)
-                .setConnectTimeout(5000, TimeUnit.MILLISECONDS)
+                .setConnectionRequestTimeout(15000, TimeUnit.MILLISECONDS)
+                .setResponseTimeout(15000, TimeUnit.MILLISECONDS)
+                .setConnectTimeout(15000, TimeUnit.MILLISECONDS)
                 .build());
 
         FutureCallback<RESTAPIGatewayResponse<LoginResult>> passedCallback = callback == null ? null : new FutureCallback<RESTAPIGatewayResponse<LoginResult>>() {

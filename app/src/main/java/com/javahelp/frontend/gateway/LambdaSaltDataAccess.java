@@ -78,9 +78,9 @@ public class LambdaSaltDataAccess extends RESTAPIGateway<byte[]> implements ISal
         SimpleHttpRequest request = SimpleHttpRequest.create("GET", uri);
 
         request.setConfig(RequestConfig.custom()
-                .setConnectionRequestTimeout(5000, TimeUnit.MILLISECONDS)
-                .setResponseTimeout(5000, TimeUnit.MILLISECONDS)
-                .setConnectTimeout(5000, TimeUnit.MILLISECONDS)
+                .setConnectionRequestTimeout(15000, TimeUnit.MILLISECONDS)
+                .setResponseTimeout(15000, TimeUnit.MILLISECONDS)
+                .setConnectTimeout(15000, TimeUnit.MILLISECONDS)
                 .build());
 
         FutureCallback<RESTAPIGatewayResponse<byte[]>> passedCallback = callback == null ? null : new FutureCallback<RESTAPIGatewayResponse<byte[]>>() {
