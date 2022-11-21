@@ -3,14 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
-    tools:context=".frontend.FrontPageActivity">
+    android:orientation="vertical"
+    tools:context=".frontend.FrontPage2Activity">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Client login page"
+        android:text="Provider login page"
         />
+
 
 </LinearLayout>
