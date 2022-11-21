@@ -1,11 +1,11 @@
 package com.javahelp.backend.endpoint.login;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assume.assumeTrue;
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 
 import com.javahelp.backend.data.IUserStore;
-import com.javahelp.backend.domain.user.authentication.SaltInteractor;
 import com.javahelp.model.user.ClientUserInfo;
 import com.javahelp.model.user.SHAPasswordHasher;
 import com.javahelp.model.user.User;
@@ -26,6 +26,18 @@ public class SaltHandlerTest {
 
     IUserStore store = IUserStore.getDefaultImplementation();
 
+    /**
+     * @return whether the database is accessible from the current process
+     */
+    public boolean databaseAccessible() {
+        try {
+            store.read("test");
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     @Test
     public void testMissingParameters() {
         when().get(ENDPOINT).then().statusCode(400)
@@ -34,6 +46,8 @@ public class SaltHandlerTest {
 
     @Test
     public void testSuccess() {
+        assumeTrue(databaseAccessible());
+
         ClientUserInfo clientInfo = new ClientUserInfo(
                 "test.client@mail.com",
                 "123  client road",
@@ -43,18 +57,20 @@ public class SaltHandlerTest {
         User u = new User("test", clientInfo, "test_user");
         UserPassword p = new UserPassword("password", SHAPasswordHasher.getInstance());
 
-        store.create(u, p);
+        try {
+            store.create(u, p);
 
-        given().queryParam("email", "test.client@mail.com")
-                        .when().get(ENDPOINT)
-                        .then().statusCode(200)
-                        .body("salt", equalTo(Base64.getEncoder().encodeToString(p.getSalt())));
+            given().queryParam("email", "test.client@mail.com")
+                    .when().get(ENDPOINT)
+                    .then().statusCode(200)
+                    .body("salt", equalTo(Base64.getEncoder().encodeToString(p.getSalt())));
 
-        when().get(USER_ENDPOINT + u.getStringID() + "/salt")
-                .then().statusCode(200)
-                .body("salt", equalTo(Base64.getEncoder().encodeToString(p.getSalt())));
-
-        store.delete(u.getStringID());
+            when().get(USER_ENDPOINT + u.getStringID() + "/salt")
+                    .then().statusCode(200)
+                    .body("salt", equalTo(Base64.getEncoder().encodeToString(p.getSalt())));
+        } finally {
+            store.delete(u.getStringID());
+        }
     }
 
     @Test

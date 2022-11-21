@@ -26,13 +26,6 @@ package:
   artifact: backend/build/distributions/function-package.zip
 
 functions:
-  hello:
-    handler: com.javahelp.backend.Handler
-    events:
-      - httpApi:
-          path: /helloworld
-          method: get
-
   login:
     handler: com.javahelp.backend.endpoint.login.LoginHandler
     events:

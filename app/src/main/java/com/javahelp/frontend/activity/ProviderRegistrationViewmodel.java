@@ -1,4 +1,4 @@
-package com.javahelp.frontend;
+package com.javahelp.frontend.activity;
 
 import android.app.Application;
 import android.view.View;

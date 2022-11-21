@@ -1,4 +1,4 @@
-package com.javahelp.frontend;
+package com.javahelp.frontend.activity;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
