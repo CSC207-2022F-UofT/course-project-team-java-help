@@ -2,7 +2,8 @@ package com.javahelp.model.token;
 
 import com.javahelp.model.user.User;
 
-import java.time.*;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.UUID;
 
 /**
@@ -56,9 +57,10 @@ public class Token {
     /**
      * Creates a new {@link Token} for the given user, with a random token string,
      * initiated at the current moment.
+     *
      * @param validDuration {@link Duration} the {@link Token} is valid for
-     * @param tag {@link String} tags for the {@link Token}
-     * @param userId {@link String} user id for the {@link Token}
+     * @param tag           {@link String} tags for the {@link Token}
+     * @param userId        {@link String} user id for the {@link Token}
      */
     public Token(Duration validDuration, String tag, String userId) {
         token = UUID.randomUUID().toString();
@@ -77,6 +79,7 @@ public class Token {
 
     /**
      * Sets the token {@link String} for this {@link Token}
+     *
      * @param s {@link String} for the {@link Token}
      */
     public void setToken(String s) {
@@ -92,6 +95,7 @@ public class Token {
 
     /**
      * Sets the tags for this {@link Token}
+     *
      * @param s {@link String} tag for this {@link Token}
      */
     public void setTag(String s) {
@@ -117,5 +121,14 @@ public class Token {
      */
     public String getUserID() {
         return this.userId;
+    }
+
+    /**
+     * Sets the {@link User} ID for this {@link Token}
+     *
+     * @param userId {@link User} ID {@link String} to assign
+     */
+    public void setUserID(String userId) {
+        this.userId = userId;
     }
 }

@@ -5,6 +5,9 @@ import com.javahelp.backend.data.IUserStore;
 import com.javahelp.model.token.Token;
 import com.javahelp.model.user.User;
 
+/**
+ * Interactor for authenticating with {@link Token}s
+ */
 public class TokenAuthManager {
     private final IUserStore userStore;
     private final ITokenStore tokenStore;
@@ -22,12 +25,21 @@ public class TokenAuthManager {
     }
 
     /**
-     * compares the input user and token and returns the result of the comparison
-     *
+     * Authenticates with the specified {@link Token} for the specified {@link User}
+     * @param input {@link ITokenAuthInput} supplying input information
      * @return TokenAuthResult object with the results of the comparison
      */
-    public TokenAuthResult authenticate(String desiredUserID, String token) {
-        this.authenticate = new TokenAuthResult(desiredUserID, tokenStore.read(token));
+    public TokenAuthResult authenticate(ITokenAuthInput input) {
+        User u = userStore.read(input.getUserID());
+        Token t = tokenStore.read(input.getToken());
+        String l = input.getToken();
+        if (u == null) {
+            return new TokenAuthResult("Unable to locate user");
+        } else if (t == null || !u.getStringID().equals(t.getUserID())) {
+            return new TokenAuthResult("Authentication failed");
+        }
+
+        this.authenticate = new TokenAuthResult(u, t);
         return authenticate;
     }
 }
