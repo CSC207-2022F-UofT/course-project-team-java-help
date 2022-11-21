@@ -76,7 +76,7 @@ public class LambdaLoginDataAccess extends RESTAPIGateway<LoginResult> implement
         request.setBody(bodyBuilder.build().toString(), ContentType.APPLICATION_JSON);
         request.setHeader("Content-Type", "application/json");
 
-        FutureCallback<RESTAPIGatewayResponse<LoginResult>> passedCallback = new FutureCallback<RESTAPIGatewayResponse<LoginResult>>() {
+        FutureCallback<RESTAPIGatewayResponse<LoginResult>> passedCallback = callback == null ? null : new FutureCallback<RESTAPIGatewayResponse<LoginResult>>() {
             @Override
             public void completed(RESTAPIGatewayResponse<LoginResult> result) {
                 if (result.isSuccess()) {

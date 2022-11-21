@@ -74,7 +74,7 @@ public class LambdaSaltDataAccess extends RESTAPIGateway<byte[]> implements ISal
         }
         SimpleHttpRequest request = SimpleHttpRequest.create("GET", uri);
 
-        FutureCallback<RESTAPIGatewayResponse<byte[]>> passedCallback = new FutureCallback<RESTAPIGatewayResponse<byte[]>>() {
+        FutureCallback<RESTAPIGatewayResponse<byte[]>> passedCallback = callback == null ? null : new FutureCallback<RESTAPIGatewayResponse<byte[]>>() {
             @Override
             public void completed(RESTAPIGatewayResponse<byte[]> result) {
                 if (result.isSuccess()) {
