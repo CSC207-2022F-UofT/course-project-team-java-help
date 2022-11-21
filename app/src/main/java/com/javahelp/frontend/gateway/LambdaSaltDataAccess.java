@@ -4,6 +4,7 @@ import com.javahelp.frontend.domain.user.login.ISaltDataAccess;
 import com.javahelp.model.user.User;
 
 import org.apache.hc.client5.http.async.methods.SimpleHttpRequest;
+import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.core5.concurrent.CompletedFuture;
 import org.apache.hc.core5.concurrent.FutureCallback;
 import org.apache.hc.core5.net.URIBuilder;
@@ -73,6 +74,12 @@ public class LambdaSaltDataAccess extends RESTAPIGateway<byte[]> implements ISal
             return new CompletedFuture<>(null);
         }
         SimpleHttpRequest request = SimpleHttpRequest.create("GET", uri);
+
+        request.setConfig(RequestConfig.custom()
+                .setConnectionRequestTimeout(5000, TimeUnit.MILLISECONDS)
+                .setResponseTimeout(5000, TimeUnit.MILLISECONDS)
+                .setConnectTimeout(5000, TimeUnit.MILLISECONDS)
+                .build());
 
         FutureCallback<RESTAPIGatewayResponse<byte[]>> passedCallback = callback == null ? null : new FutureCallback<RESTAPIGatewayResponse<byte[]>>() {
             @Override

@@ -10,6 +10,7 @@ import com.javahelp.model.util.json.TokenConverter;
 import com.javahelp.model.util.json.UserConverter;
 
 import org.apache.hc.client5.http.async.methods.SimpleHttpRequest;
+import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.core5.concurrent.FutureCallback;
 import org.apache.hc.core5.http.ContentType;
 
@@ -75,6 +76,12 @@ public class LambdaLoginDataAccess extends RESTAPIGateway<LoginResult> implement
         SimpleHttpRequest request = SimpleHttpRequest.create("POST", URI);
         request.setBody(bodyBuilder.build().toString(), ContentType.APPLICATION_JSON);
         request.setHeader("Content-Type", "application/json");
+
+        request.setConfig(RequestConfig.custom()
+                .setConnectionRequestTimeout(5000, TimeUnit.MILLISECONDS)
+                .setResponseTimeout(5000, TimeUnit.MILLISECONDS)
+                .setConnectTimeout(5000, TimeUnit.MILLISECONDS)
+                .build());
 
         FutureCallback<RESTAPIGatewayResponse<LoginResult>> passedCallback = callback == null ? null : new FutureCallback<RESTAPIGatewayResponse<LoginResult>>() {
             @Override
