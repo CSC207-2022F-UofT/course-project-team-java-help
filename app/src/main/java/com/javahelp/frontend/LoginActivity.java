@@ -2,6 +2,7 @@ package com.javahelp.frontend;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +14,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.javahelp.R;
 import com.javahelp.databinding.ActivityLoginBinding;
+import com.javahelp.frontend.util.auth.SharedPreferencesAuthInformationProvider;
+
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -30,14 +39,6 @@ public class LoginActivity extends AppCompatActivity {
         binding.setData(viewModel);
         binding.setLifecycleOwner(this);
 
-        viewModel.getUsername().observe(this, o -> {
-//            binding.username.setText(o);
-        });
-
-        viewModel.getPassword().observe(this, o -> {
-//            binding.password.setText(o);
-        });
-
         viewModel.shouldStaySignedIn().observe(this, binding.staySignedIn::setChecked);
 
         viewModel.isLoggingIn().observe(this, o -> {
@@ -45,9 +46,25 @@ public class LoginActivity extends AppCompatActivity {
             binding.loginButton.setEnabled(!o);
         });
 
-        viewModel.getLoginError().observe(this, o -> {
-            binding.loginErrorText.setVisibility(o.isPresent() ? View.VISIBLE : View.GONE);
-            o.ifPresent(s -> binding.loginErrorText.setText(s));
+        viewModel.getLoginResult().observe(this, o -> {
+            if (o.isPresent()) {
+                if (o.get().isSuccess()) {
+                    binding.loginErrorText.setText("Login successful");
+                    SharedPreferencesAuthInformationProvider credentialStore =
+                            new SharedPreferencesAuthInformationProvider(this);
+                    try {
+                        credentialStore.setTokenString(o.get().getToken().getToken());
+                        credentialStore.setUserID(o.get().getUser().getStringID());
+                    } catch (NoSuchPaddingException | IllegalBlockSizeException | NoSuchAlgorithmException | BadPaddingException | InvalidKeyException ignored) {
+                        // quiet fail for now, maybe show a toast or something in the future
+                    }
+                } else {
+                    binding.loginErrorText.setText(o.get().getErrorMessage());
+                }
+                binding.loginErrorText.setVisibility(View.VISIBLE);
+            } else {
+                binding.loginErrorText.setVisibility(View.GONE);
+            }
         });
 
         binding.loginButton.setOnClickListener(view -> {

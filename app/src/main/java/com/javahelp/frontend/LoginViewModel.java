@@ -11,6 +11,7 @@ import com.javahelp.frontend.domain.user.login.ILoginInput;
 import com.javahelp.frontend.domain.user.login.ILoginOutput;
 import com.javahelp.frontend.domain.user.login.ISaltDataAccess;
 import com.javahelp.frontend.domain.user.login.LoginInteractor;
+import com.javahelp.frontend.domain.user.login.LoginResult;
 import com.javahelp.frontend.gateway.LambdaLoginDataAccess;
 import com.javahelp.frontend.gateway.LambdaSaltDataAccess;
 import com.javahelp.model.token.Token;
@@ -29,7 +30,7 @@ public class LoginViewModel extends AndroidViewModel implements ILoginOutput {
     private MutableLiveData<String> password = new MutableLiveData<>("");
     private MutableLiveData<Boolean> loggingIn = new MutableLiveData<>(Boolean.FALSE);
     private MutableLiveData<Boolean> staySignedIn = new MutableLiveData<>(Boolean.FALSE);
-    private MutableLiveData<Optional<String>> loginError = new MutableLiveData<>(Optional.empty());
+    private MutableLiveData<Optional<LoginResult>> loginResult = new MutableLiveData<>(Optional.empty());
     private ILoginInput loginInteractor;
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 
@@ -57,12 +58,8 @@ public class LoginViewModel extends AndroidViewModel implements ILoginOutput {
         staySignedIn.setValue(b);
     }
 
-    public void setLoginError(String loginError) {
-        this.loginError.setValue(loginError == null ? Optional.empty() : Optional.of(loginError));
-    }
-
-    public MutableLiveData<Optional<String>> getLoginError() {
-        return loginError;
+    public void setLoginError(String s) {
+        loginResult.setValue(Optional.of(new LoginResult(s)));
     }
 
     public MutableLiveData<Boolean> shouldStaySignedIn() {
@@ -81,6 +78,10 @@ public class LoginViewModel extends AndroidViewModel implements ILoginOutput {
         return password;
     }
 
+    public MutableLiveData<Optional<LoginResult>> getLoginResult() {
+        return loginResult;
+    }
+
     public void attemptLogin() {
         setLoggingIn(true);
         new Thread(() -> {
@@ -96,12 +97,13 @@ public class LoginViewModel extends AndroidViewModel implements ILoginOutput {
     @Override
     public void success(User user, Token token) {
         loggingIn.postValue(false);
+        loginResult.postValue(Optional.of(new LoginResult(user, token)));
     }
 
     @Override
     public void failure() {
         loggingIn.postValue(false);
-        loginError.postValue(Optional.of("Incorrect username or password"));
+        loginResult.postValue(Optional.of(new LoginResult("Incorrect username or password")));
     }
 
     @Override
@@ -110,12 +112,13 @@ public class LoginViewModel extends AndroidViewModel implements ILoginOutput {
             errorMessage = "Connection error, try again";
         }
         loggingIn.postValue(false);
-        loginError.postValue(Optional.of(errorMessage));
+        loginResult.postValue(Optional.of(new LoginResult(errorMessage)));
     }
 
     @Override
     public void abort() {
         loggingIn.postValue(false);
+        loginResult.postValue(Optional.empty());
     }
 }
 
