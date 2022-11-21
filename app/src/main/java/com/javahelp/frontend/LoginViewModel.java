@@ -25,7 +25,7 @@ import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class MyViewModel extends AndroidViewModel implements ILoginOutput {
+public class LoginViewModel extends AndroidViewModel implements ILoginOutput {
 
     private MutableLiveData<String> username = new MutableLiveData<>("");
     private MutableLiveData<String> password = new MutableLiveData<>("");
@@ -35,7 +35,7 @@ public class MyViewModel extends AndroidViewModel implements ILoginOutput {
     private ILoginInput loginInteractor;
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 
-    public MyViewModel(@NonNull Application application) {
+    public LoginViewModel(@NonNull Application application) {
         super(application);
         ILoginDataAccess login = LambdaLoginDataAccess.getInstance();
         ISaltDataAccess salt = LambdaSaltDataAccess.getInstance();
