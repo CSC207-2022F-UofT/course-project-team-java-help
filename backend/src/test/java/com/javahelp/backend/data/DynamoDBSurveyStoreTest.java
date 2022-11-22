@@ -30,15 +30,7 @@ public class DynamoDBSurveyStoreTest {
 
         Survey read = this.db.read(survey.getID());
 
-        assertEquals(survey.size(), read.size());
-        for (int i = 0; i < survey.size(); i++) {
-            SurveyQuestion surveyQuestion = survey.get(i);
-            SurveyQuestion readQuestion = read.get(i);
-            assertEquals(surveyQuestion.getNumberOfResponses(), readQuestion.getNumberOfResponses());
-            for (int j = 0; j < surveyQuestion.getNumberOfResponses(); j++) {
-                assertEquals(surveyQuestion.getAnswer(j), readQuestion.getAnswer(j));
-            }
-        }
+        testSurveyEqual(survey, read);
 
         this.db.delete(survey.getID());
     }
@@ -58,6 +50,18 @@ public class DynamoDBSurveyStoreTest {
 
         Survey deleted = this.db.read(survey.getID());
         assertNull(deleted);
+    }
+
+    private void testSurveyEqual(Survey survey1, Survey survey2) {
+        assertEquals(survey1.size(), survey2.size());
+        for (int i = 0; i < survey1.size(); i++) {
+            SurveyQuestion surveyQuestion = survey1.get(i);
+            SurveyQuestion readQuestion = survey2.get(i);
+            assertEquals(surveyQuestion.getNumberOfResponses(), readQuestion.getNumberOfResponses());
+            for (int j = 0; j < surveyQuestion.getNumberOfResponses(); j++) {
+                assertEquals(surveyQuestion.getAnswer(j), readQuestion.getAnswer(j));
+            }
+        }
     }
 
     private Survey setupSurvey() {
