@@ -33,14 +33,15 @@ public class DynamoDBSurveyStore extends DynamoDBStore implements ISurveyStore{
      */
     @Override
     public Survey create(Survey survey) {
-        Map<String, AttributeValue> item = fromSurvey(survey);
+        if (read(survey.getID()) == null) {
+            Map<String, AttributeValue> item = fromSurvey(survey);
 
-        PutItemRequest request = new PutItemRequest()
-                .withTableName(tableName)
-                .withItem(item);
+            PutItemRequest request = new PutItemRequest()
+                    .withTableName(tableName)
+                    .withItem(item);
 
-        getClient().putItem(request);
-
+            getClient().putItem(request);
+        }
         return survey;
     }
 
@@ -90,9 +91,8 @@ public class DynamoDBSurveyStore extends DynamoDBStore implements ISurveyStore{
         ScanResult result = getClient().scan(scanRequest);
 
         for (Map<String, AttributeValue> item : result.getItems()) {
-            Survey survey = surveyFromDynamo(item);
-            if (survey != null) {
-                delete(survey.getID());
+            if (item != null) {
+                delete(item.get("id").getS());
             }
         }
     }
@@ -100,18 +100,19 @@ public class DynamoDBSurveyStore extends DynamoDBStore implements ISurveyStore{
     private static Map<String, AttributeValue> fromSurvey(Survey s) {
         Map<String, AttributeValue> survey = new HashMap<>();
 
-        survey.put("id", new AttributeValue().withS(s.getID()));
+        survey.put("id", new AttributeValue().withS(String.join("-", s.getID().split(" "))));
         survey.put("name", new AttributeValue().withS(s.getName()));
 
         List<AttributeValue> questionList = new ArrayList<>();
         Map<String, AttributeValue> questionAnswerMap = new HashMap<>();
         for (SurveyQuestion question : s.getQuestions()) {
-            questionList.add(new AttributeValue().withS(question.getQuestion()));
+            String formattedQuestion = String.join("-", question.getQuestion().split(" "));
+            questionList.add(new AttributeValue().withS(formattedQuestion));
             List<AttributeValue> answerList = new ArrayList<>();
             for (String answer : question.getAnswers()) {
                 answerList.add(new AttributeValue().withS(answer));
             }
-            questionAnswerMap.put(question.getQuestion(), new AttributeValue().withL(answerList));
+            questionAnswerMap.put(formattedQuestion, new AttributeValue().withL(answerList));
         }
 
         survey.put("questions", new AttributeValue().withL(questionList));
@@ -121,14 +122,15 @@ public class DynamoDBSurveyStore extends DynamoDBStore implements ISurveyStore{
     }
 
     private static Survey surveyFromDynamo(Map<String, AttributeValue> item) {
-        String id = item.get("id").getS(), name = item.get("name").getS();
+        String id = String.join(" ", item.get("id").getS().split("-"));
+        String name = item.get("name").getS();
 
         List<SurveyQuestion> questionList = new ArrayList<>();
 
         for (AttributeValue question : item.get("questions").getL()) {
-            String questionPrompt = question.getS();
+            String questionPrompt = String.join(" ", question.getS().split("-"));
             List<String> answers = new ArrayList<>();
-            for (AttributeValue answer : item.get("answers").getM().get(questionPrompt).getL()) {
+            for (AttributeValue answer : item.get("answers").getM().get(question.getS()).getL()) {
                 answers.add(answer.getS());
             }
 
