@@ -30,7 +30,7 @@ an AWS HTTP API Gateway endpoint. The routes on the gateway map to Lambda functi
 derived from the HTTP request made to the endpoint. The backend is connected to DynamoDB, a non-relational, document database
 from Amazon. Requests made to the backend can be authenticated using our custom token authentication scheme. 
 Connections to our backend are HTTPS but no sensitive information (passwords) is sent over the air either way. 
-The backend makes use of the Serverless framework to manage deployment and configuration. Our AWS CloudBuild stack, 
+The backend makes use of the Serverless framework to manage deployment and configuration. Our AWS CloudFormation stack, 
 DynamoDB tables, and Lambda functions and handlers are entirely specified through Serverless. This simplifies the deployment 
 process, centralizing all configuration, and providing a deploy function in a single command. The RESTAssured library is used
 for testing response formatting in the backend, alongside JUnit, which is also used by the rest of the project.
@@ -103,6 +103,8 @@ if permission is provided, does the activity call a method in the ViewModel init
 in Android's shared preferences (kind of like application settings), some type of `Context` must be provided. This frequently
 comes from an activity.
 
+### Package Structure
+
 ## Deployment & QA
 
 ### Testing
@@ -145,3 +147,86 @@ The connected Github project is used to manage tasks for this repository. Issues
 and then named _\[Module | Milestone\] Issue Name_. Pull requests must be reviewed by three contributors besides the last person
 to push the branch, and must also pass all tests before merging. Branches should also be rebased before merges,
 and commits should be squashed when merging into main.
+
+## Building, Running, & Testing
+
+### Building
+
+The project can be built with Gradle using (all gradle commands should be executed from the root directory of the project)
+
+```shell
+./gradlew build
+```
+
+or alternatively on Windows
+
+```powershell
+./gradlew.bat build
+```
+
+To build an unsigned APK (Android application file) run 
+
+```shell
+./gradlew assembleRelease
+```
+
+or
+
+```shell
+./gradlew assembleDebug
+```
+
+(or their Windows equivalents with `./gradlew.bat`)
+
+This APK can then be installed as a test application (this is very important, it will not install normally) 
+using [ADB](https://developer.android.com/studio/command-line/adb). To avoid assembling your own unsigned APK, 
+a signed one can be downloaded [here](https://drive.google.com/file/d/1y_KieN6km13-GR2R0SJ6H_HIla6poQyF/view?usp=share_link).
+To install this APK, enable install from unknown sources in your devices setting for the app you wish to open
+the APK with. Then, open the APK and install it.
+
+### Running
+
+The build does not produce any executable jar files. The handlers in the backend are meant to be invoked by Lambda, and will not
+work properly, nor execute independently, outside of that context. The frontend specifies an Android app, which similarly,
+will not work outside of Android. The model is meant as a non-executable library that both the frontend and backend take
+advantage of so that does not execute either. To execute the frontend, install and run the APK as described above.
+To execute and test the backend, see the routes section below.
+
+### API Routes
+
+Currently, the API exposes the following routes, with the following functionalities.
+
+GET ["https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/users/salt"]("https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/users/salt")
+    - Gets the salt for a specific user (to be used when hashing a password attempt)
+    - Either a 'username' or 'email' query string parameter should be added with a value corresponding to the identity of the user to fetch salt for
+    - Returns a JSON response with a single 'salt' key
+    - The value of the salt key in the response is the base 64 encoded salt for the user
+
+GET [https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/users/{userid}/salt](https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/users/{userid}/salt)
+    - Gets the salt for a specific user (to be used when hashing a password attempt)
+    - The ID of the user should be used in place of the userid path parameter in the URL
+    - Returns an identical response to the route above
+
+POST [https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/login](https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/login)
+    - This logs in as a specified user and returns a token for that user
+    - Expects request bodies to be JSONs containing: 
+        - A 'stayLoggedIn' boolean key indicating whether the token issued should be valid long term, or only in the short term 
+        - A 'saltHash' key containing a base 64 encoded byte array that has the first 4 bytes taken up by the
+        32-bit integer length of the salt in bytes. The next bytes (the number the first 4 bytes specifies), are the salt. After the salt, the
+        remaining bytes are the hash
+        - Either a 'username', 'id', or 'email' key with a corresponding identifying value
+
+### Testing
+
+Tests can be run with 
+
+```shell
+./gradlew test
+```
+
+(or the Windows equivalent with `gradlew.bat`)
+
+All tests in this project involving the database should use `assumeTrue` to verify the database is accessible
+before beginning to execute. If it is not, the test will terminate immediately. Furthermore, any tests that create resources
+in the database, should clean up these resources in a finally block. This way, even if the test fails, the resources will
+still be cleaned up, and will not be left in the database (potentially to mess with future runs).
