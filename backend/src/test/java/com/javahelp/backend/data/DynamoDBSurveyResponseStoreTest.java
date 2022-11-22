@@ -26,7 +26,7 @@ public class DynamoDBSurveyResponseStoreTest {
 
     DynamoDBSurveyResponseStore db = new DynamoDBSurveyResponseStore(tableName, regions);
 
-    @Test
+    @Test(timeout = 5000)
     public void testCreateRead() {
         this.db.cleanTable();
 
