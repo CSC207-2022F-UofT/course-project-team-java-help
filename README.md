@@ -105,6 +105,11 @@ comes from an activity.
 
 ### Package Structure
 
+The project combines packaging by component and packaging by layer. Use cases are packaged by component, but end user facing, and data access
+is packaged separately, in packages for their own layers. For instance, take the login use case. The interactor, and all the interfaces
+it requires are located in `com.javahelp.frontend.domain.user.login`. However, the implementations of the data access interfaces for this
+use case can be found in `com.javahelp.frontend.gateway`. The views, on the other hand, can be found in `com.javahelp.frontend.activity`.
+
 ## Deployment & QA
 
 ### Testing
