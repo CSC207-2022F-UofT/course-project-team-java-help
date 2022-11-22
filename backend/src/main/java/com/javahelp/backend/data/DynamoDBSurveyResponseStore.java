@@ -106,8 +106,8 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
         ScanResult result = getClient().scan(scanRequest);
 
         for (Map<String, AttributeValue> item : result.getItems()) {
-            SurveyResponse surveyResponse = surveyResponseFromDynamo(item);
-            if (surveyResponse != null) {
+            if (item != null) {
+                SurveyResponse surveyResponse = surveyResponseFromDynamo(item);
                 delete(surveyResponse.getID());
             }
         }
@@ -120,7 +120,26 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
      */
     @Override
     public List<SurveyResponse> readByUser(String userID) {
-        return null;
+        String keyConditionExpression = "user_id = :id";
+        Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
+        expressionAttributeValues.put("id", new AttributeValue().withS(userID));
+
+        ScanRequest scanRequest = new ScanRequest()
+                .withTableName(this.tableName)
+                .withFilterExpression(keyConditionExpression)
+                .withExpressionAttributeValues(expressionAttributeValues);
+
+        ScanResult result = getClient().scan(scanRequest);
+
+        List<SurveyResponse> surveyResponseList = new ArrayList<>();
+        for (Map<String, AttributeValue> item : result.getItems()) {
+            if (item != null) {
+                SurveyResponse surveyResponse = surveyResponseFromDynamo(item);
+                surveyResponseList.add(surveyResponse);
+            }
+        }
+
+        return surveyResponseList;
     }
 
     /**
