@@ -42,10 +42,7 @@ public class SurveyResponse {
      * @return {@link SurveyQuestionResponse} for the provided {@link SurveyQuestion}
      */
     public SurveyQuestionResponse getResponse(SurveyQuestion question) {
-        if (!responses.containsKey(question)) {
-            throw new IllegalArgumentException("The SurveyQuestion provided has no response");
-        }
-        return responses.get(question);
+        return responses.getOrDefault(question, new SurveyQuestionResponse(question, -1));
     }
 
     /**
@@ -70,10 +67,15 @@ public class SurveyResponse {
 
     /**
      *
-     * @return the unique {@link String} id for this {@link SurveyQuestionResponse}
+     * @return the unique {@link String} id for this {@link SurveyResponse}
      */
     public String getID() {
         return id;
     }
 
+    /**
+     *
+     * @param id {@link String} new id for this {@link SurveyResponse}
+     */
+    public void setID(String id) { this.id = id; }
 }

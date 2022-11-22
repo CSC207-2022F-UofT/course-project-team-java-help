@@ -2,7 +2,6 @@ package com.javahelp.backend.data;
 
 import com.amazonaws.regions.Regions;
 import com.javahelp.model.survey.Survey;
-import com.javahelp.model.survey.SurveyResponse;
 
 public interface ISurveyStore {
     /**
