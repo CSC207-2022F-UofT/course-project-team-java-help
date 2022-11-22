@@ -201,25 +201,36 @@ To execute and test the backend, see the routes section below.
 
 Currently, the API exposes the following routes, with the following functionalities.
 
-GET ["https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/users/salt"]("https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/users/salt")
-    - Gets the salt for a specific user (to be used when hashing a password attempt)
-    - Either a 'username' or 'email' query string parameter should be added with a value corresponding to the identity of the user to fetch salt for
-    - Returns a JSON response with a single 'salt' key
-    - The value of the salt key in the response is the base 64 encoded salt for the user
+GET [https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/users/salt](https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/users/salt)
+    
+- Gets the salt for a specific user (to be used when hashing a password attempt)
+ 
+- Either a 'username' or 'email' query string parameter should be added with a value corresponding to the identity of the user to fetch salt for
+ 
+- Returns a JSON response with a single 'salt' key
+ 
+- The value of the salt key in the response is the base 64 encoded salt for the user
 
 GET [https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/users/{userid}/salt](https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/users/{userid}/salt)
-    - Gets the salt for a specific user (to be used when hashing a password attempt)
-    - The ID of the user should be used in place of the userid path parameter in the URL
-    - Returns an identical response to the route above
+    
+- Gets the salt for a specific user (to be used when hashing a password attempt)
+ 
+- The ID of the user should be used in place of the userid path parameter in the URL
+ 
+- Returns an identical response to the route above
 
 POST [https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/login](https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/login)
-    - This logs in as a specified user and returns a token for that user
-    - Expects request bodies to be JSONs containing: 
-        - A 'stayLoggedIn' boolean key indicating whether the token issued should be valid long term, or only in the short term 
-        - A 'saltHash' key containing a base 64 encoded byte array that has the first 4 bytes taken up by the
-        32-bit integer length of the salt in bytes. The next bytes (the number the first 4 bytes specifies), are the salt. After the salt, the
-        remaining bytes are the hash
-        - Either a 'username', 'id', or 'email' key with a corresponding identifying value
+    
+- This logs in as a specified user and returns a token for that user
+     
+- Expects request bodies to be JSONs containing: 
+  - A 'stayLoggedIn' boolean key indicating whether the token issued should be valid long term, or only in the short term 
+  - A 'saltHash' key containing a base 64 encoded byte array that has the first 4 bytes taken up by the
+  32-bit integer length of the salt in bytes. The next bytes (the number the first 4 bytes specifies), are the salt. After the salt, the
+  remaining bytes are the hash
+  - Either a 'username', 'id', or 'email' key with a corresponding identifying value
+
+- Response contains a JSON representation of a user, and a JSON representation of a token
 
 ### Testing
 
