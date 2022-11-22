@@ -22,6 +22,8 @@ import jakarta.json.JsonObject;
 public class DeleteHandler extends HTTPTokenHandler implements IDeleteInputBoundary {
     private String userID;
 
+    private static final String AUTH_TYPE = "JavaHelp";
+
     @Override
     public String getUserID() {
         return userID;
@@ -46,6 +48,7 @@ public class DeleteHandler extends HTTPTokenHandler implements IDeleteInputBound
             return APIGatewayResponse.error(FORBIDDEN, "The token doesn't match the given current user");
         }
 
+        userID = u.getStringID();
         final DeleteManager deleteManager = new DeleteManager(IUserStore.getDefaultImplementation());
         final DeleteResult deleteResult = deleteManager.delete(this);
         String deleteResponse;

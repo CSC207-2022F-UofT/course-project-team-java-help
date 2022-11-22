@@ -47,6 +47,12 @@ functions:
           path: /users/{userid}/salt
           method: get
 
+  delete:
+    handler: com.javahelp.backend.endpoint.delete.DeleteHandler
+    events:
+      - httpApi:
+          path: /users/{userID}/delete
+
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
