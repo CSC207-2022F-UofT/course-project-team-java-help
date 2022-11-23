@@ -100,8 +100,8 @@ public abstract class HTTPTokenHandler extends HTTPHandler implements ITokenAuth
         for (String s : authHeader) {
             if (s.startsWith("id=")) {
                 userId = s.substring(3);
-            } else if (s.startsWith("username=")) {
-                tokenString = s.substring(9);
+            } else if (s.startsWith("token=")) {
+                tokenString = s.substring(6);
             }
             if (tokenString != null && userId != null) {
                 return true;

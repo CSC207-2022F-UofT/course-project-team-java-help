@@ -22,8 +22,6 @@ import jakarta.json.JsonObject;
 public class DeleteHandler extends HTTPTokenHandler implements IDeleteInputBoundary {
     private String userID;
 
-    private static final String AUTH_TYPE = "JavaHelp";
-
     @Override
     public String getUserID() {
         return userID;
@@ -39,6 +37,11 @@ public class DeleteHandler extends HTTPTokenHandler implements IDeleteInputBound
      */
     private boolean verifyUser(User user, Map<String, String> pathParameters) {
         return user.getStringID().equals(pathParameters.get("userid"));
+    }
+
+    @Override
+    public boolean requiresBody() {
+        return false;
     }
 
     @Override
