@@ -41,16 +41,16 @@ public class DeleteHandlerTest {
         tokenStore.create(token);
 
         JsonObject body = Json.createObjectBuilder()
-                        .add("userID", user.getStringID())
+                        .add("userid", user.getStringID())
                         .add("token", token.getToken())
                         .build();
 
-        final String ENDPOINT = "https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/users/" + user.getStringID() + "/delete";
+        final String ENDPOINT = "https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/users/" + user.getStringID();
 
         given().header(new Header("Content-Type", "application/json"))
                 .header(new Header("Authorization", "JavaHelp id=" + user.getStringID()
                 + " token=" + token.getToken()))
-                .body(body.toString()).when().post(ENDPOINT).then().statusCode(200)
+                .body(body.toString()).when().delete(ENDPOINT).then().statusCode(200)
                 .body("success", equalTo(true));
 
         tokenStore.delete(token.getToken());

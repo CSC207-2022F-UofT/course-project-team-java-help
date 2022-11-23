@@ -31,21 +31,21 @@ public class DeleteHandler extends HTTPTokenHandler implements IDeleteInputBound
 
     /**
      * A helper method for verifying that the userID of the {@link User}
-     * matches the userID associated with the {@link Token}.
+     * matches the userID in the path parameters {@link Map} of {@link String}.
      *
-     * @param user: the logged in user.
-     * @param token: the token used for authentication.
+     * @param user: the logged in {@link User}.
+     * @param pathParameters: {@link Map} of {@link String} path parameter names to {@link String} values
      * @return whether the userID of the {@link User} matches the userID of the {@link Token}.
      */
-    private boolean verifyUser(User user, Token token) {
-        return user.getStringID().equals(token.getUserID());
+    private boolean verifyUser(User user, Map<String, String> pathParameters) {
+        return user.getStringID().equals(pathParameters.get("userid"));
     }
 
     @Override
-    public APIGatewayResponse authenticatedGetResponse(User u, Token t, JsonObject body, HttpMethod method, Map<String, String[]> headers, Map<String, String[]> parameters) {
+    public APIGatewayResponse authenticatedGetResponse(User u, Token t, JsonObject body, HttpMethod method, Map<String, String[]> headers, Map<String, String[]> parameters, Map<String, String> pathParameters) {
 
-        if (!verifyUser(u, t)) {
-            return APIGatewayResponse.error(FORBIDDEN, "The token doesn't match the given current user");
+        if (!verifyUser(u, pathParameters)) {
+            return APIGatewayResponse.error(FORBIDDEN, "The path parameters do not match the given current user");
         }
 
         userID = u.getStringID();

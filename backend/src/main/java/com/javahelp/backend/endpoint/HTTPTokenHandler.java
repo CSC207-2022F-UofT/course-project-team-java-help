@@ -59,7 +59,7 @@ public abstract class HTTPTokenHandler extends HTTPHandler implements ITokenAuth
         TokenAuthResult result = interactor.authenticate(this);
 
         if (result.isSuccess()) {
-            return authenticatedGetResponse(result.getUser(), result.getToken(), body, method, headers, parameters);
+            return authenticatedGetResponse(result.getUser(), result.getToken(), body, method, headers, parameters, pathParameters);
         } else {
             return APIGatewayResponse.error(UNAUTHENTICATED, result.getErrorMessage()); // invalid credentials
         }
@@ -74,9 +74,10 @@ public abstract class HTTPTokenHandler extends HTTPHandler implements ITokenAuth
      * @param method     {@link HttpMethod} used
      * @param headers    {@link Map} of header {@link String}s to {@link String} arrays of values
      * @param parameters {@link Map} of parameter {@link String}s to arrays of values
+     * @param pathParameters {@link Map} of {@link String} path parameter names to {@link String} values
      * @return {@link APIGatewayResponse} to send
      */
-    public abstract APIGatewayResponse authenticatedGetResponse(User u, Token t, JsonObject body, HttpMethod method, Map<String, String[]> headers, Map<String, String[]> parameters);
+    public abstract APIGatewayResponse authenticatedGetResponse(User u, Token t, JsonObject body, HttpMethod method, Map<String, String[]> headers, Map<String, String[]> parameters, Map<String, String> pathParameters);
 
     @Override
     public String getUserID() {
