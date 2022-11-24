@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:orientation="vertical"
+    tools:context=".frontend.activity.SurveyQuestionActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/survey_question"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="15dp"
+            android:textSize="18sp"
+            android:text="Example Question">
+
+        </TextView>
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/question_answer_1"
+                android:layout_width="match_parent"
+                android:layout_height="28dp"
+                android:text="Example Answer"
+                android:onClick="onRadioButtonClicked">
+
+            </RadioButton>
+
+            <RadioButton
+                android:id="@+id/question_answer_2"
+                android:layout_width="match_parent"
+                android:layout_height="28dp"
+                android:text="Example Answer"
+                android:onClick="onRadioButtonClicked">
+
+            </RadioButton>
+
+            <RadioButton
+                android:id="@+id/question_answer_3"
+                android:layout_width="match_parent"
+                android:layout_height="28dp"
+                android:text="Example Answer"
+                android:onClick="onRadioButtonClicked">
+
+            </RadioButton>
+
+            <RadioButton
+                android:id="@+id/question_answer_4"
+                android:layout_width="match_parent"
+                android:layout_height="28dp"
+                android:text="Example Answer"
+                android:onClick="onRadioButtonClicked">
+
+            </RadioButton>
+
+
+        </RadioGroup>
+    </LinearLayout>
+
+</ScrollView>
