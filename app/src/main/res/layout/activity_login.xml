@@ -129,7 +129,7 @@
             android:layout_height="wrap_content"
             android:text="Login Error Message"
             android:textAlignment="center"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="16sp"
             android:visibility="gone" />
 
@@ -151,13 +151,14 @@
             android:layout_height="wrap_content"
             android:buttonTint="#FFFFFF"
             android:text="Stay Signed In"
-            android:textColor="@color/white" />
+            android:textColor="@color/Grey" />
 
         <TextView
             android:layout_width="90dp"
             android:layout_height="30dp"
             android:layout_gravity="right"
             android:gravity="bottom"
+            android:textColor="@color/Grey"
             android:text="By Java Help" />
 
 

@@ -35,7 +35,6 @@ public class FrontPageActivity extends AppCompatActivity {
                 case R.id.search:
                     replaceFragment(new SearchFragment());
                     break;
-
             }
             return true;
         });
