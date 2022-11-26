@@ -74,11 +74,33 @@
                 android:text="dave@example.com"
                 android:textSize="20sp"/>
 
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_marginTop="30dp"
+                android:ems="10"
+                android:text="Gender:"
+                android:textSize="20sp"
+                android:textColor="@color/black"/>
+
+
+            <TextView
+                android:id="@+id/accgender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:text="Male"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="25dp"
                 android:ems="10"
                 android:text="Phone:"
                 android:textSize="20sp"

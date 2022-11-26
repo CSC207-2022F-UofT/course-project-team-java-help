@@ -36,20 +36,25 @@
             android:layout_marginTop="50dp"
             android:orientation="horizontal">
 
+
             <Button
                 android:id="@+id/bot_c_reg"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:backgroundTint="#08FFFFFF"
-                android:text=" Client
-             Register"
+                android:onClick="onButtonClick"
+                android:text="Client Register"
                 android:textColor="@color/white"
-                android:textSize="20dp" />
+                android:textSize="20dp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/editText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/editText" />
 
             <Button
                 android:id="@+id/bot_p_reg"
@@ -119,8 +124,6 @@
             android:text="Login"
             android:textColor="@color/white"
             android:textSize="20dp"
-
-
             />
 
         <TextView

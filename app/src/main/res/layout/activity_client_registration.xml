@@ -193,16 +193,16 @@
                     android:textColor="@color/black"
                     android:textColorHint="@color/black" />
 
-                <com.google.android.material.button.MaterialButton
+                <Button
                     android:id="@+id/signupbtn1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
                     android:layout_marginStart="15dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="15dp"
-                    android:layout_marginBottom="15dp"
+                    android:layout_marginBottom="20dp"
                     android:backgroundTint="#5F9590"
                     android:text="REGISTER"
                     android:textColor="@color/white"

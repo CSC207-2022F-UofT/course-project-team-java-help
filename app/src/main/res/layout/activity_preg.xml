@@ -191,7 +191,7 @@
                     android:textColorHint="@color/black" />
 
 
-                <com.google.android.material.button.MaterialButton
+                <Button
                     android:id="@+id/signupbtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

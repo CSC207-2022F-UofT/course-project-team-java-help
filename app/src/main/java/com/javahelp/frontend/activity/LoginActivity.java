@@ -1,6 +1,8 @@
 package com.javahelp.frontend.activity;
 
+
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
@@ -32,10 +34,9 @@ import javax.crypto.NoSuchPaddingException;
 public class LoginActivity extends AppCompatActivity {
 
     /**
-     * Permission request code to get internet access for loggin in
+     * Permission request code to get internet access for logging in
      */
     private static final int REQUEST_INTERNET_LOGIN = 1;
-
     LoginViewModel viewModel;
     ActivityLoginBinding binding;
 
@@ -57,6 +58,19 @@ public class LoginActivity extends AppCompatActivity {
         viewModel.getLoginResult().observe(this, this::updateOnLoginResult);
 
         binding.loginButton.setOnClickListener(this::loginClick);
+
+        binding.botCReg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, ClientRegistrationActivity.class));
+            }
+        });
+        binding.botPReg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, ProviderRegistrationActivity.class));
+            }
+        });
     }
 
     /**
@@ -140,7 +154,6 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(this, "Internet access denied, cannot log in", Toast.LENGTH_LONG);
                 }
-                return;
         }
     }
 }
