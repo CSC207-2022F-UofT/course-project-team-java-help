@@ -60,18 +60,8 @@ public class LoginActivity extends AppCompatActivity {
 
         binding.loginButton.setOnClickListener(this::loginClick);
 
-        binding.botCReg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, ClientRegistrationActivity.class));
-            }
-        });
-        binding.botPReg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, ProviderRegistrationActivity.class));
-            }
-        });
+        binding.botCReg.setOnClickListener(this::clientRegisterClick);
+        binding.botPReg.setOnClickListener(this:: providerRegisterClick);
     }
 
     /**
@@ -157,5 +147,23 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 return;
         }
+    }
+
+    /**
+     * Called when the client register button is clicked
+     *
+     *@param v {@link View} that was clicked
+     */
+    private void clientRegisterClick(View v){
+        startActivity(new Intent(LoginActivity.this, ClientRegistrationActivity.class));
+    }
+
+    /**
+     * Called when the provider register button is clicked
+     *
+     *@param v {@link View} that was clicked
+     */
+    private void providerRegisterClick(View v){
+        startActivity(new Intent(LoginActivity.this, ProviderRegistrationActivity.class));
     }
 }
