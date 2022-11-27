@@ -57,7 +57,7 @@ public class ClientUserInfo extends UserInfo {
     /**
      * Sets the first name of this client.
      *
-     * @param firstName: the new first name of this client.
+     * @param firstName the new first name of this client.
      */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
@@ -75,7 +75,7 @@ public class ClientUserInfo extends UserInfo {
     /**
      * Sets the last name of this client.
      *
-     * @param lastName: the new last name of this client.
+     * @param lastName the new last name of this client.
      */
     public void setLastName(String lastName) {
         this.lastName = lastName;
@@ -93,14 +93,14 @@ public class ClientUserInfo extends UserInfo {
     /**
      * Sets the address of this client.
      *
-     * @param address: the new address of this client.
+     * @param address the new address of this client.
      */
     public void setAddress(String address) {
         this.address = address;
     }
 
     /**
-     * Gets the phone number of this client.
+     * Gets the {@link String}phone number of this client.
      *
      * @return the phone number of this client.
      */
@@ -109,27 +109,27 @@ public class ClientUserInfo extends UserInfo {
     }
 
     /**
-     * Sets the phone number of this client.
+     * Sets the {@link String} phone number of this client.
      *
-     * @param phoneNumber: the new phone number of this client.
+     * @param phoneNumber the new phone number of this client.
      */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
     /**
-     * Gets the gender of this provider
+     * Gets the {@link Gender} of this provider
      *
-     * @return the current gender of this client
+     * @return the current {@link Gender} of this client
      */
     public Gender getGender(){
         return gender;
     }
 
     /**
-     * Sets a new gender to this client
+     * Sets a new {@link Gender} to this client
      *
-     * @param gender an updated gender of this client
+     * @param gender an updated {@link Gender} of this client
      */
     public void setGender(Gender gender){
         this.gender = gender;
