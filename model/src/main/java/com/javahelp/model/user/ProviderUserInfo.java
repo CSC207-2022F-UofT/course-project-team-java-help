@@ -5,10 +5,10 @@ package com.javahelp.model.user;
  */
 public class ProviderUserInfo extends UserInfo {
     private String practiceName;
-    private boolean certified;
+    private boolean certified = false;
     private String address;
     private String phoneNumber;
-    private Gender gender;
+    private Gender gender = Gender.UNMENTIONED;
 
     /**
      * Constructs a ProviderInfo object.
@@ -22,7 +22,6 @@ public class ProviderUserInfo extends UserInfo {
     public ProviderUserInfo(String emailAddress, String address, String phoneNumber,
                             String practiceName, Gender gender) {
         this(emailAddress, address, phoneNumber, practiceName);
-        this.certified = false;
         this.setGender(gender);
     }
 
@@ -38,8 +37,7 @@ public class ProviderUserInfo extends UserInfo {
      */
     public ProviderUserInfo(String emailAddress, String address, String phoneNumber,
                             String practiceName, Gender gender, boolean certified){
-        this(emailAddress, address, phoneNumber, practiceName);
-        this.certified = certified;
+        this(emailAddress, address, phoneNumber, practiceName, certified);
         this.setGender(gender);
     }
 
@@ -56,7 +54,7 @@ public class ProviderUserInfo extends UserInfo {
     public ProviderUserInfo(String emailAddress, String address, String phoneNumber,
                             String practiceName, boolean certified){
         this(emailAddress, address, phoneNumber, practiceName);
-        this.certified = certified;
+        setCertified(certified);
         // No update on gender because it was done inside the called overloaded method above
     }
 
@@ -72,11 +70,9 @@ public class ProviderUserInfo extends UserInfo {
     public ProviderUserInfo(String emailAddress, String address, String phoneNumber,
                             String practiceName){
         super(emailAddress);
-        this.practiceName = practiceName;
-        this.certified = false;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.setGender(Gender.UNMENTIONED);
+        setPracticeName(practiceName);
+        setAddress(address);
+        setPhoneNumber(phoneNumber);
     }
 
     /**

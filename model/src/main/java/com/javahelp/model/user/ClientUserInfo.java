@@ -8,7 +8,7 @@ public class ClientUserInfo extends UserInfo {
     private String lastName;
     private String address;
     private String phoneNumber;
-    private Gender gender;
+    private Gender gender = Gender.UNMENTIONED;
 
     /**
      * Constructs a ClientInfo object.
@@ -23,7 +23,7 @@ public class ClientUserInfo extends UserInfo {
     public ClientUserInfo(String emailAddress, String address, String phoneNumber, String firstName,
                           String lastName, Gender gender) {
         this(emailAddress, address, phoneNumber, firstName, lastName);
-        this.setGender(gender);
+        setGender(gender);
     }
 
     /**
@@ -39,11 +39,10 @@ public class ClientUserInfo extends UserInfo {
     public ClientUserInfo(String emailAddress, String address, String phoneNumber, String firstName,
                           String lastName) {
         super(emailAddress);
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.setGender(Gender.UNMENTIONED);
+        setFirstName(firstName);
+        setLastName(lastName);
+        setAddress(address);
+        setPhoneNumber(phoneNumber);
     }
 
     /**
