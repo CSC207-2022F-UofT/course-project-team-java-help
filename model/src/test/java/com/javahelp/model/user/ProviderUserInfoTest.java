@@ -63,7 +63,7 @@ public class ProviderUserInfoTest {
     }
 
     @Test(timeout = 50)
-    public void testSetGender(){
+    public void testSetGender() {
         assertNotEquals(Gender.MALE, p2.getGender());
         p2.setGender(Gender.MALE);
         assertEquals(Gender.MALE, p2.getGender());
