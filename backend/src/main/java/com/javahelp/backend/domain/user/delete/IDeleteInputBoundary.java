@@ -9,5 +9,5 @@ public interface IDeleteInputBoundary {
     /**
      * @return the {@link String} userID of the user to be deleted, or null if none provided.
      */
-    String getUserID();
+    String getStringID();
 }

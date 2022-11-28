@@ -23,7 +23,7 @@ public class DeleteHandler extends HTTPTokenHandler implements IDeleteInputBound
     private String userID;
 
     @Override
-    public String getUserID() {
+    public String getStringID() {
         return userID;
     }
 
