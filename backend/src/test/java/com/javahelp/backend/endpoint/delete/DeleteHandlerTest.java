@@ -77,4 +77,37 @@ public class DeleteHandlerTest {
             userStore.delete(user.getStringID());
         }
     }
+
+    @Test
+    public void testNoMatchPathParameters() {
+        assumeTrue(databaseAccessible());
+
+        UserInfo userInfo = new ClientUserInfo("123@mail.com", "University of Toronto",
+                "123-456-7890", "J", "M");
+
+        UserInfo userInfo1 = new ClientUserInfo("fail@mail.com", "University",
+                "123-123-1234", "M", "J");
+        UserPassword password = new UserPassword("password", SHAPasswordHasher.getInstance());
+        UserPassword password1 = new UserPassword("qwertyui", SHAPasswordHasher.getInstance());
+        User user = new User("test", userInfo, "asdfgh");
+        User user1 = new User("test1", userInfo1, "qwerty");
+        Token token = null;
+
+        try {
+            userStore.create(user, password);
+            userStore.create(user1, password1);
+            token = new Token(Duration.ofMinutes(30), "test", user.getStringID());
+            tokenStore.create(token);
+
+            given().header(new Header("Content-Type", "application/json"))
+                    .header(new Header("Authorization", "JavaHelp id=" + user.getStringID()
+                            + " token=" + token.getToken()))
+                    .when().delete(USER_ENDPOINT + user1.getStringID()).then().statusCode(403)
+                    .body("message", equalTo("The path parameters do not match the given current user"));
+
+        } finally {
+            tokenStore.delete(token.getToken());
+            userStore.delete(user.getStringID());
+        }
+    }
 }
