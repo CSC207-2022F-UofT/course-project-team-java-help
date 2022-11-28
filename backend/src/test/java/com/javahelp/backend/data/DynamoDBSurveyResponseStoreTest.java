@@ -3,6 +3,7 @@ package com.javahelp.backend.data;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assume.assumeTrue;
 
 import com.amazonaws.regions.Regions;
 import com.javahelp.model.survey.Survey;
@@ -28,6 +29,8 @@ public class DynamoDBSurveyResponseStoreTest {
 
     @Test(timeout = 5000)
     public void testCreateRead() {
+        assumeTrue(databaseAccessible());
+
         this.db.cleanTable();
 
         User user = setupUser();
@@ -37,14 +40,19 @@ public class DynamoDBSurveyResponseStoreTest {
 
         SurveyResponse read = this.db.read(sr.getID());
 
-        testSurveyEqual(sr.getSurvey(), read.getSurvey());
-        testResponsesEqual(sr.getSurvey(), sr, read);
-
-        this.db.delete(sr.getID());
+        try {
+            testSurveyEqual(sr.getSurvey(), read.getSurvey());
+            testResponsesEqual(sr.getSurvey(), sr, read);
+        }
+        finally {
+            this.db.delete(sr.getID());
+        }
     }
 
     @Test(timeout = 5000)
     public void testDelete() {
+        assumeTrue(databaseAccessible());
+
         this.db.cleanTable();
 
         User user = setupUser();
@@ -53,12 +61,42 @@ public class DynamoDBSurveyResponseStoreTest {
         this.db.create(user.getStringID(), sr);
 
         SurveyResponse read = this.db.read(sr.getID());
-        assertNotNull(read);
+        try {
+            assertNotNull(read);
+        }
+        finally {
+            this.db.delete(sr.getID());
+            SurveyResponse deleted = this.db.read(sr.getID());
+            assertNull(deleted);
+        }
+    }
 
-        this.db.delete(sr.getID());
+    @Test(timeout = 5000)
+    public void testCreateExistingResponse() {
+        assumeTrue(databaseAccessible());
 
-        SurveyResponse deleted = this.db.read(sr.getID());
-        assertNull(deleted);
+        this.db.cleanTable();
+
+        User user = setupUser();
+        SurveyResponse sr1 = setupSurveyResponse();
+        SurveyResponse sr2 = setupSurveyResponseAlt();
+
+        try {
+            sr1 = this.db.create(user.getStringID(), sr1);
+            SurveyResponse read1 = this.db.read(sr1.getID());
+            testSurveyEqual(sr1.getSurvey(), read1.getSurvey());
+            testResponsesEqual(sr1.getSurvey(), sr1, read1);
+
+            sr2 = this.db.create(user.getStringID(), sr2);
+            assertEquals(sr2.getID(), sr1.getID());
+            SurveyResponse read2 = this.db.read(sr1.getID());
+            testSurveyEqual(sr1.getSurvey(), read2.getSurvey());
+            testResponsesEqual(sr2.getSurvey(), sr2, read2);
+        }
+        finally {
+            this.db.delete(sr1.getID());
+        }
+
     }
 
     private void testSurveyEqual(Survey survey1, Survey survey2) {
@@ -116,6 +154,36 @@ public class DynamoDBSurveyResponseStoreTest {
         return new SurveyResponse("response1", survey, map);
     }
 
+    private SurveyResponse setupSurveyResponseAlt() {
+        List<String> responses = new ArrayList<>();
+
+        responses.add("This is the first response");
+        responses.add("This is the second response");
+        responses.add("This is the third response");
+
+        SurveyQuestion first = new SurveyQuestion("This is the first survey question",
+                responses);
+        SurveyQuestion second = new SurveyQuestion("This is the second survey question",
+                responses);
+
+        List<SurveyQuestion> questions = new ArrayList<>();
+
+        questions.add(first);
+        questions.add(second);
+
+        Survey survey = new Survey("survey1", "Test Survey", questions);
+
+        SurveyQuestionResponse firstResponse = new SurveyQuestionResponse(first, 0);
+        SurveyQuestionResponse secondResponse = new SurveyQuestionResponse(second, 1);
+
+        Map<SurveyQuestion, SurveyQuestionResponse> map = new HashMap<>();
+
+        map.put(first, firstResponse);
+        map.put(second, secondResponse);
+
+        return new SurveyResponse("response2", survey, map);
+    }
+
     private User setupUser() {
         ClientUserInfo clientInfo = new ClientUserInfo(
                 "test.client@mail.com",
@@ -128,4 +196,12 @@ public class DynamoDBSurveyResponseStoreTest {
         return u;
     }
 
+    private boolean databaseAccessible() {
+        try {
+            this.db.read("test");
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
