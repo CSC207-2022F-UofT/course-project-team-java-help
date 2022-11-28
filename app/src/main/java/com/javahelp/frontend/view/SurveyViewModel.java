@@ -19,7 +19,7 @@ public class SurveyViewModel extends AndroidViewModel implements ISurveyInformat
 
     @Override
     public String getQuestion() {
-        return "test";
+        return "";
     }
 
     @Override
