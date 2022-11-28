@@ -39,6 +39,12 @@ public class Survey {
 
     /**
      *
+     * @param id {@link String} of the survey.
+     */
+    public void setID(String id) { this.id = id; }
+
+    /**
+     *
      * @return human-readable name of this {@link Survey} as a {@link String}
      */
     public String getName() {

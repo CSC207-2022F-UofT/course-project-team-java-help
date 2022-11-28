@@ -25,76 +25,95 @@ public class DynamoDBSurveyResponseStoreTest {
 
     Regions regions = Regions.US_EAST_1;
 
-    DynamoDBSurveyResponseStore db = new DynamoDBSurveyResponseStore(tableName, regions);
+    ISurveyStore surveyDB = ISurveyStore.getDefaultImplementation();
+    DynamoDBSurveyResponseStore responseDB = new DynamoDBSurveyResponseStore(tableName,
+            regions,
+            surveyDB);
 
-    @Test(timeout = 5000)
+    @Test
     public void testCreateRead() {
-        assumeTrue(databaseAccessible());
+        assumeTrue(surveyDatabaseAccessible());
+        assumeTrue(responseDatabaseAccessible());
 
-        this.db.cleanTable();
+        this.surveyDB.cleanTable();
+        this.responseDB.cleanTable();
 
         User user = setupUser();
-        SurveyResponse sr = setupSurveyResponse();
+        Survey survey = setupSurvey();
+        survey = this.surveyDB.create(survey);
 
-        sr = this.db.create(user.getStringID(), sr);
+        SurveyResponse sr = setupSurveyResponse(survey);
 
-        SurveyResponse read = this.db.read(sr.getID());
+        sr = this.responseDB.create(user.getStringID(), sr);
+
+        SurveyResponse read = this.responseDB.read(sr.getID());
 
         try {
             testSurveyEqual(sr.getSurvey(), read.getSurvey());
-            testResponsesEqual(sr.getSurvey(), sr, read);
+            testResponsesEqual(survey, sr, read);
         }
         finally {
-            this.db.delete(sr.getID());
+            this.surveyDB.delete(survey.getID());
+            this.responseDB.delete(sr.getID());
         }
     }
 
     @Test(timeout = 5000)
     public void testDelete() {
-        assumeTrue(databaseAccessible());
+        assumeTrue(surveyDatabaseAccessible());
+        assumeTrue(responseDatabaseAccessible());
 
-        this.db.cleanTable();
+        this.surveyDB.cleanTable();
+        this.responseDB.cleanTable();
 
         User user = setupUser();
-        SurveyResponse sr = setupSurveyResponse();
+        Survey survey = setupSurvey();
+        survey = this.surveyDB.create(survey);
+        SurveyResponse sr = setupSurveyResponse(survey);
 
-        this.db.create(user.getStringID(), sr);
+        this.responseDB.create(user.getStringID(), sr);
 
-        SurveyResponse read = this.db.read(sr.getID());
+        SurveyResponse read = this.responseDB.read(sr.getID());
         try {
             assertNotNull(read);
         }
         finally {
-            this.db.delete(sr.getID());
-            SurveyResponse deleted = this.db.read(sr.getID());
+            this.surveyDB.delete(survey.getID());
+            this.responseDB.delete(sr.getID());
+            SurveyResponse deleted = this.responseDB.read(sr.getID());
             assertNull(deleted);
         }
     }
 
     @Test(timeout = 5000)
     public void testCreateExistingResponse() {
-        assumeTrue(databaseAccessible());
+        assumeTrue(surveyDatabaseAccessible());
+        assumeTrue(responseDatabaseAccessible());
 
-        this.db.cleanTable();
+        this.surveyDB.cleanTable();
+        this.responseDB.cleanTable();
 
         User user = setupUser();
-        SurveyResponse sr1 = setupSurveyResponse();
-        SurveyResponse sr2 = setupSurveyResponseAlt();
+        Survey survey = setupSurvey();
+        survey = this.surveyDB.create(survey);
+        SurveyResponse sr1 = setupSurveyResponse(survey);
+        SurveyResponse sr2 = setupSurveyResponseAlt(survey);
 
         try {
-            sr1 = this.db.create(user.getStringID(), sr1);
-            SurveyResponse read1 = this.db.read(sr1.getID());
+            sr1 = this.responseDB.create(user.getStringID(), sr1);
+            SurveyResponse read1 = this.responseDB.read(sr1.getID());
             testSurveyEqual(sr1.getSurvey(), read1.getSurvey());
             testResponsesEqual(sr1.getSurvey(), sr1, read1);
 
-            sr2 = this.db.create(user.getStringID(), sr2);
+            sr2 = this.responseDB.create(user.getStringID(), sr2);
             assertEquals(sr2.getID(), sr1.getID());
-            SurveyResponse read2 = this.db.read(sr1.getID());
+            SurveyResponse read2 = this.responseDB.read(sr1.getID());
             testSurveyEqual(sr1.getSurvey(), read2.getSurvey());
             testResponsesEqual(sr2.getSurvey(), sr2, read2);
         }
         finally {
-            this.db.delete(sr1.getID());
+            this.surveyDB.delete(survey.getID());
+            this.responseDB.delete(sr1.getID());
         }
 
     }
@@ -124,24 +143,9 @@ public class DynamoDBSurveyResponseStoreTest {
         }
     }
 
-    private SurveyResponse setupSurveyResponse() {
-        List<String> responses = new ArrayList<>();
-
-        responses.add("This is the first response");
-        responses.add("This is the second response");
-        responses.add("This is the third response");
-
-        SurveyQuestion first = new SurveyQuestion("This is the first survey question",
-                responses);
-        SurveyQuestion second = new SurveyQuestion("This is the second survey question",
-                responses);
-
-        List<SurveyQuestion> questions = new ArrayList<>();
-
-        questions.add(first);
-        questions.add(second);
-
-        Survey survey = new Survey("survey1", "Test Survey", questions);
+    private SurveyResponse setupSurveyResponse(Survey survey) {
+        SurveyQuestion first = survey.get(0);
+        SurveyQuestion second = survey.get(1);
 
         SurveyQuestionResponse firstResponse = new SurveyQuestionResponse(first, 1);
         SurveyQuestionResponse secondResponse = new SurveyQuestionResponse(second, 0);
@@ -154,7 +158,22 @@ public class DynamoDBSurveyResponseStoreTest {
         return new SurveyResponse("response1", survey, map);
     }
 
-    private SurveyResponse setupSurveyResponseAlt() {
+    private SurveyResponse setupSurveyResponseAlt(Survey survey) {
+        SurveyQuestion first = survey.get(0);
+        SurveyQuestion second = survey.get(1);
+
+        SurveyQuestionResponse firstResponse = new SurveyQuestionResponse(first, 0);
+        SurveyQuestionResponse secondResponse = new SurveyQuestionResponse(second, 1);
+
+        Map<SurveyQuestion, SurveyQuestionResponse> map = new HashMap<>();
+
+        map.put(first, firstResponse);
+        map.put(second, secondResponse);
+
+        return new SurveyResponse("response2", survey, map);
+    }
+
+    private Survey setupSurvey() {
         List<String> responses = new ArrayList<>();
 
         responses.add("This is the first response");
@@ -171,17 +190,7 @@ public class DynamoDBSurveyResponseStoreTest {
         questions.add(first);
         questions.add(second);
 
-        Survey survey = new Survey("survey1", "Test Survey", questions);
-
-        SurveyQuestionResponse firstResponse = new SurveyQuestionResponse(first, 0);
-        SurveyQuestionResponse secondResponse = new SurveyQuestionResponse(second, 1);
-
-        Map<SurveyQuestion, SurveyQuestionResponse> map = new HashMap<>();
-
-        map.put(first, firstResponse);
-        map.put(second, secondResponse);
-
-        return new SurveyResponse("response2", survey, map);
+        return new Survey("survey1", "Test Survey", questions);
     }
 
     private User setupUser() {
@@ -196,9 +205,18 @@ public class DynamoDBSurveyResponseStoreTest {
         return u;
     }
 
-    private boolean databaseAccessible() {
+    private boolean surveyDatabaseAccessible() {
         try {
-            this.db.read("test");
+            this.surveyDB.read("test");
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean responseDatabaseAccessible() {
+        try {
+            this.responseDB.read("test");
             return true;
         } catch (Exception e) {
             return false;

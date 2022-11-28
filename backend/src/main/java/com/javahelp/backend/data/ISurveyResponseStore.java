@@ -13,7 +13,10 @@ public interface ISurveyResponseStore {
      * @return Default implementation of {@link ISurveyResponseStore}
      */
     static ISurveyResponseStore getDefaultImplementation() {
-        return new DynamoDBSurveyResponseStore("javahelpBackendFilledSurveys", Regions.US_EAST_1);
+        ISurveyStore surveyStore = ISurveyStore.getDefaultImplementation();
+        return new DynamoDBSurveyResponseStore("javahelpBackendFilledSurveys",
+                Regions.US_EAST_1,
+                surveyStore);
     }
 
     /**
