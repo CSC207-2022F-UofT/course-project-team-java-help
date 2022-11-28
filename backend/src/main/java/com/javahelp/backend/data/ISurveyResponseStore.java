@@ -32,6 +32,12 @@ public interface ISurveyResponseStore {
     SurveyResponse read(String id);
 
     /**
+     * Updates the specified object to match the provided object
+     * @param surveyResponse object to update, will update based on the ID field of this object
+     */
+    void update(String userID, SurveyResponse surveyResponse);
+
+    /**
      * Deletes the specified {@link SurveyResponse}
      *
      * @param id {@link String} id of the {@link SurveyResponse} to delete
@@ -47,7 +53,7 @@ public interface ISurveyResponseStore {
     /**
      *
      * @param userID {@link String} id of the user to be queried.
-     * @return {@link List <SurveyResponse>} of the specified user.
+     * @return {@link List<SurveyResponse>} of the specified user.
      */
     List<SurveyResponse> readByUser(String userID);
 
@@ -55,7 +61,7 @@ public interface ISurveyResponseStore {
      *
      * @param constraint {@link Map <>} which specifies the required attributes
      *                   from the User.
-     * @return {@link Set <User>} with the specified constraints.
+     * @return {@link Set<User>} with the specified constraints.
      */
     Set<String> readByConstraint(Map<String, Set<String>> constraint);
 

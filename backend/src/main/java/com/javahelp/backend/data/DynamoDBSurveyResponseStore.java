@@ -8,11 +8,15 @@ import com.amazonaws.services.dynamodbv2.model.GetItemResult;
 import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
+import com.amazonaws.services.dynamodbv2.model.UpdateItemRequest;
 import com.javahelp.model.survey.Survey;
 import com.javahelp.model.survey.SurveyQuestion;
 import com.javahelp.model.survey.SurveyQuestionResponse;
 import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.User;
+import com.javahelp.model.user.UserPassword;
+
+import org.w3c.dom.Attr;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,20 +45,24 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
      */
     @Override
     public SurveyResponse create(String userID, SurveyResponse surveyResponse) {
-        surveyStore.cleanTable();
         surveyStore.create(surveyResponse.getSurvey());
 
         String id = UUID.randomUUID().toString();
         surveyResponse.setID(id);
 
-        Map<String, AttributeValue> item = fromSurveyResponse(userID, surveyResponse);
+        SurveyResponse existingSr = readByUserAndSurvey(userID, surveyResponse.getSurvey().getID());
+        if (existingSr != null) {
+            surveyResponse.setID(existingSr.getID());
+            update(userID, surveyResponse);
+        }
+        else {
+            Map<String, AttributeValue> item = fromSurveyResponse(userID, surveyResponse);
+            PutItemRequest request = new PutItemRequest()
+                    .withTableName(tableName)
+                    .withItem(item);
 
-        PutItemRequest request = new PutItemRequest()
-                .withTableName(tableName)
-                .withItem(item);
-
-        getClient().putItem(request);
-
+            getClient().putItem(request);
+        }
         return surveyResponse;
     }
 
@@ -78,6 +86,20 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
         }
 
         return surveyResponseFromDynamo(result.getItem());
+    }
+
+    @Override
+    public void update(String userID, SurveyResponse surveyResponse) {
+        Map<String, AttributeValue> key = new HashMap<>();
+        key.put("id", new AttributeValue(surveyResponse.getID()));
+
+        UpdateItemRequest request = new UpdateItemRequest()
+                .withTableName(tableName)
+                .withKey(key)
+                .withUpdateExpression(getUpdateString())
+                .withExpressionAttributeValues(updateFromSurveyResponse(userID, surveyResponse));
+
+        getClient().updateItem(request);
     }
 
     /**
@@ -141,6 +163,43 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
         }
 
         return surveyResponseList;
+    }
+
+    /**
+     * Obtains the survey response of a particular survey completed by a user.
+     * Note that each user will only have one survey response of a particular survey.
+     *
+     * @param userID {@link String} id of the user to be queried.
+     * @param surveyID {@link String} id of the specific survey completed by this user.
+     * @return {@link SurveyResponse} of the specified user and survey, or null if no
+     * such survey response is found.
+     */
+    public SurveyResponse readByUserAndSurvey(String userID, String surveyID) {
+        String keyConditionExpression = "user_id = :id AND survey_id = :surveyId";
+        Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
+        expressionAttributeValues.put(":id", new AttributeValue().withS(userID));
+        expressionAttributeValues.put(":surveyId", new AttributeValue().withS(surveyID));
+
+        ScanRequest scanRequest = new ScanRequest()
+                .withTableName(this.tableName)
+                .withFilterExpression(keyConditionExpression)
+                .withExpressionAttributeValues(expressionAttributeValues);
+
+        ScanResult result = getClient().scan(scanRequest);
+
+        List<SurveyResponse> surveyResponseList = new ArrayList<>();
+        for (Map<String, AttributeValue> item : result.getItems()) {
+            if (item != null) {
+                SurveyResponse surveyResponse = surveyResponseFromDynamo(item);
+                surveyResponseList.add(surveyResponse);
+            }
+        }
+        if (surveyResponseList.size() == 0) {
+            return null;
+        }
+        else {
+            return surveyResponseList.get(0);
+        }
     }
 
     /**
@@ -224,6 +283,11 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
         return userList;
     }
 
+    /**
+     * @param userID {@link String} id of specified user.
+     * @param sr {@link SurveyResponse} survey response to be saved to database.
+     * @return {@link Map} containing the representation
+     */
     private static Map<String, AttributeValue> fromSurveyResponse(String userID, SurveyResponse sr) {
         Map<String, AttributeValue> surveyResponse = new HashMap<>();
 
@@ -244,6 +308,10 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
         return surveyResponse;
     }
 
+    /**
+     * @param item {@link Map} containing representation of {@link SurveyResponse}
+     * @return {@link SurveyResponse} contained
+     */
     private static SurveyResponse surveyResponseFromDynamo(Map<String, AttributeValue> item) {
         String id = item.get("id").getS();
         String surveyID = item.get("survey_id").getS();
@@ -262,5 +330,39 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
         }
 
         return new SurveyResponse(id, survey, responses);
+    }
+
+    /**
+     * @param userID {@link String} id of specified user.
+     * @param sr {@link SurveyResponse} survey response to be saved to database.
+     * @return {@link Map} containing the representation to be updated.
+     */
+    private static Map<String, AttributeValue> updateFromSurveyResponse(String userID, SurveyResponse sr) {
+        Map<String, AttributeValue> surveyResponse = new HashMap<>();
+
+        String formattedSurveyID = String.join("-", sr.getSurvey().getID().split(" "));
+
+        surveyResponse.put(":survey_id_val", new AttributeValue().withS(formattedSurveyID));
+        surveyResponse.put(":user_id_val", new AttributeValue().withS(userID));
+
+        Map<String, AttributeValue> questionResponseMap = new HashMap<>();
+        for (SurveyQuestion question : sr.getSurvey().getQuestions()) {
+            SurveyQuestionResponse response = sr.getResponse(question);
+            String formattedQuestion = String.join("-", question.getQuestion().split(" "));
+            questionResponseMap.put(formattedQuestion, new AttributeValue().withN(String.valueOf(response.getResponseNumber())));
+        }
+
+        surveyResponse.put(":responses_val", new AttributeValue().withM(questionResponseMap));
+
+        return surveyResponse;
+    }
+
+    /**
+     * @return {@link String} string for updating existing entry in database.
+     */
+    private static String getUpdateString() {
+        return "SET survey_id=:survey_id_val, " +
+                "user_id=:user_id_val, " +
+                "responses=:responses_val";
     }
 }
