@@ -66,13 +66,15 @@ public class SurveyResponseTest {
             response.getResponse(second).getQuestion().getQuestion());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void getResponse_throwsIllegalArgumentException() {
+    @Test
+    public void getNonExistingResponse() {
         List<String> responses = new ArrayList<>();
 
         responses.add("test");
+        SurveyQuestion sq = new SurveyQuestion("Third survey question", responses);
+        SurveyQuestionResponse expected = new SurveyQuestionResponse(sq, -1);
 
-        response.getResponse(new SurveyQuestion("Third survey question", responses));
+        assertEquals(expected.getResponseNumber(), response.getResponse(sq).getResponseNumber());
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
