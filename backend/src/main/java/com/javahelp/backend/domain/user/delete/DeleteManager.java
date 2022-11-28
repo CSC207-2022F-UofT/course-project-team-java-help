@@ -30,13 +30,13 @@ public class DeleteManager {
      * @return a {@link DeleteResult} instance encoding whether the deletion was successful.
      */
     public DeleteResult delete(IDeleteInputBoundary input) {
-        User user = userStore.read(input.getUserID());
+        User user = userStore.read(input.getStringID());
 
         if (user == null) {
             return new DeleteResult("User does not exist");
         }
 
-        userStore.delete(input.getUserID());
+        userStore.delete(input.getStringID());
         return new DeleteResult(user);
     }
 }

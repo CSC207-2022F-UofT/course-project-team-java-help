@@ -59,23 +59,18 @@ public class DeleteHandlerTest {
 
         UserPassword password = new UserPassword("password", SHAPasswordHasher.getInstance());
         User user = new User("test", userInfo, "asdfgh");
-        Token token = new Token(Duration.ofMinutes(30), "test", user.getStringID());
+        Token token = null;
 
         try {
             userStore.create(user, password);
+            token = new Token(Duration.ofMinutes(30), "test", user.getStringID());
             tokenStore.create(token);
-
-
-            JsonObject body = Json.createObjectBuilder()
-                    .add("userid", user.getStringID())
-                    .add("token", token.getToken())
-                    .build();
 
             given().header(new Header("Content-Type", "application/json"))
                     .header(new Header("Authorization", "JavaHelp id=" + user.getStringID()
                             + " token=" + token.getToken()))
-                    .when().delete(USER_ENDPOINT + user.getStringID()).then().statusCode(500);
-                    //.body("success", equalTo(true));
+                    .when().delete(USER_ENDPOINT + user.getStringID()).then().statusCode(200)
+                    .body("success", equalTo(true));
 
         } finally {
             tokenStore.delete(token.getToken());
