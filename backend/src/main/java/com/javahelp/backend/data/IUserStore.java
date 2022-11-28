@@ -1,6 +1,7 @@
 package com.javahelp.backend.data;
 
 import com.amazonaws.regions.Regions;
+import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.User;
 import com.javahelp.model.user.UserPassword;
 
@@ -59,6 +60,12 @@ public interface IUserStore {
      * @param id {@link String} id of the {@link User} to delete
      */
     void delete(String id);
+
+    /**
+     * Removes all {@link SurveyResponse}s in database.
+     * ONLY use during preliminary testing!
+     */
+    void cleanTable();
 
     /**
      * Updates the password of a {@link User}

@@ -29,11 +29,12 @@ import java.util.UUID;
 
 public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurveyResponseStore{
     private String tableName;
-    private static ISurveyStore surveyStore = ISurveyStore.getDefaultImplementation();
+    private ISurveyStore surveyStore;
 
-    DynamoDBSurveyResponseStore(String tableName, Regions region) {
+    DynamoDBSurveyResponseStore(String tableName, Regions region, ISurveyStore surveyStore) {
         super(region);
         this.tableName = tableName;
+        this.surveyStore = surveyStore;
     }
 
     /**
@@ -45,8 +46,6 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
      */
     @Override
     public SurveyResponse create(String userID, SurveyResponse surveyResponse) {
-        surveyStore.create(surveyResponse.getSurvey());
-
         String id = UUID.randomUUID().toString();
         surveyResponse.setID(id);
 
@@ -291,7 +290,7 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
     private static Map<String, AttributeValue> fromSurveyResponse(String userID, SurveyResponse sr) {
         Map<String, AttributeValue> surveyResponse = new HashMap<>();
 
-        String formattedSurveyID = String.join("-", sr.getSurvey().getID().split(" "));
+        String formattedSurveyID = sr.getSurvey().getID();
 
         surveyResponse.put("id", new AttributeValue().withS(sr.getID()));
         surveyResponse.put("survey_id", new AttributeValue().withS(formattedSurveyID));
@@ -312,12 +311,12 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
      * @param item {@link Map} containing representation of {@link SurveyResponse}
      * @return {@link SurveyResponse} contained
      */
-    private static SurveyResponse surveyResponseFromDynamo(Map<String, AttributeValue> item) {
+    private SurveyResponse surveyResponseFromDynamo(Map<String, AttributeValue> item) {
         String id = item.get("id").getS();
         String surveyID = item.get("survey_id").getS();
         String userID = item.get("user_id").getS();
 
-        Survey survey = surveyStore.read(surveyID);
+        Survey survey = this.surveyStore.read(surveyID);
 
         Map<SurveyQuestion, SurveyQuestionResponse> responses = new HashMap<>();
         for (SurveyQuestion surveyQuestion : survey.getQuestions()) {
@@ -340,7 +339,7 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
     private static Map<String, AttributeValue> updateFromSurveyResponse(String userID, SurveyResponse sr) {
         Map<String, AttributeValue> surveyResponse = new HashMap<>();
 
-        String formattedSurveyID = String.join("-", sr.getSurvey().getID().split(" "));
+        String formattedSurveyID = sr.getSurvey().getID();
 
         surveyResponse.put(":survey_id_val", new AttributeValue().withS(formattedSurveyID));
         surveyResponse.put(":user_id_val", new AttributeValue().withS(userID));

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 
 public class DynamoDBSurveyStore extends DynamoDBStore implements ISurveyStore{
@@ -33,15 +34,18 @@ public class DynamoDBSurveyStore extends DynamoDBStore implements ISurveyStore{
      */
     @Override
     public Survey create(Survey survey) {
-        if (read(survey.getID()) == null) {
-            Map<String, AttributeValue> item = fromSurvey(survey);
+        String id = UUID.randomUUID().toString();
 
-            PutItemRequest request = new PutItemRequest()
-                    .withTableName(tableName)
-                    .withItem(item);
+        survey.setID(id);
 
-            getClient().putItem(request);
-        }
+        Map<String, AttributeValue> item = fromSurvey(survey);
+
+        PutItemRequest request = new PutItemRequest()
+                .withTableName(tableName)
+                .withItem(item);
+
+        getClient().putItem(request);
+
         return survey;
     }
 
@@ -100,7 +104,7 @@ public class DynamoDBSurveyStore extends DynamoDBStore implements ISurveyStore{
     private static Map<String, AttributeValue> fromSurvey(Survey s) {
         Map<String, AttributeValue> survey = new HashMap<>();
 
-        survey.put("id", new AttributeValue().withS(String.join("-", s.getID().split(" "))));
+        survey.put("id", new AttributeValue().withS(s.getID()));
         survey.put("name", new AttributeValue().withS(s.getName()));
 
         List<AttributeValue> questionList = new ArrayList<>();
@@ -122,7 +126,7 @@ public class DynamoDBSurveyStore extends DynamoDBStore implements ISurveyStore{
     }
 
     private static Survey surveyFromDynamo(Map<String, AttributeValue> item) {
-        String id = String.join(" ", item.get("id").getS().split("-"));
+        String id = item.get("id").getS();
         String name = item.get("name").getS();
 
         List<SurveyQuestion> questionList = new ArrayList<>();

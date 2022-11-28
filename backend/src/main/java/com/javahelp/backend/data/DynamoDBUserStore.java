@@ -8,7 +8,10 @@ import com.amazonaws.services.dynamodbv2.model.GetItemResult;
 import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
+import com.amazonaws.services.dynamodbv2.model.ScanRequest;
+import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.amazonaws.services.dynamodbv2.model.UpdateItemRequest;
+import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.ClientUserInfo;
 import com.javahelp.model.user.ProviderUserInfo;
 import com.javahelp.model.user.User;
@@ -152,6 +155,24 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
 
         getClient().deleteItem(request);
     }
+
+    /**
+     * Removes all {@link User}s in database.
+     * ONLY use during preliminary testing!
+     */
+    @Override
+    public void cleanTable() {
+        ScanRequest scanRequest = new ScanRequest()
+                .withTableName(tableName);
+        ScanResult result = getClient().scan(scanRequest);
+
+        for (Map<String, AttributeValue> item : result.getItems()) {
+            if (item != null) {
+                delete(item.get("id").getS());
+            }
+        }
+    }
+
 
     @Override
     public User create(User u, UserPassword password) {
