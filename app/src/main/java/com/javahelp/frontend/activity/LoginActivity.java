@@ -1,6 +1,7 @@
 package com.javahelp.frontend.activity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
@@ -58,6 +59,9 @@ public class LoginActivity extends AppCompatActivity {
         viewModel.getLoginResult().observe(this, this::updateOnLoginResult);
 
         binding.loginButton.setOnClickListener(this::loginClick);
+
+        binding.botCReg.setOnClickListener(this::clientRegisterClick);
+        binding.botPReg.setOnClickListener(this:: providerRegisterClick);
     }
 
     /**
@@ -97,6 +101,7 @@ public class LoginActivity extends AppCompatActivity {
         if (result.isSuccess()) {
             binding.loginErrorText.setText("Login successful");
             storeCredentials(result.getUser(), result.getToken());
+            startActivity(new Intent(LoginActivity.this, FrontPageActivity.class));
         } else {
             binding.loginErrorText.setText(result.getErrorMessage());
         }
@@ -143,5 +148,23 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 return;
         }
+    }
+
+    /**
+     * Called when the client register button is clicked
+     *
+     *@param v {@link View} that was clicked
+     */
+    private void clientRegisterClick(View v){
+        startActivity(new Intent(LoginActivity.this, ClientRegistrationActivity.class));
+    }
+
+    /**
+     * Called when the provider register button is clicked
+     *
+     *@param v {@link View} that was clicked
+     */
+    private void providerRegisterClick(View v){
+        startActivity(new Intent(LoginActivity.this, ProviderRegistrationActivity.class));
     }
 }

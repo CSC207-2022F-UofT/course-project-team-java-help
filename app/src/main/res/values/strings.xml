@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">JavaHelp</string>
+    <string name="app_name"></string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="about">JavaHelp is a CSC207 course project created by UofT students. Our aim is to build a platform for people who need mental support from professionals.</string>
+    <string-array name="genders">
+        <item>Unmentioned</item>
+        <item>Female</item>
+        <item>Male</item>
+    </string-array>
 </resources>
