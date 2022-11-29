@@ -84,10 +84,11 @@ public class DeleteManagerTest {
                 final String userID = user.getStringID();
 
                 @Override
-                public String getUserID() {
+                public String getStringID() {
                     return userID;
                 }
             };
+
         } finally {
             DeleteResult deleteResult1 = deleteManager.delete(input);
             assertNotNull(deleteResult1.getUser());

@@ -25,8 +25,7 @@
         <activity
             android:name=".frontend.activity.ClientRegistrationActivity"
             android:exported="false"
-            android:parentActivityName=".frontend.activity.LoginActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:parentActivityName=".frontend.activity.LoginActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -34,8 +33,7 @@
         <activity
             android:name=".frontend.activity.ProviderRegistrationActivity"
             android:exported="false"
-            android:parentActivityName=".frontend.activity.LoginActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:parentActivityName=".frontend.activity.LoginActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -43,8 +41,7 @@
         <activity
             android:name=".frontend.activity.FrontPageActivity"
             android:exported="false"
-            android:parentActivityName=".frontend.activity.LoginActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:parentActivityName=".frontend.activity.LoginActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

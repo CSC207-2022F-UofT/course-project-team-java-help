@@ -125,3 +125,6 @@ node_modules
 
 # NDK files
 .cxx
+
+# config files
+install.sh
