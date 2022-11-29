@@ -1,6 +1,7 @@
 package com.javahelp.backend.query;
 
 import com.javahelp.backend.data.ISurveyResponseStore;
+import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.User;
 import com.javahelp.backend.data.IUserStore;
 
@@ -15,7 +16,7 @@ import java.util.Set;
  * specified by the user.
  * The query constraints are indicated using filters (multiple choice) or searches (text name).
  */
-public class UserQueryConstraint {
+public class UserQueryConstraint implements IUserQueryConstraint{
     private ISurveyResponseStore dbSRStore;
     private IUserStore dbUserStore;
 
@@ -24,17 +25,28 @@ public class UserQueryConstraint {
         this.dbUserStore = dbUserStore;
     }
 
-    public Set<User> getProvidersWithConstraints(List<Constraint> constraints) {
-        Set<String> ids = getIDWithConstraints(constraints);
-        Set<User> usersWithConstraint = new HashSet<>();
-        for (String id : ids) {
+    @Override
+    public Map<String, User> getProvidersWithConstraints(List<Constraint> constraints) {
+        Map<String, SurveyResponse> responses = getResponsesWithConstraints(constraints);
+        Map<String, User> usersWithConstraint = new HashMap<>();
+        for (String id : responses.keySet()) {
             User user = this.dbUserStore.read(id);
-            usersWithConstraint.add(user);
+            usersWithConstraint.put(id, user);
         }
         return usersWithConstraint;
     }
 
-    private Set<String> getIDWithConstraints(List<Constraint> constraints) {
+    public Map<String, User> getProvidersWithConstraints(Map<String, SurveyResponse> responses) {
+        Map<String, User> usersWithConstraint = new HashMap<>();
+        for (String id : responses.keySet()) {
+            User user = this.dbUserStore.read(id);
+            usersWithConstraint.put(id, user);
+        }
+        return usersWithConstraint;
+    }
+
+    @Override
+    public Map<String, SurveyResponse> getResponsesWithConstraints(List<Constraint> constraints) {
         Map<String, Set<String>> combinedConstraintMap = new HashMap<>();
 
         for (int i = 0; i < constraints.size(); i++) {
