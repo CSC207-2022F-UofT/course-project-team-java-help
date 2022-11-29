@@ -66,11 +66,11 @@ public interface ISurveyResponseStore {
      *                   from the User.
      * @return {@link Set<User>} with the specified constraints.
      */
-    Set<String> readByConstraint(Map<String, Set<String>> constraint);
+    Map<String, SurveyResponse> readByConstraint(Map<String, Set<String>> constraint);
 
     /**
      *
      * @return all {@link Set<User>} existing in database.
      */
-    Set<String> readWithoutConstraint();
+    Map<String, SurveyResponse> readWithoutConstraint();
 }
