@@ -1,12 +1,12 @@
 package com.javahelp.frontend.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.javahelp.R;
 import com.javahelp.databinding.ActivityClientRegistrationBinding;
@@ -24,14 +24,16 @@ public class ClientRegistrationActivity extends AppCompatActivity {
         binding.setCdata(clientRegistrationVm);
         binding.setLifecycleOwner(this);
 
-        binding.signupbtn1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ClientRegistrationActivity.this,
-                        FrontPageActivity.class);
-                startActivity(intent);
-            }
-        });
-
+        binding.signupbtn1.setOnClickListener(this::registerClick);
     }
+
+    /**
+     * Called when the register button is clicked
+     *
+     *@param v {@link View} that was clicked
+     */
+    private void registerClick(View v) {
+        startActivity(new Intent(ClientRegistrationActivity.this, FrontPageActivity.class));
+    }
+
 }
