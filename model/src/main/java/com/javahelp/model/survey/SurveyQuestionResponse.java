@@ -17,7 +17,7 @@ public class SurveyQuestionResponse {
     public SurveyQuestionResponse(SurveyQuestion question, int responseNumber) {
         this.question = question;
         this.responseNumber = responseNumber;
-        if (this.responseNumber < 0 || this.responseNumber >= this.question.getNumberOfResponses()) {
+        if (this.responseNumber < -1 || this.responseNumber >= this.question.getNumberOfResponses()) {
             throw new IllegalStateException("SurveyQuestionResponse cannot have an invalid response index");
         }
     }
