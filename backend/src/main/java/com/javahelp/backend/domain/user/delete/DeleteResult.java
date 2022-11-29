@@ -5,7 +5,7 @@ import com.javahelp.model.user.User;
 /**
  * A class used by a {@link DeleteManager} that encodes the result of an account deletion action.
  */
-class DeleteResult {
+public class DeleteResult {
     private final User user;
     private final String errorMessage;
 
