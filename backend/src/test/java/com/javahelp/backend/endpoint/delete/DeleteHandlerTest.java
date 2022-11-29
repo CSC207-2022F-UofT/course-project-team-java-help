@@ -50,7 +50,7 @@ public class DeleteHandlerTest {
         }
     }
 
-    @Test
+    @Test(timeout = 20000)
     public void testSuccess() {
         assumeTrue(databaseAccessible());
 
@@ -78,7 +78,7 @@ public class DeleteHandlerTest {
         }
     }
 
-    @Test
+    @Test(timeout = 20000)
     public void testNoMatchPathParameters() {
         assumeTrue(databaseAccessible());
 
