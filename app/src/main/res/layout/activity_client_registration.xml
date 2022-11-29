@@ -138,22 +138,6 @@
                     android:textColor="@color/black"
                     android:textColorHint="@color/black" />
 
-
-                <Spinner
-                    android:id="@+id/gender1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="#23857C7C"
-                    android:drawablePadding="20dp"
-                    android:hint="Gender"
-                    android:padding="25dp"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/black" />
-
                 <EditText
                     android:id="@+id/home1"
                     android:layout_width="match_parent"

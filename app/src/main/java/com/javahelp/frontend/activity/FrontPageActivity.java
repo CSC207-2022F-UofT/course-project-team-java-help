@@ -21,7 +21,7 @@ public class FrontPageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityFgBinding.inflate(getLayoutInflater());
-        setContentView(binding.bottomNavigationView);
+        setContentView(binding.getRoot());
         replaceFragment(new HomeFragment());
 
         binding.bottomNavigationView.setOnItemSelectedListener(item ->{

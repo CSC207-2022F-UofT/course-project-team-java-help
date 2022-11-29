@@ -101,6 +101,7 @@ public class LoginActivity extends AppCompatActivity {
         if (result.isSuccess()) {
             binding.loginErrorText.setText("Login successful");
             storeCredentials(result.getUser(), result.getToken());
+            startActivity(new Intent(LoginActivity.this, FrontPageActivity.class));
         } else {
             binding.loginErrorText.setText(result.getErrorMessage());
         }
