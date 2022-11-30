@@ -103,7 +103,7 @@ public class DeleteHandlerTest {
                     .header(new Header("Authorization", "JavaHelp id=" + user.getStringID()
                             + " token=" + token.getToken()))
                     .when().delete(USER_ENDPOINT + user1.getStringID()).then().statusCode(403)
-                    .body("message", equalTo("The path parameters do not match the given current user"));
+                    .body("message", equalTo("The path parameters do not match the current user"));
 
         } finally {
             tokenStore.delete(token.getToken());
