@@ -17,9 +17,11 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import jakarta.json.Json;
 import jakarta.json.JsonObject;
 
+/**
+ * Data access for delete through lambda.
+ */
 public class LambdaDeleteDataAccess extends RESTAPIGateway<DeleteResult> implements IDeleteDataAccess {
     private static final IDeleteDataAccess instance = new LambdaDeleteDataAccess();
     private static final String USER_ENDPOINT = "https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/users/";
@@ -114,6 +116,9 @@ public class LambdaDeleteDataAccess extends RESTAPIGateway<DeleteResult> impleme
     }
 
 
+    /**
+     * @return an instance of {@link LambdaDeleteDataAccess}.
+     */
     public static IDeleteDataAccess getInstance() {
         return instance;
     }
