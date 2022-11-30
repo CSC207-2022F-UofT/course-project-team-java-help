@@ -145,7 +145,7 @@ public class LambdaDeleteDataAccess extends RESTAPIGateway<DeleteResult> impleme
                 return new RESTAPIGatewayResponse<>(new DeleteResult(errorMessage));
             }
             else if (response.getResponseCode() == 403) {
-                return new RESTAPIGatewayResponse<>(new DeleteResult("The path parameters do not match the current user"));
+                return new RESTAPIGatewayResponse<>(new DeleteResult("The path parameters do not match the given current user"));
             }
             else {
                 return new RESTAPIGatewayResponse<>("JSON missing relevant fields");
