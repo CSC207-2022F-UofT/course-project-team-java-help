@@ -1,5 +1,7 @@
 package com.javahelp.frontend.domain.user.delete;
 
+import com.javahelp.model.user.User;
+
 /**
  * An interface that provides information about an account deletion.
  *
@@ -10,7 +12,8 @@ public interface IDeleteOutput {
     /**
      * Called when the account deletion was successful.
      */
-    void success();
+
+    void success(User user);
 
     /**
      * Called when the account deletion failed
