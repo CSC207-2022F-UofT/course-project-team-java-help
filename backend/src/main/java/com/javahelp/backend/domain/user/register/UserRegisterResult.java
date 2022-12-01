@@ -4,9 +4,9 @@ import com.javahelp.model.user.User;
 import com.javahelp.model.user.UserPassword;
 
 /**
- * Response for {@link User} registration from a {@link UserRegisterInteractor}
+ * Result of {@link User} registration from a {@link UserRegisterInteractor}
  */
-public class RegisterUserResponse {
+public class UserRegisterResult {
 
     private User user = null;
     private UserPassword password = null;
@@ -17,7 +17,7 @@ public class RegisterUserResponse {
      * @param user the newly created {@link User}
      * @param password the newly created {@link UserPassword}
      */
-    public RegisterUserResponse(User user, UserPassword password) {
+    public UserRegisterResult(User user, UserPassword password) {
         this.user = user;
         this.password = password;
     }
@@ -26,7 +26,7 @@ public class RegisterUserResponse {
      * An overloaded constructor to make a report for this failed registration
      * @param error a description of failure at registration
      */
-    public RegisterUserResponse(String error) {
+    public UserRegisterResult(String error) {
         this.error = error;
     }
 
