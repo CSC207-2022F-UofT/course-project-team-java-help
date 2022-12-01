@@ -110,7 +110,7 @@ public class DynamoDBSurveyStore extends DynamoDBStore implements ISurveyStore{
         List<AttributeValue> questionList = new ArrayList<>();
         Map<String, AttributeValue> questionAnswerMap = new HashMap<>();
         for (SurveyQuestion question : s.getQuestions()) {
-            String formattedQuestion = String.join("-", question.getQuestion().split(" "));
+            String formattedQuestion = String.join("_", question.getQuestion().split(" "));
             questionList.add(new AttributeValue().withS(formattedQuestion));
             List<AttributeValue> answerList = new ArrayList<>();
             for (String answer : question.getAnswers()) {
@@ -132,7 +132,7 @@ public class DynamoDBSurveyStore extends DynamoDBStore implements ISurveyStore{
         List<SurveyQuestion> questionList = new ArrayList<>();
 
         for (AttributeValue question : item.get("questions").getL()) {
-            String questionPrompt = String.join(" ", question.getS().split("-"));
+            String questionPrompt = String.join(" ", question.getS().split("_"));
             List<String> answers = new ArrayList<>();
             for (AttributeValue answer : item.get("answers").getM().get(question.getS()).getL()) {
                 answers.add(answer.getS());

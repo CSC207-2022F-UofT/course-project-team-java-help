@@ -205,17 +205,18 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
      *
      * @param constraint {@link Map <>} which specifies the required attributes
      *                   from the User.
-     * @return {@link Set <User>} with the specified constraints.
+     * @return {@link Map} of all users and their corresponding survey responses
+     * with the specific constraints.
      */
     @Override
-    public Set<String> readByConstraint(Map<String, Set<String>> constraint) {
+    public Map<String, SurveyResponse> readByConstraint(Map<String, Set<String>> constraint) {
         Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
 
         int n_questions = 0;
         int n_answers = 0;
         StringBuilder conditionBuilder = new StringBuilder();
         for (String question : constraint.keySet()) {
-            String formattedQuestion = String.join("-", question.split(" "));
+            String formattedQuestion = String.join("_", question.split(" "));
             n_questions = n_questions + 1;
             Set<String> answers = constraint.get(question);
 
@@ -223,7 +224,7 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
             for (String answer: answers) {
                 String keyString = String.format(":answer_%s", n_answers);
                 expressions.add(keyString);
-                expressionAttributeValues.put(keyString, new AttributeValue().withS(answer));
+                expressionAttributeValues.put(keyString, new AttributeValue().withN(answer));
                 n_answers = n_answers + 1;
             }
             String attrKeyString = String.format("responses.%s", formattedQuestion);
@@ -254,32 +255,39 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
                 .withExpressionAttributeValues(expressionAttributeValues);
         ScanResult result = getClient().scan(scanRequest);
 
-        Set<String> userList = new HashSet<>();
+        Map<String, SurveyResponse> usersAndSurveyR = new HashMap<>();
         for (Map<String, AttributeValue> item : result.getItems()) {
-            String userId = String.valueOf(item.get("user_id"));
-            userList.add(userId);
+            if (item != null) {
+                String userId = String.valueOf(item.get("user_id").getS());
+                SurveyResponse sr = surveyResponseFromDynamo(item);
+                usersAndSurveyR.put(userId, sr);
+            }
         }
 
-        return userList;
+        return usersAndSurveyR;
     }
 
     /**
      *
-     * @return all {@link Set<User>} existing in database.
+     * @return {@link Map} of all users and their corresponding survey responses
+     * existing in database.
      */
     @Override
-    public Set<String> readWithoutConstraint() {
+    public Map<String, SurveyResponse> readWithoutConstraint() {
         ScanRequest scanRequest = new ScanRequest()
                 .withTableName(this.tableName);
         ScanResult result = getClient().scan(scanRequest);
 
-        Set<String> userList = new HashSet<>();
+        Map<String, SurveyResponse> usersAndSurveyR = new HashMap<>();
         for (Map<String, AttributeValue> item : result.getItems()) {
-            String userId = String.valueOf(item.get("user_id"));
-            userList.add(userId);
+            if (item != null) {
+                String userId = String.valueOf(item.get("user_id").getS());
+                SurveyResponse sr = surveyResponseFromDynamo(item);
+                usersAndSurveyR.put(userId, sr);
+            }
         }
 
-        return userList;
+        return usersAndSurveyR;
     }
 
     /**
@@ -299,7 +307,7 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
         Map<String, AttributeValue> questionResponseMap = new HashMap<>();
         for (SurveyQuestion question : sr.getSurvey().getQuestions()) {
             SurveyQuestionResponse response = sr.getResponse(question);
-            String formattedQuestion = String.join("-", question.getQuestion().split(" "));
+            String formattedQuestion = String.join("_", question.getQuestion().split(" "));
             questionResponseMap.put(formattedQuestion, new AttributeValue().withN(String.valueOf(response.getResponseNumber())));
         }
         surveyResponse.put("responses", new AttributeValue().withM(questionResponseMap));
@@ -320,7 +328,7 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
 
         Map<SurveyQuestion, SurveyQuestionResponse> responses = new HashMap<>();
         for (SurveyQuestion surveyQuestion : survey.getQuestions()) {
-            String formattedQuestion = String.join("-", surveyQuestion.getQuestion().split(" "));
+            String formattedQuestion = String.join("_", surveyQuestion.getQuestion().split(" "));
             String responseS = item.get("responses").getM().get(formattedQuestion).getN();
             int response = Integer.parseInt(responseS);
             SurveyQuestionResponse questionResponse = new SurveyQuestionResponse(surveyQuestion, response);
@@ -347,7 +355,7 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
         Map<String, AttributeValue> questionResponseMap = new HashMap<>();
         for (SurveyQuestion question : sr.getSurvey().getQuestions()) {
             SurveyQuestionResponse response = sr.getResponse(question);
-            String formattedQuestion = String.join("-", question.getQuestion().split(" "));
+            String formattedQuestion = String.join("_", question.getQuestion().split(" "));
             questionResponseMap.put(formattedQuestion, new AttributeValue().withN(String.valueOf(response.getResponseNumber())));
         }
 
