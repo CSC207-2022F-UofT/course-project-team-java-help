@@ -28,17 +28,17 @@ public abstract class UserRegisterInteractor <T extends IUserRegisterInputBounda
      * Checks whether email and username are taken
      * @param boundary {@link IUserRegisterInputBoundary} with input
      *
-     * @return a {@link RegisterUserResponse} with error message, or else null
+     * @return a {@link UserRegisterResult} with error message, or else null
      */
-    private RegisterUserResponse areEmailAndUsernameTaken(T boundary) {
+    private UserRegisterResult areEmailAndUsernameTaken(T boundary) {
         User emailTaken = userStore.readByEmail(boundary.getEmailAddress());
         User usernameTaken = userStore.readByUsername(boundary.getUsername());
         if (emailTaken != null && usernameTaken != null){
-            return new RegisterUserResponse("Email and username already taken");
+            return new UserRegisterResult("Email and username already taken");
         } else if (emailTaken != null){
-            return new RegisterUserResponse("Email already taken");
+            return new UserRegisterResult("Email already taken");
         } else if (usernameTaken != null){
-            return new RegisterUserResponse("Username already taken");
+            return new UserRegisterResult("Username already taken");
         }
 
         // none already taken
@@ -49,10 +49,10 @@ public abstract class UserRegisterInteractor <T extends IUserRegisterInputBounda
      * Determines whether the provided input can assemble a valid {@link UserInfo}
      * @param boundary <T> {@link IUserRegisterInputBoundary} to retrieve input
      *
-     * @return a {@link RegisterUserResponse} containing the error message
+     * @return a {@link UserRegisterResult} containing the error message
      * for invalid {@link IUserRegisterInputBoundary}, or else null
      */
-    protected abstract RegisterUserResponse isValidated(T boundary);
+    protected abstract UserRegisterResult isValidated(T boundary);
 
     /**
      * Assembles {@link UserInfo} from input
@@ -65,32 +65,32 @@ public abstract class UserRegisterInteractor <T extends IUserRegisterInputBounda
      * Creates and registers a {@link User}
      * @param boundary <T> valid {@link IUserRegisterInputBoundary}
      *
-     * @return a {@link RegisterUserResponse} with the registration results
+     * @return a {@link UserRegisterResult} with the registration results
      */
-    private RegisterUserResponse registerUserToDatabase(T boundary) {
+    private UserRegisterResult registerUserToDatabase(T boundary) {
         UserInfo info = bundleUserInfo(boundary);
         User user = new User("", info, boundary.getUsername());
 
         UserPassword userPassword = new UserPassword(boundary.getSaltAndHash());
         User newUser = userStore.create(user, userPassword);
 
-        return new RegisterUserResponse(newUser, userPassword);
+        return new UserRegisterResult(newUser, userPassword);
     }
 
     /**
      * Registers a new {@link User}
      * @param boundary <T> {@link IUserRegisterInputBoundary} providing input
-     * @return a new {@link RegisterUserResponse} with created {@link User}, or an error message
+     * @return a new {@link UserRegisterResult} with created {@link User}, or an error message
      */
-    public RegisterUserResponse register(T boundary) {
+    public UserRegisterResult register(T boundary) {
         // check email and username are not taken
-        RegisterUserResponse emailUsernameTaken = areEmailAndUsernameTaken(boundary);
+        UserRegisterResult emailUsernameTaken = areEmailAndUsernameTaken(boundary);
         if (emailUsernameTaken != null) {
             return emailUsernameTaken;
         }
 
         // Check user input valid
-        RegisterUserResponse inputInvalid = isValidated(boundary);
+        UserRegisterResult inputInvalid = isValidated(boundary);
         if (inputInvalid != null) {
             return inputInvalid;
         }

@@ -1,11 +1,10 @@
 package com.javahelp.backend.domain.user.register.client;
 
 import com.javahelp.backend.data.IUserStore;
-import com.javahelp.backend.domain.user.register.RegisterUserResponse;
+import com.javahelp.backend.domain.user.register.UserRegisterResult;
 import com.javahelp.backend.domain.user.register.UserRegisterInteractor;
 import com.javahelp.model.user.ClientUserInfo;
 import com.javahelp.model.user.User;
-import com.javahelp.model.user.UserPassword;
 
 /**
  * Interactor that creates new client {@link User}s
@@ -29,7 +28,7 @@ public class ClientRegisterInteractor extends
     }
 
     @Override
-    protected RegisterUserResponse isValidated(IClientRegisterInputBoundary boundary) {
+    protected UserRegisterResult isValidated(IClientRegisterInputBoundary boundary) {
         return null;
     }
 }
