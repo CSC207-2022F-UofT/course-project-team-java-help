@@ -10,16 +10,16 @@ import java.util.Set;
 public interface IUserQueryConstraint {
     /**
      *
-     * @param constraints {@link List} of {@link Constraint}s to be applied for query.
+     * @param constraint {@link Constraint} to be applied for query.
      * @return {@link Set} of Users that satisfy the list of {@link Constraint}s.
      */
-    Map<String, User> getProvidersWithConstraints(List<Constraint> constraints);
+    Map<String, User> getProvidersWithConstraints(Constraint constraint);
 
     /**
      *
-     * @param constraints{ @link List} of {@link Constraint}s to be applied for query.
+     * @param constraint {@link Constraint} to be applied for query.
      * @return {@link Map} of {@link String} ID of users and their corresponding
      * {@link SurveyResponse}s.
      */
-    Map<String, SurveyResponse> getResponsesWithConstraints(List<Constraint> constraints);
+    Map<String, SurveyResponse> getResponsesWithConstraints(Constraint constraint);
 }

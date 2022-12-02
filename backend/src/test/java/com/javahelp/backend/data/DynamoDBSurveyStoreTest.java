@@ -20,7 +20,7 @@ public class DynamoDBSurveyStoreTest {
 
     DynamoDBSurveyStore db = new DynamoDBSurveyStore(tableName, regions);
 
-    @Test(timeout = 5000)
+    @Test
     public void testCreateRead() {
         this.db.cleanTable();
 
@@ -60,6 +60,7 @@ public class DynamoDBSurveyStoreTest {
             assertEquals(surveyQuestion.getNumberOfResponses(), readQuestion.getNumberOfResponses());
             for (int j = 0; j < surveyQuestion.getNumberOfResponses(); j++) {
                 assertEquals(surveyQuestion.getAnswer(j), readQuestion.getAnswer(j));
+                assertEquals(surveyQuestion.getAnswerAttribute(j), readQuestion.getAnswerAttribute(j));
             }
         }
     }
@@ -80,7 +81,11 @@ public class DynamoDBSurveyStoreTest {
             outOf10Responses.add(Integer.toString(i));
         }
 
-        questions.add(new SurveyQuestion("This is the first question", responses1));
+        SurveyQuestion first = new SurveyQuestion("This is the first question", responses1);
+        first.setAnswerAttribute(0, "attr1");
+        first.setAnswerAttribute(1, "attr2");
+
+        questions.add(first);
         questions.add(new SurveyQuestion("This is the second question", responses2));
         for (int i = 3; i <= 5; i++) {
             questions.add(new SurveyQuestion("This is the " + i + "th question", outOf10Responses));

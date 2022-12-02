@@ -6,7 +6,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Unit tests for {@link Survey}
@@ -21,7 +23,6 @@ public class SurveyTest {
         List<SurveyQuestion> questions = new ArrayList<>();
 
         List<String> responses1 = new ArrayList<>();
-
         responses1.add("This is a response option");
         responses1.add("This is a second response option");
 

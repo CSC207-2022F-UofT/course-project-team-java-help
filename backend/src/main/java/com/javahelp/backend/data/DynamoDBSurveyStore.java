@@ -14,8 +14,10 @@ import com.javahelp.model.user.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 
@@ -108,19 +110,24 @@ public class DynamoDBSurveyStore extends DynamoDBStore implements ISurveyStore{
         survey.put("name", new AttributeValue().withS(s.getName()));
 
         List<AttributeValue> questionList = new ArrayList<>();
+        Map<String, AttributeValue> questionAttrMap = new HashMap<>();
         Map<String, AttributeValue> questionAnswerMap = new HashMap<>();
         for (SurveyQuestion question : s.getQuestions()) {
             String formattedQuestion = String.join("_", question.getQuestion().split(" "));
             questionList.add(new AttributeValue().withS(formattedQuestion));
             List<AttributeValue> answerList = new ArrayList<>();
-            for (String answer : question.getAnswers()) {
-                answerList.add(new AttributeValue().withS(answer));
+            List<AttributeValue> attrList = new ArrayList<>();
+            for (int i = 0; i < question.getNumberOfResponses(); i++) {
+                answerList.add(new AttributeValue().withS(question.getAnswer(i)));
+                attrList.add(new AttributeValue().withSS(question.getAnswerAttribute(i)));
             }
             questionAnswerMap.put(formattedQuestion, new AttributeValue().withL(answerList));
+            questionAttrMap.put(formattedQuestion, new AttributeValue().withL(attrList));
         }
 
         survey.put("questions", new AttributeValue().withL(questionList));
         survey.put("answers", new AttributeValue().withM(questionAnswerMap));
+        survey.put("attributes", new AttributeValue().withM(questionAttrMap));
 
         return survey;
     }
@@ -139,6 +146,12 @@ public class DynamoDBSurveyStore extends DynamoDBStore implements ISurveyStore{
             }
 
             SurveyQuestion surveyQuestion = new SurveyQuestion(questionPrompt, answers);
+            int n = 0;
+            for (AttributeValue attrSet : item.get("attributes").getM().get(question.getS()).getL()) {
+                surveyQuestion.setAnswerAttribute(n, new HashSet<>(attrSet.getSS()));
+                n = n + 1;
+            }
+
             questionList.add(surveyQuestion);
         }
 

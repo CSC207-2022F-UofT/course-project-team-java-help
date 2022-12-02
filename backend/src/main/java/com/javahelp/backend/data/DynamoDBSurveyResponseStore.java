@@ -9,6 +9,7 @@ import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.amazonaws.services.dynamodbv2.model.UpdateItemRequest;
+import com.javahelp.backend.search.constraint.Constraint;
 import com.javahelp.model.survey.Survey;
 import com.javahelp.model.survey.SurveyQuestion;
 import com.javahelp.model.survey.SurveyQuestionResponse;
@@ -209,43 +210,26 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
      * with the specific constraints.
      */
     @Override
-    public Map<String, SurveyResponse> readByConstraint(Map<String, Set<String>> constraint) {
+    public Map<String, SurveyResponse> readByConstraint(Constraint constraint) {
         Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
 
-        int n_questions = 0;
-        int n_answers = 0;
+        int n_attr = 1;
         StringBuilder conditionBuilder = new StringBuilder();
-        for (String question : constraint.keySet()) {
-            String formattedQuestion = String.join("_", question.split(" "));
-            n_questions = n_questions + 1;
-            Set<String> answers = constraint.get(question);
+        for (String attr : constraint.getConstraints()) {
+            String keyString = String.format(":attr_%s", n_attr);
+            expressionAttributeValues.put(keyString, new AttributeValue().withS(attr));
 
-            Set<String> expressions = new HashSet<>();
-            for (String answer: answers) {
-                String keyString = String.format(":answer_%s", n_answers);
-                expressions.add(keyString);
-                expressionAttributeValues.put(keyString, new AttributeValue().withN(answer));
-                n_answers = n_answers + 1;
-            }
-            String attrKeyString = String.format("responses.%s", formattedQuestion);
-            String attrKeySetString = String.format("(%s)", String.join(", ", expressions));
-            conditionBuilder.append("(");
-            conditionBuilder.append(attrKeyString);
-            conditionBuilder.append(" IN ");
-            conditionBuilder.append(attrKeySetString);
-            conditionBuilder.append(")");
-            if (n_questions < constraint.size()) {
+            conditionBuilder.append(String.format("(contains(attributes, %s))", keyString));
+            if (n_attr < constraint.size()) {
                 conditionBuilder.append(" AND ");
             }
+
+            n_attr = n_attr + 1;
         }
 
-        /**
-         * keyConditionExpression Format:
-         *  - "(attr_question1 IN (:answer_0, :answer_1, ...)) AND (attr_question2 IN (:answer_3, ...)) AND ..."
-         */
         String keyConditionExpression = conditionBuilder.toString();
 
-        if (n_answers == 0) {
+        if (constraint.size() == 0) {
             return readWithoutConstraint();
         }
 
@@ -298,19 +282,22 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
     private static Map<String, AttributeValue> fromSurveyResponse(String userID, SurveyResponse sr) {
         Map<String, AttributeValue> surveyResponse = new HashMap<>();
 
-        String formattedSurveyID = sr.getSurvey().getID();
+        Survey survey = sr.getSurvey();
+        String formattedSurveyID = survey.getID();
 
         surveyResponse.put("id", new AttributeValue().withS(sr.getID()));
         surveyResponse.put("survey_id", new AttributeValue().withS(formattedSurveyID));
         surveyResponse.put("user_id", new AttributeValue().withS(userID));
 
         Map<String, AttributeValue> questionResponseMap = new HashMap<>();
-        for (SurveyQuestion question : sr.getSurvey().getQuestions()) {
-            SurveyQuestionResponse response = sr.getResponse(question);
-            String formattedQuestion = String.join("_", question.getQuestion().split(" "));
+        for (int i = 0; i < survey.size(); i++) {
+            SurveyQuestionResponse response = sr.getResponse(i);
+            String formattedQuestion = String.join("_", survey.get(i).getQuestion().split(" "));
             questionResponseMap.put(formattedQuestion, new AttributeValue().withN(String.valueOf(response.getResponseNumber())));
         }
+
         surveyResponse.put("responses", new AttributeValue().withM(questionResponseMap));
+        surveyResponse.put("attributes", new AttributeValue().withSS(sr.getAttributes()));
 
         return surveyResponse;
     }
@@ -360,6 +347,7 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
         }
 
         surveyResponse.put(":responses_val", new AttributeValue().withM(questionResponseMap));
+        surveyResponse.put(":attributes_val", new AttributeValue().withSS(sr.getAttributes()));
 
         return surveyResponse;
     }
@@ -370,6 +358,7 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
     private static String getUpdateString() {
         return "SET survey_id=:survey_id_val, " +
                 "user_id=:user_id_val, " +
-                "responses=:responses_val";
+                "responses=:responses_val, " +
+                "attributes=:attributes_val";
     }
 }

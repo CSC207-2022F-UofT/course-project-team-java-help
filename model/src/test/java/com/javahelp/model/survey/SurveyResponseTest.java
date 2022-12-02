@@ -7,8 +7,10 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Tests for {@link SurveyResponse}
@@ -18,6 +20,8 @@ public class SurveyResponseTest {
     SurveyResponse response;
 
     SurveyQuestion second;
+
+    Set<String> attrSet = new HashSet<>();
 
     @Before
     public void setUp() {
@@ -32,6 +36,10 @@ public class SurveyResponseTest {
                 responses);
         second = new SurveyQuestion("This is the second survey question",
                 responses);
+
+        attrSet.add("attr1");
+        attrSet.add("attr2");
+        second.setAnswerAttribute(0, attrSet);
 
         List<SurveyQuestion> questions = new ArrayList<>();
 
@@ -65,6 +73,9 @@ public class SurveyResponseTest {
         assertEquals("This is the second survey question",
             response.getResponse(second).getQuestion().getQuestion());
     }
+
+    @Test
+    public void getAttributes() { assertEquals(attrSet, response.getAttributes()); }
 
     @Test
     public void getNonExistingResponse() {
