@@ -30,11 +30,11 @@ public class SearchInteractor {
     }
 
     public SearchResult search(ISearchInput input) {
-        SurveyResponse responseMain = this.responseStore.read(input.getToken());
+        SurveyResponse responseMain = this.responseStore.read(input.getUserID());
 
         UserQueryConstraint userQueryConstraint = new UserQueryConstraint(this.responseStore, this.userStore);
-        Map<String, User> users = userQueryConstraint.getProvidersWithConstraints(input.getConstraints());
-        Map<String, SurveyResponse> responses = userQueryConstraint.getResponsesWithConstraints(input.getConstraints());
+        Map<String, User> users = userQueryConstraint.getProvidersWithConstraints(input.getConstraint());
+        Map<String, SurveyResponse> responses = userQueryConstraint.getResponsesWithConstraints(input.getConstraint());
 
         List<User> userList = new ArrayList<>();
         List<SurveyResponse> responseList = new ArrayList<>();

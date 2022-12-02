@@ -13,6 +13,7 @@ import com.javahelp.backend.search.ISearchInput;
 import com.javahelp.backend.search.SearchInteractor;
 import com.javahelp.backend.search.SearchResult;
 import com.javahelp.backend.search.constraint.Constraint;
+import com.javahelp.backend.search.constraint.IConstraint;
 import com.javahelp.model.survey.SurveyQuestion;
 import com.javahelp.model.user.UserPassword;
 import com.javahelp.model.util.json.SurveyResponseConverter;
@@ -25,12 +26,14 @@ import java.util.Iterator;
 import java.util.Map;
 
 import jakarta.json.Json;
+import jakarta.json.JsonArray;
 import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 
 public class SearchHandler extends HTTPHandler implements ISearchInput {
-    private List<Constraint> constraints;
+    private String userID;
+    private IConstraint constraint = IConstraint.getDefaultImplementation();
     private boolean isRanking;
 
     /**
@@ -46,21 +49,18 @@ public class SearchHandler extends HTTPHandler implements ISearchInput {
      */
     @Override
     public APIGatewayResponse getResponse(JsonObject body, HttpMethod method, Map<String, String[]> headers, Map<String, String[]> parameters, Map<String, String> pathParameters) {
-        JsonObject jsonQueryMap = body.getJsonObject("filters");
 
-
-        if (email == null && username == null && id == null) {
-            return APIGatewayResponse.error(BAD_REQUEST, "Request must contain one of \"id\", \"email\", \"username\"");
+        userID = body.getString("userID", null);
+        isRanking = body.getBoolean("ranking", false);
+        JsonArray filters = body.getJsonArray("filters");
+        for (int i = 0; i < filters.size(); i++) {
+            String filter_key = String.format("filter_%s", i);
+            constraint.setConstraint(filters.getJsonObject(i).getString(filter_key));
         }
 
-        String saltHash = body.getString("saltHash");
-        try {
-            password = new UserPassword(saltHash);
-        } catch (RuntimeException e) {
-            return APIGatewayResponse.error(BAD_REQUEST, "Invalid password saltHash, cannot parse");
+        if (userID == null) {
+            return APIGatewayResponse.error(BAD_REQUEST, "Request must contain \"id\"");
         }
-
-        stayLoggedIn = body.getBoolean("stayLoggedIn");
 
         SearchInteractor interactor = new SearchInteractor(ISurveyStore.getDefaultImplementation(),
                 ISurveyResponseStore.getDefaultImplementation(),
@@ -73,11 +73,11 @@ public class SearchHandler extends HTTPHandler implements ISearchInput {
         if (result.isSuccess()) {
             JsonObjectBuilder jsonUserBuilder = Json.createObjectBuilder();
             JsonObjectBuilder jsonResponseBuilder = Json.createObjectBuilder();
-            for (String id : result.getUsers().keySet()) {
-                jsonUserBuilder.add(id,
-                        UserConverter.getInstance().toJSON(result.getUsers().get(id)));
-                jsonResponseBuilder.add(id,
-                        SurveyResponseConverter.getInstance().toJSON(result.getResponses().get(id)));
+            for (int i = 0; i < result.getUsers().size(); i++) {
+                jsonUserBuilder.add(String.format("user_%s", i),
+                        UserConverter.getInstance().toJSON(result.getUsers().get(i)));
+                jsonResponseBuilder.add(String.format("response_%s", i),
+                        SurveyResponseConverter.getInstance().toJSON(result.getResponses().get(i)));
             }
 
             JsonObjectBuilder jsonBuilder = Json.createObjectBuilder();
@@ -98,12 +98,19 @@ public class SearchHandler extends HTTPHandler implements ISearchInput {
     }
 
     /**
+     * @return the desired token identifier of the client
+     * or null if no desired token identifier is known/specified.
+     */
+    @Override
+    public String getUserID() { return this.userID; }
+
+    /**
      * @return the desired {@link Map} of {@link SurveyQuestion} to {@link String} answer
      * for setting query constraint.
      * or null if no desired question is known/specified
      */
     @Override
-    public List<Constraint> getConstraints() { return this.constraints; }
+    public IConstraint getConstraint() { return this.constraint; }
 
     /**
      * @return whether to rank list of providers based on user survey data
