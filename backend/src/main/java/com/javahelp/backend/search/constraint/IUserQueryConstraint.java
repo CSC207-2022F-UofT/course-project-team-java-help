@@ -3,7 +3,6 @@ package com.javahelp.backend.search.constraint;
 import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.User;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,7 +12,7 @@ public interface IUserQueryConstraint {
      * @param constraint {@link Constraint} to be applied for query.
      * @return {@link Set} of Users that satisfy the list of {@link Constraint}s.
      */
-    Map<String, User> getProvidersWithConstraints(Constraint constraint);
+    Map<String, User> getProvidersWithConstraints(IConstraint constraint);
 
     /**
      *
@@ -21,5 +20,5 @@ public interface IUserQueryConstraint {
      * @return {@link Map} of {@link String} ID of users and their corresponding
      * {@link SurveyResponse}s.
      */
-    Map<String, SurveyResponse> getResponsesWithConstraints(Constraint constraint);
+    Map<String, SurveyResponse> getResponsesWithConstraints(IConstraint constraint);
 }

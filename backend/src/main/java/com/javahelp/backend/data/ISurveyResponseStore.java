@@ -1,7 +1,7 @@
 package com.javahelp.backend.data;
 
 import com.amazonaws.regions.Regions;
-import com.javahelp.backend.search.constraint.Constraint;
+import com.javahelp.backend.search.constraint.IConstraint;
 import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.User;
 
@@ -67,7 +67,7 @@ public interface ISurveyResponseStore {
      *                   from the User.
      * @return {@link Set<User>} with the specified constraints.
      */
-    Map<String, SurveyResponse> readByConstraint(Constraint constraint);
+    Map<String, SurveyResponse> readByConstraint(IConstraint constraint);
 
     /**
      *

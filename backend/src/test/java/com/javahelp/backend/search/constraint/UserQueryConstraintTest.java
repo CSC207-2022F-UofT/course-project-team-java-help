@@ -1,4 +1,4 @@
-package com.javahelp.backend.search;
+package com.javahelp.backend.search.constraint;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assume.assumeTrue;
@@ -7,8 +7,6 @@ import org.junit.Test;
 
 import com.javahelp.backend.data.ISurveyStore;
 import com.javahelp.backend.data.IUserStore;
-import com.javahelp.backend.search.constraint.Constraint;
-import com.javahelp.backend.search.constraint.UserQueryConstraint;
 import com.javahelp.model.survey.Survey;
 import com.javahelp.model.survey.SurveyQuestion;
 import com.javahelp.model.survey.SurveyQuestionResponse;

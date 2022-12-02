@@ -10,6 +10,7 @@ import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.amazonaws.services.dynamodbv2.model.UpdateItemRequest;
 import com.javahelp.backend.search.constraint.Constraint;
+import com.javahelp.backend.search.constraint.IConstraint;
 import com.javahelp.model.survey.Survey;
 import com.javahelp.model.survey.SurveyQuestion;
 import com.javahelp.model.survey.SurveyQuestionResponse;
@@ -210,7 +211,7 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
      * with the specific constraints.
      */
     @Override
-    public Map<String, SurveyResponse> readByConstraint(Constraint constraint) {
+    public Map<String, SurveyResponse> readByConstraint(IConstraint constraint) {
         Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
 
         int n_attr = 1;

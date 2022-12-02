@@ -25,7 +25,7 @@ public class UserQueryConstraint implements IUserQueryConstraint{
     }
 
     @Override
-    public Map<String, User> getProvidersWithConstraints(Constraint constraint) {
+    public Map<String, User> getProvidersWithConstraints(IConstraint constraint) {
         Map<String, SurveyResponse> responses = getResponsesWithConstraints(constraint);
         Map<String, User> usersWithConstraint = new HashMap<>();
         for (String id : responses.keySet()) {
@@ -45,7 +45,7 @@ public class UserQueryConstraint implements IUserQueryConstraint{
     }
 
     @Override
-    public Map<String, SurveyResponse> getResponsesWithConstraints(Constraint constraint) {
+    public Map<String, SurveyResponse> getResponsesWithConstraints(IConstraint constraint) {
         return this.dbSRStore.readByConstraint(constraint);
     }
 }
