@@ -28,9 +28,11 @@ public class DeleteInteractor implements IDeleteInput {
             @Override
             public void completed(DeleteResult result) {
                 if (result.isSuccess()) {
-                    output.success();
+                    output.success(result.getUser());
                 }
-                output.failure();
+                else {
+                    output.failure(result.getErrorMessage());
+                }
             }
 
             @Override
