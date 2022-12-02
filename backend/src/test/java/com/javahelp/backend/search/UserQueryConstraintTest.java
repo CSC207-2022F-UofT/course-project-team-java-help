@@ -1,19 +1,20 @@
-package com.javahelp.backend.query;
+package com.javahelp.backend.search;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assume.assumeTrue;
 
 import org.junit.Test;
 
-import com.amazonaws.regions.Regions;
 import com.javahelp.backend.data.ISurveyStore;
 import com.javahelp.backend.data.IUserStore;
+import com.javahelp.backend.search.constraint.Constraint;
+import com.javahelp.backend.search.constraint.UserQueryConstraint;
+import com.javahelp.backend.search.constraint.VanillaConstraint;
 import com.javahelp.model.survey.Survey;
 import com.javahelp.model.survey.SurveyQuestion;
 import com.javahelp.model.survey.SurveyQuestionResponse;
 import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.ClientUserInfo;
-import com.javahelp.model.user.ProviderUserInfo;
 import com.javahelp.model.user.User;
 import com.javahelp.model.user.UserPassword;
 

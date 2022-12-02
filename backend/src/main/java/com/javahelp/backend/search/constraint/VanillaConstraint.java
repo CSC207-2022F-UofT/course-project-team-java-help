@@ -1,7 +1,4 @@
-package com.javahelp.backend.query;
-
-import java.util.ArrayList;
-import java.util.HashMap;
+package com.javahelp.backend.search.constraint;
 
 public class VanillaConstraint extends Constraint{
     public VanillaConstraint(String question) {

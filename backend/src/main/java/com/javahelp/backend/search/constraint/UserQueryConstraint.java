@@ -1,4 +1,4 @@
-package com.javahelp.backend.query;
+package com.javahelp.backend.search.constraint;
 
 import com.javahelp.backend.data.ISurveyResponseStore;
 import com.javahelp.model.survey.SurveyResponse;
@@ -6,7 +6,6 @@ import com.javahelp.model.user.User;
 import com.javahelp.backend.data.IUserStore;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;

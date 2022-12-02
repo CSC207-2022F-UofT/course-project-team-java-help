@@ -1,4 +1,4 @@
-package com.javahelp.backend.query;
+package com.javahelp.backend.search.constraint;
 
 import java.util.List;
 
