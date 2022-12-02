@@ -55,7 +55,7 @@ public class DeleteInteractorTest {
         };
     }
 
-    @Test
+    @Test(timeout = 5000)
     public void testDeleteInteractor() {
         DeleteResult deleteResult = new DeleteResult(user);
         IDeleteDataAccess deleteDataAccess = (userID, callback) -> {
