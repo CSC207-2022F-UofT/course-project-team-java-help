@@ -9,9 +9,15 @@ import java.util.Map;
 public interface ISearchInput {
 
     /**
+     *
+     * @return the desired token identifier of the client
+     * or null if no desired token identifier is known/specified.
+     */
+    String getToken();
+    /**
      * @return the desired {@link Map} of {@link SurveyQuestion} to {@link String} answer
      * for setting query constraint.
-     * or null if no desired question is known/specified
+     * or null if no desired list of constraint is known/specified
      */
     List<Constraint> getConstraints();
 

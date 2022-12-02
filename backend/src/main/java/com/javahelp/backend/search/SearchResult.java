@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 public class SearchResult {
-    private final Map<String, User> users;
-    private final Map<String, SurveyResponse> responses;
+    private final List<User> users;
+    private final List<SurveyResponse> responses;
     private final String errorMessage;
 
     /**
@@ -18,7 +18,7 @@ public class SearchResult {
      * @param users {@link Map} of {@link String} id to {@link User} to bundle
      * @param responses {@link List} of {@link String} id to {@link SurveyResponse} to bundle
      */
-    SearchResult(Map<String, User> users, Map<String, SurveyResponse> responses) {
+    SearchResult(List<User> users, List<SurveyResponse> responses) {
         this.users = users;
         this.responses = responses;
         this.errorMessage = null;
@@ -38,12 +38,12 @@ public class SearchResult {
     /**
      * @return the {@link Map} of {@link String} id to {@link User}s.
      */
-    public Map<String, User> getUsers() { return this.users; }
+    public List<User> getUsers() { return this.users; }
 
     /**
      * @return the {@link Map} of {@link String} id to {@link SurveyResponse}s
      */
-    public Map<String, SurveyResponse> getResponses() { return this.responses; }
+    public List<SurveyResponse> getResponses() { return this.responses; }
 
     /**
      * @return {@link String} error message
