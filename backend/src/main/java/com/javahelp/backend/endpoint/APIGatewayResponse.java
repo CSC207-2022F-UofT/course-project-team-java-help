@@ -185,7 +185,7 @@ public class APIGatewayResponse {
          * Builds the {@link APIGatewayResponse} using the passed object body
          * converted to JSON.
          */
-        public Builder setJSONBody(Object objectBody) {
+        public Builder setJSONBodyByBean(Object objectBody) {
             headers.put("Content-Type", "application/json");
             this.objectBody = objectBody;
             return this;

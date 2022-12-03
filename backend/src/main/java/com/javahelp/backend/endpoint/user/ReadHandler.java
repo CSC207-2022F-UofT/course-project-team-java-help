@@ -59,7 +59,7 @@ public class ReadHandler extends HTTPTokenHandler implements IUserReadInput {
 
             return APIGatewayResponse.builder()
                     .setStatusCode(OK)
-                    .setJSONBody(userRepresentation)
+                    .setJSONBody(userRepresentation.toString())
                     .build();
         } else {
             return APIGatewayResponse.error(NOT_FOUND, "Unable to locate the specified user");
