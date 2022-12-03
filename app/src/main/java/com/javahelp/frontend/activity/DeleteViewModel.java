@@ -114,6 +114,10 @@ public class DeleteViewModel extends AndroidViewModel implements IDeleteOutput, 
         return loginResult;
     }
 
+    public MutableLiveData<String> getUserID() {
+        return new MutableLiveData<>(provider.getUserID());
+    }
+
     /**
      * Tries to log in
      */
