@@ -25,7 +25,7 @@ import java.util.concurrent.Executors;
 public class DeleteViewModel extends AndroidViewModel implements IDeleteOutput {
 
     private final IDeleteInput deleteInteractor;
-    private final IDeleteDataAccess dataAccess;
+    private final IAuthInformationProvider provider;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final MutableLiveData<Optional<DeleteResult>> deleteResult = new MutableLiveData<>(Optional.empty());
     private final MutableLiveData<Optional<Boolean>> deleting = new MutableLiveData<>(Optional.of(false));
@@ -38,8 +38,9 @@ public class DeleteViewModel extends AndroidViewModel implements IDeleteOutput {
      */
     public DeleteViewModel(@NonNull Application application, IAuthInformationProvider provider) {
         super(application);
-        dataAccess = new LambdaDeleteDataAccess(provider);
+        IDeleteDataAccess dataAccess = new LambdaDeleteDataAccess(provider);
         deleteInteractor = new DeleteInteractor(this, dataAccess);
+        this.provider = provider;
     }
 
     /**
@@ -100,11 +101,9 @@ public class DeleteViewModel extends AndroidViewModel implements IDeleteOutput {
     }
 
     /**
-     * Attempts to delete the {@link User} provided by the {@link IAuthInformationProvider}.
-     * @param provider: the {@link IAuthInformationProvider} that provides information
-     *                of the {@link User} to be deleted.
+     * Attempts to delete the {@link User}.
      */
-    public void attemptDelete(IAuthInformationProvider provider) {
+    public void attemptDelete() {
         setDeleting(true);
         executor.execute(() -> {
             try {
