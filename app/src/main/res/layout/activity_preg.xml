@@ -167,6 +167,16 @@
                     android:textColor="@color/black"
                     android:textColorHint="@color/black" />
 
+                <TextView
+                    android:id="@+id/registerErrorText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Register Error Message"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:visibility="gone" />
+
 
                 <Button
                     android:id="@+id/signupbtn"
