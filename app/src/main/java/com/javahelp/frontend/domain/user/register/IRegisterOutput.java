@@ -3,6 +3,10 @@ package com.javahelp.frontend.domain.user.register;
 import com.javahelp.model.token.Token;
 import com.javahelp.model.user.User;
 
+/**
+ * Interface for classes that wish to receive information from {@link RegisterInteractor}.
+ * Acts as an output boundary for the {@link RegisterInteractor} use case.
+ */
 public interface IRegisterOutput {
 
     /**

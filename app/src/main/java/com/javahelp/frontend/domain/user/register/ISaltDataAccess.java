@@ -1,9 +1,14 @@
 package com.javahelp.frontend.domain.user.register;
 
+
 import org.apache.hc.core5.concurrent.FutureCallback;
 
 import java.util.concurrent.Future;
 
+
+/**
+ * Accesses the salt for a {@link RegisterInteractor}
+ */
 public interface ISaltDataAccess {
 
     /**

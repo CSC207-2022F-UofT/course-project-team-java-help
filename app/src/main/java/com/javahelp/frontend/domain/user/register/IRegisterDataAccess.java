@@ -1,6 +1,6 @@
 package com.javahelp.frontend.domain.user.register;
 
-import com.javahelp.frontend.domain.user.login.LoginResult;
+
 import com.javahelp.model.user.ProviderUserInfo;
 import com.javahelp.model.user.UserPassword;
 
@@ -17,7 +17,8 @@ public interface IRegisterDataAccess {
      * @param username     username to log in for, or null
      * @param password     the {@link UserPassword} to log in with
      * @param callback     the {@link FutureCallback} to call, or null
-     * @return {@link Future} with {@link LoginResult}
+     * @param providerUserInfo    the {@link ProviderUserInfo} to register, or null
+     * @return {@link Future} with {@link RegisterResult}
      */
     Future<RegisterResult> register(String username, ProviderUserInfo providerUserInfo, UserPassword password, FutureCallback<RegisterResult> callback);
 }

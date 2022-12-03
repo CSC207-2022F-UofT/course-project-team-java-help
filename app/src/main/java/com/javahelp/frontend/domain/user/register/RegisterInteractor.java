@@ -1,19 +1,17 @@
 package com.javahelp.frontend.domain.user.register;
 
-import com.javahelp.frontend.domain.user.login.ILoginDataAccess;
-import com.javahelp.frontend.domain.user.login.ILoginOutput;
-import com.javahelp.frontend.domain.user.login.LoginInteractor;
-import com.javahelp.frontend.domain.user.login.LoginResult;
+
 import com.javahelp.model.user.ProviderUserInfo;
 import com.javahelp.model.user.IPasswordHasher;
-import com.javahelp.model.user.SHAPasswordHasher;
+
 import com.javahelp.model.user.User;
 import com.javahelp.model.user.UserPassword;
 
 import org.apache.hc.core5.concurrent.FutureCallback;
 
-import java.security.PublicKey;
-
+/**
+ * Use case interactor for register a {@link User}
+ */
 public class RegisterInteractor implements IRegisterInput {
 
     IRegisterOutput output;
@@ -66,7 +64,6 @@ public class RegisterInteractor implements IRegisterInput {
      * @param password     {@link byte[]} to log into
      * @param providerUserInfo user's personal information to register, or null
      */
-
     private void registerWithUserPassword(String username, UserPassword password, ProviderUserInfo providerUserInfo) {
         registerAccess.register(username, providerUserInfo, password, new FutureCallback<RegisterResult>() {
             @Override

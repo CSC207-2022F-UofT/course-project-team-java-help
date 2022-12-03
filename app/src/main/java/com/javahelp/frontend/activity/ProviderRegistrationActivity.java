@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.javahelp.R;
 import com.javahelp.databinding.ActivityPregBinding;
-import com.javahelp.frontend.domain.user.login.LoginResult;
+
 import com.javahelp.frontend.domain.user.register.RegisterResult;
 import com.javahelp.frontend.util.auth.SharedPreferencesAuthInformationProvider;
 import com.javahelp.model.token.Token;
@@ -27,8 +27,15 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+
+/**
+ * Activity to register a provider account
+ */
 public class ProviderRegistrationActivity extends AppCompatActivity {
 
+    /**
+     * Permission request code to get internet access for register
+     */
     private static final int REQUEST_INTERNET_REGISTER = 1;
     ProviderRegistrationViewmodel providerRegistrationViewmodel;
     ActivityPregBinding binding;
@@ -45,14 +52,7 @@ public class ProviderRegistrationActivity extends AppCompatActivity {
 
         providerRegistrationViewmodel.getRegisterResult().observe(this, this::updateOnRegisterResult);
 
-        binding.signupbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ProviderRegistrationActivity.this,
-                        FrontPage2Activity.class);
-                startActivity(intent);
-            }
-        });
+        binding.signupbtn.setOnClickListener(this::registerClick);
 
     }
 
@@ -61,7 +61,7 @@ public class ProviderRegistrationActivity extends AppCompatActivity {
      *
      * @param v {@link View} that was clicked
      */
-    private void loginClick(View v) {
+    private void registerClick(View v) {
         providerRegistrationViewmodel.setUsername(binding.username.getText().toString());
         providerRegistrationViewmodel.setPassword1(binding.password.getText().toString());
         providerRegistrationViewmodel.setPassword2(binding.repassword.getText().toString());
@@ -73,6 +73,9 @@ public class ProviderRegistrationActivity extends AppCompatActivity {
         registerAttempt();
     }
 
+    /**
+     * Initiates a register request
+     */
     private void registerAttempt() {
         if (binding.username.getText().toString().isEmpty() || binding.password.getText().toString().isEmpty()
         || binding.repassword.getText().toString().isEmpty()) {
@@ -89,15 +92,27 @@ public class ProviderRegistrationActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Updates this {@link RegisterResult} to reflect the passed register result
+     *
+     * @param registerResult {@link Optional} {@link RegisterResult} to update on
+     */
     private void updateOnRegisterResult(Optional<RegisterResult> registerResult) {
         if(registerResult.isPresent()){
-            updateOnRegisterResult(Optional.of(registerResult.get()));
+            updateOnPresentRegisterResult(registerResult.get());
         } else {
             binding.registerErrorText.setVisibility(View.GONE);
         }
     }
 
+    /**
+     * Updates the UI based on a {@link RegisterResult}. This is called with non-null register results, meaning
+     * a registration has been attempted, and has either succeeded or failed. This is unlike updateOnRegisterResult
+     * which is called with an {@link Optional} {@link RegisterResult}, and calls this method if that
+     * {@link Optional} is present.
+     *
+     * @param result {@link RegisterResult} of login attempt
+     */
     private void updateOnPresentRegisterResult(RegisterResult result) {
         if (result.isSuccess()) {
             binding.registerErrorText.setText("Register successful");

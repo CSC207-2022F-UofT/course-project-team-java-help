@@ -1,12 +1,12 @@
 package com.javahelp.frontend.domain.user.register;
 
-
-import com.javahelp.frontend.domain.user.login.LoginResult;
 import com.javahelp.model.token.Token;
 import com.javahelp.model.user.User;
 
-import java.util.Optional;
 
+/**
+ * Result of a request to log in made with a {@link IRegisterDataAccess}
+ */
 public class RegisterResult {
     private  String errorMessage;
     private Token token;
@@ -28,9 +28,6 @@ public class RegisterResult {
     public RegisterResult(User user, Token token) {
         this.user = user;
         this.token = token;
-    }
-
-    public static void postValue(Optional<RegisterResult> registerResult) {
     }
 
     /**

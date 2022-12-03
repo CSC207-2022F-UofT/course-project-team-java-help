@@ -6,17 +6,16 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.javahelp.frontend.domain.user.login.LoginInteractor;
-import com.javahelp.frontend.domain.user.login.LoginResult;
+
 import com.javahelp.frontend.domain.user.register.IRegisterDataAccess;
 import com.javahelp.frontend.domain.user.register.IRegisterOutput;
 import com.javahelp.frontend.domain.user.register.ISaltDataAccess;
 import com.javahelp.frontend.domain.user.register.RegisterInteractor;
 import com.javahelp.frontend.domain.user.register.RegisterResult;
-import com.javahelp.frontend.gateway.LambdaLoginDataAccess;
+
 import com.javahelp.frontend.gateway.LambdaRegisterDataAccess;
-import com.javahelp.frontend.gateway.LambdaSaltDataAccess;
 import com.javahelp.frontend.gateway.LambdaSaltDataAccessProvider;
+
 import com.javahelp.model.token.Token;
 import com.javahelp.model.user.IPasswordHasher;
 import com.javahelp.model.user.ProviderUserInfo;
@@ -177,7 +176,7 @@ public class ProviderRegistrationViewmodel extends AndroidViewModel implements I
 
     @Override
     public void failure() {
-        RegisterResult.postValue(Optional.of(new RegisterResult("Incorrect username or password")));
+        RegisterResult.postValue(Optional.of(new RegisterResult("Incorrect input of information")));
     }
 
     @Override
