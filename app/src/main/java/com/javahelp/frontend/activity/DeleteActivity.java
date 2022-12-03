@@ -21,11 +21,11 @@ import com.javahelp.frontend.domain.user.login.LoginResult;
 
 import java.util.Optional;
 
+/**
+ * The {@link AppCompatActivity} for an account deletion.
+ */
 public class DeleteActivity extends AppCompatActivity {
 
-    /**
-     * Permission request code to get internet access for loggin in
-     */
     private static final int REQUEST_INTERNET_LOGIN = 1;
     private static final int REQUEST_INTERNET_DELETE = 2;
 
@@ -141,14 +141,27 @@ public class DeleteActivity extends AppCompatActivity {
         binding.deleteErrorText.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Called when the confirm deletion button is clicked.
+     * @param view {@link View} that was clicked.
+     */
     private void yesClick(View view) {
         requestPermissions(new String[]{Manifest.permission.INTERNET}, REQUEST_INTERNET_DELETE);
     }
 
+    /**
+     * Called when the cancel deletion button is clicked.
+     * @param view {@View} that was clicked.
+     */
     private void noClick(View view) {
         startActivity(new Intent(DeleteActivity.this, FrontPageActivity.class));
     }
 
+    /**
+     * Updates this {@link DeleteActivity} to reflect the passed delete result.
+     *
+     * @param result {@link Optional} {@link DeleteResult} to update on.
+     */
     private void updateOnDeleteResult(Optional<DeleteResult> result) {
         if (result.isPresent()) {
             updateOnPresentDeleteResult(result.get());
@@ -157,6 +170,11 @@ public class DeleteActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Updates the UI based on a {@link DeleteResult}.
+     *
+     * @param result {@link DeleteResult} of delete attempt
+     */
     private void updateOnPresentDeleteResult(DeleteResult result) {
         if (result.isSuccess()) {
             Toast.makeText(this, "Deletion successful", Toast.LENGTH_LONG);
