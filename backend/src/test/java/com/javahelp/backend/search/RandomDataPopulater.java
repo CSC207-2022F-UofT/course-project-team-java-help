@@ -26,8 +26,9 @@ public class RandomDataPopulater {
 
     private Survey survey;
     private final User randomClient;
+    private final SurveyResponse randomClientResponses;
     private final List<User> randomProviders;
-    private final List<SurveyResponse> randomResponses;
+    private final List<SurveyResponse> randomProviderResponses;
 
     private ISurveyStore surveyDB = ISurveyStore.getDefaultImplementation();
     private ISurveyResponseStore srDB = ISurveyResponseStore.getDefaultImplementation();
@@ -48,10 +49,13 @@ public class RandomDataPopulater {
         this.survey = this.surveyDB.create(survey);
 
         UserPassword p = randomUserPassword();
-        this.randomClient = this.userDB.create(generateRandomClient(), p);
+        User client = generateRandomClient();
+        this.randomClient = this.userDB.create(client, p);
+        SurveyResponse sr = generateRandomSurveyResponse(this.survey);
+        this.randomClientResponses = this.srDB.create(client.getStringID(), sr);
 
         this.randomProviders = new ArrayList<>();
-        this.randomResponses = new ArrayList<>();
+        this.randomProviderResponses = new ArrayList<>();
 
         for (int i = 0; i < N_POPULATION; i++) {
             p = randomUserPassword();
@@ -62,7 +66,7 @@ public class RandomDataPopulater {
             response = this.srDB.create(user.getStringID(), response);
 
             this.randomProviders.add(user);
-            this.randomResponses.add(response);
+            this.randomProviderResponses.add(response);
         }
     }
 
@@ -72,7 +76,7 @@ public class RandomDataPopulater {
 
     public List<User> getRandomProviders() { return this.randomProviders; }
 
-    public List<SurveyResponse> getRandomResponses() { return this.randomResponses; }
+    public List<SurveyResponse> getRandomResponses() { return this.randomProviderResponses; }
 
     public IUserStore getUserDB() { return this.userDB; }
 
@@ -89,7 +93,7 @@ public class RandomDataPopulater {
         this.userDB.delete(this.randomClient.getStringID());
         for (int i = 0; i < this.randomProviders.size(); i++) {
             this.userDB.delete(this.randomProviders.get(i).getStringID());
-            this.srDB.delete(this.randomResponses.get(i).getID());
+            this.srDB.delete(this.randomProviderResponses.get(i).getID());
         }
     }
 

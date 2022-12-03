@@ -144,9 +144,9 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
      */
     @Override
     public List<SurveyResponse> readByUser(String userID) {
-        String keyConditionExpression = "user_id = :id";
+        String keyConditionExpression = "user_id = :user_id_val";
         Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
-        expressionAttributeValues.put("id", new AttributeValue().withS(userID));
+        expressionAttributeValues.put(":user_id_val", new AttributeValue().withS(userID));
 
         ScanRequest scanRequest = new ScanRequest()
                 .withTableName(this.tableName)
