@@ -232,6 +232,26 @@ POST [https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/login](https://gwkv
 
 - Response contains a JSON representation of a user, and a JSON representation of a token
 
+DELETE [https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/users/{userid}](https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/users/{userid})
+
+- This deletes the specified user
+
+- Expects no request body
+
+- Expects Authorization header of 'JavaHelp' type followed by 'id=<user id> token=<token>'
+
+- User ID and token must be valid for the user being deleted
+
+GET [https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/users/{userid}](https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/users/{userid})
+
+- Retrieves a JSON representation of the specified user
+
+- Expects no request body
+
+- Expects Authorization header of 'JavaHelp' type followed by 'id=<user id> token=<token>'
+
+- User ID and token must be valid for the user being retrieved
+
 ### Testing
 
 Tests can be run with 
