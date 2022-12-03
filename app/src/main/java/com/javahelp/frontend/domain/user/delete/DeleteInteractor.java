@@ -28,21 +28,21 @@ public class DeleteInteractor implements IDeleteInput {
             @Override
             public void completed(DeleteResult result) {
                 if (result.isSuccess()) {
-                    output.success(result.getUser());
+                    output.deleteSuccess(result.getUser());
                 }
                 else {
-                    output.failure(result.getErrorMessage());
+                    output.deleteFailure(result.getErrorMessage());
                 }
             }
 
             @Override
             public void failed(Exception ex) {
-                output.error(ex.getMessage());
+                output.deleteError(ex.getMessage());
             }
 
             @Override
             public void cancelled() {
-                output.abort();
+                output.deleteAbort();
             }
         });
     }
