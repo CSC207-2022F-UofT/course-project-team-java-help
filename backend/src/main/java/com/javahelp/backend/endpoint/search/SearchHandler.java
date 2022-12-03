@@ -83,8 +83,10 @@ public class SearchHandler extends HTTPHandler implements ISearchInput {
             JsonObjectBuilder jsonBuilder = Json.createObjectBuilder();
             jsonBuilder.add("users", jsonUserBuilder);
             jsonBuilder.add("responses", jsonResponseBuilder);
+            jsonBuilder.add("success", true);
             response = jsonBuilder.build().toString();
-        } else {
+        }
+        else {
             response = Json.createObjectBuilder()
                     .add("errorMessage", result.getErrorMessage())
                     .add("success", false)
