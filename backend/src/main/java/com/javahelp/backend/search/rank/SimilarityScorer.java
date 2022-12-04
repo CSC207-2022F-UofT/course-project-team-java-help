@@ -12,15 +12,10 @@ public class SimilarityScorer implements ISimilarityScorer{
 
     @Override
     public Float getSimilarityScore(SurveyResponse sr1, SurveyResponse sr2) {
-        if (!Objects.equals(sr1.getSurvey().getID(), sr2.getSurvey().getID())) {
-            return 0.0F;
-        }
         float match = 0;
-        int total = sr1.getSurvey().size();
-        for (SurveyQuestion question : sr1.getSurvey().getQuestions()) {
-            SurveyQuestionResponse r1 = sr1.getResponse(question);
-            SurveyQuestionResponse r2 = sr2.getResponse(question);
-            if (r1.getResponseNumber() == r2.getResponseNumber()) {
+        int total = sr1.getAttributes().size() + sr2.getAttributes().size();
+        for (String attr : sr1.getAttributes()) {
+            if (sr2.getAttributes().contains(attr)) {
                 match = match + 1;
             }
         }
