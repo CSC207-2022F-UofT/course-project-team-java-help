@@ -22,33 +22,13 @@
         <TextView
             android:id="@+id/tv_1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="144dp"
             android:layout_marginTop="50dp"
             android:gravity="center"
             android:maxLines="1"
             android:text="Verify Your Password"
             android:textColor="@color/white"
             android:textSize="30dp" />
-
-        <EditText
-            android:id="@+id/userID"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/border_bg"
-            android:drawableLeft="@drawable/user48"
-            android:drawablePadding="5dp"
-            android:maxLines="1"
-            android:paddingLeft="5dp"
-            android:text="@={data.userID}"
-            android:inputType="none"
-            android:enabled="false"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-
-            />
 
         <EditText
             android:id="@+id/password"

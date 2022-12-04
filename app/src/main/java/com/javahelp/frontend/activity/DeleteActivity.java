@@ -35,13 +35,11 @@ public class DeleteActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_delete_verify);
+        binding = DataBindingUtil.setContentView(DeleteActivity.this, R.layout.activity_delete_verify);
         deleteViewModel = new ViewModelProvider(this).get(DeleteViewModel.class);
 
         binding.setData(deleteViewModel);
         binding.setLifecycleOwner(this);
-
-        binding.userID.setText((CharSequence) deleteViewModel.getUserID());
 
         deleteViewModel.isLoggingIn().observe(this, o -> {
             binding.progressBar.setVisibility(o ? View.VISIBLE : View.GONE);
@@ -151,7 +149,7 @@ public class DeleteActivity extends AppCompatActivity {
 
     /**
      * Called when the cancel deletion button is clicked.
-     * @param view {@View} that was clicked.
+     * @param view {@link View} that was clicked.
      */
     private void noClick(View view) {
         startActivity(new Intent(DeleteActivity.this, FrontPageActivity.class));
@@ -177,7 +175,6 @@ public class DeleteActivity extends AppCompatActivity {
      */
     private void updateOnPresentDeleteResult(DeleteResult result) {
         if (result.isSuccess()) {
-            Toast.makeText(this, "Deletion successful", Toast.LENGTH_LONG);
             startActivity(new Intent(DeleteActivity.this, LoginActivity.class));
         } else {
             Toast.makeText(this, result.getErrorMessage(), Toast.LENGTH_LONG);
