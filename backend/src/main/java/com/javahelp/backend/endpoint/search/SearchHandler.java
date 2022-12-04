@@ -20,20 +20,23 @@ import com.javahelp.model.util.json.SurveyResponseConverter;
 import com.javahelp.model.util.json.TokenConverter;
 import com.javahelp.model.util.json.UserConverter;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
+import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 
 public class SearchHandler extends HTTPHandler implements ISearchInput {
     private String userID;
-    private IConstraint constraint = IConstraint.getDefaultImplementation();
+    private Set<String> constraint = new HashSet<>();
     private boolean isRanking;
 
     /**
@@ -53,13 +56,18 @@ public class SearchHandler extends HTTPHandler implements ISearchInput {
         userID = body.getString("userID", null);
         isRanking = body.getBoolean("ranking", false);
         JsonArray filters = body.getJsonArray("filters");
-        for (int i = 0; i < filters.size(); i++) {
-            String filter_key = String.format("filter_%s", i);
-            constraint.setConstraint(filters.getJsonObject(i).getString(filter_key));
+
+        if (userID == null || filters == null) {
+            return APIGatewayResponse.error(BAD_REQUEST, "Request must contain \"userID\" and \"filters\"");
         }
 
-        if (userID == null) {
-            return APIGatewayResponse.error(BAD_REQUEST, "Request must contain \"id\"");
+        try {
+            for (int i = 0; i < filters.size(); i++) {
+                String filter_key = String.format("filter_%s", i);
+                constraint.add(filters.getJsonObject(i).getString(filter_key));
+            }
+        } catch (RuntimeException e) {
+            return APIGatewayResponse.error(BAD_REQUEST, "Invalid filters");
         }
 
         SearchInteractor interactor = new SearchInteractor(ISurveyStore.getDefaultImplementation(),
@@ -71,13 +79,15 @@ public class SearchHandler extends HTTPHandler implements ISearchInput {
         String response;
 
         if (result.isSuccess()) {
-            JsonObjectBuilder jsonUserBuilder = Json.createObjectBuilder();
-            JsonObjectBuilder jsonResponseBuilder = Json.createObjectBuilder();
+            JsonArrayBuilder jsonUserBuilder = Json.createArrayBuilder();
+            JsonArrayBuilder jsonResponseBuilder = Json.createArrayBuilder();
             for (int i = 0; i < result.getUsers().size(); i++) {
-                jsonUserBuilder.add(String.format("user_%s", i),
-                        UserConverter.getInstance().toJSON(result.getUsers().get(i)));
-                jsonResponseBuilder.add(String.format("response_%s", i),
-                        SurveyResponseConverter.getInstance().toJSON(result.getResponses().get(i)));
+                jsonUserBuilder.add(Json.createObjectBuilder()
+                        .add(String.format("user_%s", i),
+                                UserConverter.getInstance().toJSON(result.getUsers().get(i))));
+                jsonResponseBuilder.add(Json.createObjectBuilder()
+                        .add(String.format("response_%s", i),
+                                SurveyResponseConverter.getInstance().toJSON(result.getResponses().get(i))));
             }
 
             JsonObjectBuilder jsonBuilder = Json.createObjectBuilder();
@@ -112,7 +122,7 @@ public class SearchHandler extends HTTPHandler implements ISearchInput {
      * or null if no desired question is known/specified
      */
     @Override
-    public IConstraint getConstraint() { return this.constraint; }
+    public Set<String> getConstraints() { return this.constraint; }
 
     /**
      * @return whether to rank list of providers based on user survey data

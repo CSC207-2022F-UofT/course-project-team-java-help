@@ -1,9 +1,9 @@
 package com.javahelp.backend.search;
 
-import com.javahelp.backend.search.constraint.IConstraint;
 import com.javahelp.model.survey.SurveyQuestion;
 
 import java.util.Map;
+import java.util.Set;
 
 public interface ISearchInput {
 
@@ -18,7 +18,7 @@ public interface ISearchInput {
      * for setting query constraint.
      * or null if no desired list of constraint is known/specified
      */
-    IConstraint getConstraint();
+    Set<String> getConstraints();
 
     /**
      * @return whether to rank list of providers based on user survey data

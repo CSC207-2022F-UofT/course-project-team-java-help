@@ -7,6 +7,8 @@ import static io.restassured.RestAssured.given;
 import com.javahelp.backend.data.ISurveyResponseStore;
 import com.javahelp.backend.data.ISurveyStore;
 import com.javahelp.backend.data.IUserStore;
+import com.javahelp.backend.search.RandomDataPopulater;
+import com.javahelp.model.user.User;
 
 import org.junit.Test;
 
@@ -46,27 +48,20 @@ public class SearchHandlerTest {
     }
 
     @Test
-    public void testMissingUserID() {
-        given().header(new Header("Content-Type", "application/json"))
-                .body("{\"ranking\":\"false\"," +
-                        "\"filters\":[\"filter_1\":\"attr1_0\"," +
-                                     "\"filter_2\":\"attr2_0\"]}")
-                .when().post(SEARCH).then().statusCode(400).body("message",
-                        equalTo("Request must contain \"id\""));
-    }
-
-    @Test
     public void testValidSearch() {
         assumeTrue(userDatabaseAccessible());
         assumeTrue(surveyDatabaseAccessible());
         assumeTrue(srDatabaseAccessible());
 
+        RandomDataPopulater dataPopulater = new RandomDataPopulater(true);
+        User client = dataPopulater.getRandomClient();
+
         JsonObject json = Json.createObjectBuilder()
-                .add("userID", "test")
+                .add("userID", client.getStringID())
                 .add("ranking", false)
-                .add("filters", Json.createObjectBuilder()
-                        .add("filter_1", "attr1_0")
-                        .add("filter_2", "attr2_0"))
+                .add("filters", Json.createArrayBuilder()
+                        .add(Json.createObjectBuilder().add("filter_1", "attr1_0"))
+                        .add(Json.createObjectBuilder().add("filter_2", "attr2_0")))
                 .build();
 
         given().header(new Header("Content-Type", "application/json"))
