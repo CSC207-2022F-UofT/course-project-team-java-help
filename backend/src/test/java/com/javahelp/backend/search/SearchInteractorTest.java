@@ -43,15 +43,10 @@ public class SearchInteractorTest {
     @Test
     public void testSearchWithConstraint() {
         User mainClient = this.dataPopulater.getRandomClient();
-        IConstraint constraint = new Constraint();
 
         User randomProvider1 = this.providers.get(0);
         SurveyResponse randomResponse1 = this.responses.get(0);
         Set<String> attributes1 = randomResponse1.getAttributes();
-
-        for (String attr : attributes1) {
-            constraint.setConstraint(attr);
-        }
 
         try {
             SearchInteractor interactor = new SearchInteractor(this.surveyDB,
@@ -62,7 +57,7 @@ public class SearchInteractorTest {
                 @Override
                 public String getUserID() { return mainClient.getStringID(); }
                 @Override
-                public IConstraint getConstraint() { return constraint; }
+                public Set<String> getConstraints() { return attributes1; }
                 @Override
                 public boolean getIsRanking() { return false; }
             });
@@ -79,7 +74,7 @@ public class SearchInteractorTest {
     @Test
     public void testSearchWithoutConstraint() {
         User mainClient = this.dataPopulater.getRandomClient();
-        IConstraint constraint = new Constraint();
+        Set<String> attributes = new HashSet<>();
 
         List<User> randomProviders = this.providers;
         List<SurveyResponse> randomResponses = this.responses;
@@ -93,7 +88,7 @@ public class SearchInteractorTest {
                 @Override
                 public String getUserID() { return mainClient.getStringID(); }
                 @Override
-                public IConstraint getConstraint() { return constraint; }
+                public Set<String> getConstraints() { return attributes; }
                 @Override
                 public boolean getIsRanking() { return false; }
             });

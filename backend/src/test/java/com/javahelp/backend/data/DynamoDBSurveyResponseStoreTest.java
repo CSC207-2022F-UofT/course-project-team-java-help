@@ -44,7 +44,7 @@ public class DynamoDBSurveyResponseStoreTest {
 
         SurveyResponse sr = setupSurveyResponse(survey);
 
-        sr = this.responseDB.create(user.getStringID(), sr);
+        sr = this.responseDB.create(user.getStringID(), sr, true);
 
         SurveyResponse read = this.responseDB.read(sr.getID());
 
@@ -71,7 +71,7 @@ public class DynamoDBSurveyResponseStoreTest {
         survey = this.surveyDB.create(survey);
         SurveyResponse sr = setupSurveyResponse(survey);
 
-        this.responseDB.create(user.getStringID(), sr);
+        this.responseDB.create(user.getStringID(), sr, true);
 
         SurveyResponse read = this.responseDB.read(sr.getID());
         try {
@@ -100,12 +100,12 @@ public class DynamoDBSurveyResponseStoreTest {
         SurveyResponse sr2 = setupSurveyResponseAlt(survey);
 
         try {
-            sr1 = this.responseDB.create(user.getStringID(), sr1);
+            sr1 = this.responseDB.create(user.getStringID(), sr1, true);
             SurveyResponse read1 = this.responseDB.read(sr1.getID());
             testSurveyEqual(sr1.getSurvey(), read1.getSurvey());
             testResponsesEqual(sr1.getSurvey(), sr1, read1);
 
-            sr2 = this.responseDB.create(user.getStringID(), sr2);
+            sr2 = this.responseDB.create(user.getStringID(), sr2, true);
             assertEquals(sr2.getID(), sr1.getID());
             SurveyResponse read2 = this.responseDB.read(sr1.getID());
             testSurveyEqual(sr1.getSurvey(), read2.getSurvey());

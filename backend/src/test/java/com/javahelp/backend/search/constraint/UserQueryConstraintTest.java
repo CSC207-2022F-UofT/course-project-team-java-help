@@ -52,8 +52,8 @@ public class UserQueryConstraintTest {
 
         SurveyResponse sr1 = setupSurveyResponse1(survey);
         SurveyResponse sr2 = setupSurveyResponse2(survey);
-        sr1 = this.srDB.create(u1.getStringID(), sr1);
-        sr2 = this.srDB.create(u2.getStringID(), sr2);
+        sr1 = this.srDB.create(u1.getStringID(), sr1, true);
+        sr2 = this.srDB.create(u2.getStringID(), sr2, true);
 
         Constraint constraint = new Constraint();
 
@@ -97,8 +97,8 @@ public class UserQueryConstraintTest {
 
         SurveyResponse sr1 = setupSurveyResponse1(survey);
         SurveyResponse sr2 = setupSurveyResponse2(survey);
-        sr1 = this.srDB.create(u1.getStringID(), sr1);
-        sr2 = this.srDB.create(u2.getStringID(), sr2);
+        sr1 = this.srDB.create(u1.getStringID(), sr1, true);
+        sr2 = this.srDB.create(u2.getStringID(), sr2, true);
 
         Constraint constraint = new Constraint();
         constraint.setConstraint("attr1_1");
@@ -142,8 +142,8 @@ public class UserQueryConstraintTest {
 
         SurveyResponse sr1 = setupSurveyResponse1(survey);
         SurveyResponse sr2 = setupSurveyResponse2(survey);
-        sr1 = this.srDB.create(u1.getStringID(), sr1);
-        sr2 = this.srDB.create(u2.getStringID(), sr2);
+        sr1 = this.srDB.create(u1.getStringID(), sr1, true);
+        sr2 = this.srDB.create(u2.getStringID(), sr2, true);
 
         Constraint constraint = new Constraint();
         constraint.setConstraint("attr1_2");
@@ -238,7 +238,7 @@ public class UserQueryConstraintTest {
         questions.add(first);
         questions.add(second);
 
-        return new Survey("survey1", "Test Survey", questions);
+        return new Survey("PSurvey_1", "Test Survey", questions);
     }
 
     private SurveyResponse setupSurveyResponse1(Survey survey) {
