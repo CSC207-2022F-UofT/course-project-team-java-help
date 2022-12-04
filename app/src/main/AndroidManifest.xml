@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.javahelp" >
-
     <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
@@ -41,7 +40,7 @@
         <activity
             android:name=".frontend.activity.FrontPageActivity"
             android:exported="false"
-            android:parentActivityName=".frontend.activity.LoginActivity" >
+            android:parentActivityName=".frontend.activity.FrontPageActivity" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
