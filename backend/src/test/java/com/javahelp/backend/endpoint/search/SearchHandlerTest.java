@@ -59,9 +59,7 @@ public class SearchHandlerTest {
         JsonObject json = Json.createObjectBuilder()
                 .add("userID", client.getStringID())
                 .add("ranking", false)
-                .add("filters", Json.createArrayBuilder()
-                        .add(Json.createObjectBuilder().add("filter_0", "attr0"))
-                        .add(Json.createObjectBuilder().add("filter_1", "attr1")))
+                .add("filters", Json.createArrayBuilder())
                 .build();
 
         given().header(new Header("Content-Type", "application/json"))

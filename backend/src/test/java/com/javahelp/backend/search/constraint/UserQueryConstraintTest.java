@@ -101,7 +101,7 @@ public class UserQueryConstraintTest {
         sr2 = this.srDB.create(u2.getStringID(), sr2, true);
 
         Constraint constraint = new Constraint();
-        constraint.setConstraint("attr1_1");
+        constraint.setConstraint("attr1");
 
         UserQueryConstraint userQueryConstraint = new UserQueryConstraint(this.srDB, this.userDB);
         Map<String, SurveyResponse> responses = userQueryConstraint.getResponsesWithConstraints(constraint);
@@ -146,14 +146,14 @@ public class UserQueryConstraintTest {
         sr2 = this.srDB.create(u2.getStringID(), sr2, true);
 
         Constraint constraint = new Constraint();
-        constraint.setConstraint("attr1_2");
-        constraint.setConstraint("attr2_2");
+        constraint.setConstraint("attr0");
+        constraint.setConstraint("attr1");
 
         UserQueryConstraint userQueryConstraint = new UserQueryConstraint(this.srDB, this.userDB);
         Map<String, SurveyResponse> responses = userQueryConstraint.getResponsesWithConstraints(constraint);
 
         Map<String, SurveyResponse> expected = new HashMap<>();
-        expected.put(u2.getStringID(), sr2);
+        expected.put(u1.getStringID(), sr1);
 
         assertEquals(expected.keySet(), responses.keySet());
         for (String id : expected.keySet()) {
@@ -225,13 +225,13 @@ public class UserQueryConstraintTest {
         SurveyQuestion second = new SurveyQuestion("This is the second survey question",
                 responses);
 
-        first.setAnswerAttribute(0, "attr1_0");
-        first.setAnswerAttribute(1, "attr1_1");
-        first.setAnswerAttribute(2, "attr1_2");
+        first.setAnswerAttribute(0, "attr0");
+        first.setAnswerAttribute(1, "attr1");
+        first.setAnswerAttribute(2, "attr2");
 
-        second.setAnswerAttribute(0, "attr2_0");
-        second.setAnswerAttribute(1, "attr2_1");
-        second.setAnswerAttribute(2, "attr2_2");
+        second.setAnswerAttribute(0, "attr0");
+        second.setAnswerAttribute(1, "attr1");
+        second.setAnswerAttribute(2, "attr2");
 
         List<SurveyQuestion> questions = new ArrayList<>();
 
