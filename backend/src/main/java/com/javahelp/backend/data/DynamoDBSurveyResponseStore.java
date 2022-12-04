@@ -368,7 +368,7 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
     private static String getUpdateString() {
         return "SET survey_id=:survey_id_val, " +
                 "user_id=:user_id_val, " +
-                "provider_survey=:provider_survey_val" +
+                "provider_survey=:provider_survey_val, " +
                 "responses=:responses_val, " +
                 "attributes=:attributes_val";
     }
