@@ -25,9 +25,10 @@ public interface ISurveyResponseStore {
      *
      * @param userID {@link String} id of author (user) of this surveyResponse
      * @param surveyResponse {@link SurveyResponse} to create
+     * @param isProvider {@link boolean} whether the surveyResponse is completed by a provider
      * @return {@link SurveyResponse} that was created
      */
-    SurveyResponse create(String userID, SurveyResponse surveyResponse);
+    SurveyResponse create(String userID, SurveyResponse surveyResponse, boolean isProvider);
 
     /**
      * @param id {@link String} id of the {@link SurveyResponse}
@@ -37,9 +38,11 @@ public interface ISurveyResponseStore {
 
     /**
      * Updates the specified object to match the provided object
+     * @param userID {@link String} id of author (user) of this surveyResponse
      * @param surveyResponse object to update, will update based on the ID field of this object
+     * @param isProvider {@link boolean} whether the surveyResponse is completed by a provider
      */
-    void update(String userID, SurveyResponse surveyResponse);
+    void update(String userID, SurveyResponse surveyResponse, boolean isProvider);
 
     /**
      * Deletes the specified {@link SurveyResponse}
