@@ -1,12 +1,14 @@
-package com.javahelp.backend.search;
+package com.javahelp.backend.domain.search;
 
 import static org.junit.Assert.assertEquals;
 
 import com.javahelp.backend.data.ISurveyResponseStore;
 import com.javahelp.backend.data.ISurveyStore;
 import com.javahelp.backend.data.IUserStore;
-import com.javahelp.backend.search.constraint.Constraint;
-import com.javahelp.backend.search.constraint.IConstraint;
+import com.javahelp.backend.domain.search.ISearchInput;
+import com.javahelp.backend.domain.search.SearchInteractor;
+import com.javahelp.backend.domain.search.SearchResult;
+import com.javahelp.backend.search.RandomDataPopulater;
 import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.User;
 

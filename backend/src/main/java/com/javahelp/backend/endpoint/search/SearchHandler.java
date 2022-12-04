@@ -9,28 +9,20 @@ import com.javahelp.backend.data.ISurveyStore;
 import com.javahelp.backend.data.IUserStore;
 import com.javahelp.backend.endpoint.APIGatewayResponse;
 import com.javahelp.backend.endpoint.HTTPHandler;
-import com.javahelp.backend.search.ISearchInput;
-import com.javahelp.backend.search.SearchInteractor;
-import com.javahelp.backend.search.SearchResult;
-import com.javahelp.backend.search.constraint.Constraint;
-import com.javahelp.backend.search.constraint.IConstraint;
+import com.javahelp.backend.domain.search.ISearchInput;
+import com.javahelp.backend.domain.search.SearchInteractor;
+import com.javahelp.backend.domain.search.SearchResult;
 import com.javahelp.model.survey.SurveyQuestion;
-import com.javahelp.model.user.UserPassword;
 import com.javahelp.model.util.json.SurveyResponseConverter;
-import com.javahelp.model.util.json.TokenConverter;
 import com.javahelp.model.util.json.UserConverter;
 
 import java.util.HashSet;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
-import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 

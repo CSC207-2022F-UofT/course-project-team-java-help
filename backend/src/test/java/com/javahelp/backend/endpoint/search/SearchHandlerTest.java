@@ -68,5 +68,7 @@ public class SearchHandlerTest {
                 .body(json.toString()).when().post(SEARCH).then().statusCode(200)
                 .contentType(ContentType.JSON)
                 .body("success", equalTo(true));
+
+        //dataPopulater.deleteRandomPopulation();
     }
 }

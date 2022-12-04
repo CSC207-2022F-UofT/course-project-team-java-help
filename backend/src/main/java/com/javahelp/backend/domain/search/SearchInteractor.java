@@ -1,4 +1,4 @@
-package com.javahelp.backend.search;
+package com.javahelp.backend.domain.search;
 
 import com.javahelp.backend.data.ISurveyResponseStore;
 import com.javahelp.backend.data.ISurveyStore;
