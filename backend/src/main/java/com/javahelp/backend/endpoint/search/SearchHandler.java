@@ -64,7 +64,11 @@ public class SearchHandler extends HTTPHandler implements ISearchInput {
         try {
             for (int i = 0; i < filters.size(); i++) {
                 String filter_key = String.format("filter_%s", i);
-                constraint.add(filters.getJsonObject(i).getString(filter_key));
+                String filter = filters.getJsonObject(i).getString(filter_key, null);
+                if (filter == null) {
+                    return APIGatewayResponse.error(BAD_REQUEST, "Incorrect syntax for filter.");
+                }
+                constraint.add(filter);
             }
         } catch (RuntimeException e) {
             return APIGatewayResponse.error(BAD_REQUEST, "Invalid filters");
