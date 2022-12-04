@@ -152,10 +152,10 @@ public class RandomDataPopulater {
         List<SurveyQuestion> questions = new ArrayList<>();
         for (int i = 0; i < N_SURVEY_QUESTIONS; i++) {
             SurveyQuestion question = new SurveyQuestion(String.format("Question %s", i), responses);
-            question.setAnswerAttribute(0, String.format("attr%s_0", i));
-            question.setAnswerAttribute(1, String.format("attr%s_1", i));
-            question.setAnswerAttribute(2, String.format("attr%s_2", i));
-            question.setAnswerAttribute(3, String.format("attr%s_3", i));
+            question.setAnswerAttribute(0, "attr0");
+            question.setAnswerAttribute(1, "attr1");
+            question.setAnswerAttribute(2, "attr2");
+            question.setAnswerAttribute(3, "attr3");
 
             questions.add(question);
         }
