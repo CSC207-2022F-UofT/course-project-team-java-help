@@ -78,7 +78,12 @@ public class SearchHandler extends HTTPHandler implements ISearchInput {
                 ISurveyResponseStore.getDefaultImplementation(),
                 IUserStore.getDefaultImplementation());
 
-        SearchResult result = interactor.search(this);
+        SearchResult result;
+        try {
+            result = interactor.search(this);
+        } catch (RuntimeException e) {
+            return APIGatewayResponse.error(BAD_REQUEST, "Failed search.");
+        }
 
         String response;
 
