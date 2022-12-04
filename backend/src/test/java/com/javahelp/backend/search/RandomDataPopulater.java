@@ -51,8 +51,8 @@ public class RandomDataPopulater {
         UserPassword p = randomUserPassword();
         User client = generateRandomClient();
         this.randomClient = this.userDB.create(client, p);
-        SurveyResponse sr = generateRandomSurveyResponse(this.survey);
-        this.randomClientResponses = this.srDB.create(client.getStringID(), sr);
+        SurveyResponse sr = generateRandomSurveyResponse(setupSurvey());
+        this.randomClientResponses = this.srDB.create(client.getStringID(), sr, false);
 
         this.randomProviders = new ArrayList<>();
         this.randomProviderResponses = new ArrayList<>();
@@ -63,7 +63,7 @@ public class RandomDataPopulater {
             SurveyResponse response = generateRandomSurveyResponse(this.survey);
 
             user = this.userDB.create(user, p);
-            response = this.srDB.create(user.getStringID(), response);
+            response = this.srDB.create(user.getStringID(), response, true);
 
             this.randomProviders.add(user);
             this.randomProviderResponses.add(response);
