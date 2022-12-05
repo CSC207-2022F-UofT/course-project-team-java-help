@@ -134,7 +134,7 @@ public class SearchFragment extends Fragment {
     }
 
     private void updateProviderList(boolean isSearching) {
-        if (!isSearching && viewModel.getUsers() != null) {
+        if (!isSearching && viewModel.getUsers() != null && viewModel.getSurveyResponses() != null) {
             usersAndResponses = new ArrayList<>();
             List<User> users = viewModel.getUsers();
             List<SurveyResponse> surveyResponses = viewModel.getSurveyResponses();
