@@ -24,6 +24,7 @@ public class SurveyQuestionConverterTest {
         assertEquals(question.getQuestion(), restored.getQuestion());
         for (int i = 0; i < question.getNumberOfResponses(); i++) {
             assertEquals(question.getAnswer(i), restored.getAnswer(i));
+            assertEquals(question.getAnswerAttribute(i), restored.getAnswerAttribute(i));
         }
     }
 
@@ -35,6 +36,7 @@ public class SurveyQuestionConverterTest {
         assertEquals(question.getQuestion(), restored.getQuestion());
         for (int i = 0; i < question.getNumberOfResponses(); i++) {
             assertEquals(question.getAnswer(i), restored.getAnswer(i));
+            assertEquals(question.getAnswerAttribute(i), restored.getAnswerAttribute(i));
         }
     }
 

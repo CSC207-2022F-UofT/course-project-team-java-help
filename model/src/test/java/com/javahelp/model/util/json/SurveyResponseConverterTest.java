@@ -42,6 +42,7 @@ public class SurveyResponseConverterTest {
     private void testResponsesEqual(Survey survey, SurveyResponse sr1, SurveyResponse sr2) {
         assertEquals(survey.size(), sr1.size());
         assertEquals(survey.size(), sr2.size());
+        assertEquals(sr1.getAttributes(), sr2.getAttributes());
         for (int i = 0; i < survey.size(); i++) {
             SurveyQuestionResponse response1 = sr1.getResponse(i);
             SurveyQuestionResponse response2 = sr2.getResponse(i);

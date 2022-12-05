@@ -38,6 +38,7 @@ public class SurveyQuestionResponseConverterTest {
         assertEquals(q1.getQuestion(), q2.getQuestion());
         for (int i = 0; i < q1.getNumberOfResponses(); i++) {
             assertEquals(q1.getAnswer(i), q2.getAnswer(i));
+            assertEquals(q1.getAnswerAttribute(i), q2.getAnswerAttribute(i));
         }
     }
 
