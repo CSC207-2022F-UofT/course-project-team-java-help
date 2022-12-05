@@ -39,7 +39,10 @@ public class SurveyResponseTest {
 
         attrSet.add("attr1");
         attrSet.add("attr2");
+        first.setAnswerAttribute(0, attrSet);
+        first.setAnswerAttribute(1, attrSet);
         second.setAnswerAttribute(0, attrSet);
+        second.setAnswerAttribute(1, attrSet);
 
         List<SurveyQuestion> questions = new ArrayList<>();
 
