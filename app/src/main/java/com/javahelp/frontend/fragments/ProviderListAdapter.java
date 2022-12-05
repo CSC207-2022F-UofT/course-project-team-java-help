@@ -13,17 +13,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.javahelp.R;
+import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.ProviderUserInfo;
 import com.javahelp.model.user.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-public class ProviderListAdapter extends ArrayAdapter<User> {
+public class ProviderListAdapter extends ArrayAdapter<Map<User, SurveyResponse>> {
     private final Integer imgID = R.drawable.user48;
 
-    public ProviderListAdapter(Context context, List<User> users) {
-        super(context, R.layout.provider_list, users);
+    public ProviderListAdapter(Context context, List<Map<User, SurveyResponse>> usersAndResponses) {
+        super(context, R.layout.provider_list, usersAndResponses);
     }
 
     @SuppressLint("SetTextI18n")
@@ -38,8 +40,16 @@ public class ProviderListAdapter extends ArrayAdapter<User> {
         TextView subtitleCert = (TextView) view.findViewById(R.id.certified);
         TextView subtitleNumber = (TextView) view.findViewById(R.id.number);
         TextView subtitleAddr = (TextView) view.findViewById(R.id.address);
+        TextView subtitleAttr0 = (TextView) view.findViewById(R.id.attr0);
+        TextView subtitleAttr1 = (TextView) view.findViewById(R.id.attr1);
+        TextView subtitleAttr2 = (TextView) view.findViewById(R.id.attr2);
+        TextView subtitleAttr3 = (TextView) view.findViewById(R.id.attr3);
 
-        User user = getItem(position);
+
+        Map<User, SurveyResponse> userAndResponse = getItem(position);
+        User user = (User) userAndResponse.keySet().toArray()[0];
+        SurveyResponse sr = userAndResponse.get(user);
+
         ProviderUserInfo info = (ProviderUserInfo) user.getUserInfo();
 
         titleText.setText(info.getPracticeName());
@@ -52,6 +62,19 @@ public class ProviderListAdapter extends ArrayAdapter<User> {
         }
         subtitleNumber.setText(info.getPhoneNumber());
         subtitleAddr.setText(info.getAddress());
+
+        List<String> attributes = new ArrayList<>();
+        if (sr.getAttributes().contains("attr0")) { attributes.add("attr0"); }
+        if (sr.getAttributes().contains("attr1")) { attributes.add("attr1"); }
+        if (sr.getAttributes().contains("attr2")) { attributes.add("attr2"); }
+        if (sr.getAttributes().contains("attr3")) { attributes.add("attr3"); }
+        for (int i = 0; i < attributes.size(); i++) {
+            if (i == 0) { subtitleAttr0.setText(attributes.get(i)); }
+            if (i == 1) { subtitleAttr1.setText(attributes.get(i)); }
+            if (i == 2) { subtitleAttr2.setText(attributes.get(i)); }
+            if (i == 3) { subtitleAttr3.setText(attributes.get(i)); }
+        }
+
 
         return view;
 
