@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="10dp"
-        android:background="@drawable/b2"
+        android:background="@drawable/leaves"
         tools:context=".frontend.activity.LoginActivity">
 
 
@@ -45,10 +45,10 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:backgroundTint="#08FFFFFF"
+                android:backgroundTint="#1DFFFFFF"
                 android:text=" Client
              Register"
-                android:textColor="@color/white"
+                android:textColor="#FFFFFF"
                 android:textSize="20dp" />
 
             <Button
@@ -59,7 +59,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:backgroundTint="#0CFFFFFF"
+                android:backgroundTint="#17FFFFFF"
                 android:text="Provider Register"
                 android:textColor="@color/white"
                 android:textSize="20dp" />
@@ -73,7 +73,7 @@
             android:layout_marginTop="50dp"
             android:layout_marginRight="10dp"
             android:background="@drawable/border_bg"
-            android:drawableLeft="@drawable/user48"
+            android:drawableLeft="@drawable/ic_baseline_person_outline_24"
             android:drawablePadding="5dp"
             android:hint="Username"
             android:maxLines="1"
@@ -92,7 +92,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginRight="10dp"
             android:background="@drawable/border_bg"
-            android:drawableLeft="@drawable/passwordicon"
+            android:drawableLeft="@drawable/ic_baseline_password_24"
             android:drawablePadding="5dp"
             android:hint="Password"
             android:inputType="textPassword"
@@ -112,7 +112,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="20dp"
-            android:backgroundTint="#19ECEBEB"
+            android:backgroundTint="#25ECEBEB"
             android:gravity="center"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
@@ -129,7 +129,7 @@
             android:layout_height="wrap_content"
             android:text="Login Error Message"
             android:textAlignment="center"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="16sp"
             android:visibility="gone" />
 
@@ -143,7 +143,7 @@
 
         <View
             android:layout_width="wrap_content"
-            android:layout_height="150dp" />
+            android:layout_height="100dp" />
 
         <CheckBox
             android:id="@+id/staySignedIn"
@@ -151,16 +151,21 @@
             android:layout_height="wrap_content"
             android:buttonTint="#FFFFFF"
             android:text="Stay Signed In"
-            android:textColor="#8E8E8E" />
+            android:textColor="#FFFFFF" />
 
         <TextView
             android:layout_width="90dp"
             android:layout_height="30dp"
             android:layout_gravity="right"
-            android:gravity="bottom"
             android:text="By Java Help"
-            android:textColor="#939393" />
-
+            android:textColor="#FDFDFD" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Credit to Photo: Xuebing Du"
+            android:padding="20dp"
+            android:textColor="#FDFDFD" />
 
     </LinearLayout>
 </layout>
