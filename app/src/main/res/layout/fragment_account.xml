@@ -112,7 +112,6 @@
                     android:text="Phone:"
                     android:textSize="20sp"
                     android:textColor="@color/black"/>
-
                 <TextView
                     android:id="@+id/editTextPhone"
                     android:layout_width="match_parent"
@@ -141,6 +140,13 @@
                     android:ems="10"
                     android:text="NewYork, USA"
                     android:textSize="20sp"/>
+                <Button
+                    android:id="@+id/deleteButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:text="Delete My Account"
+                    android:textColor="@color/Red" />
             </LinearLayout>
 
         </RelativeLayout>
