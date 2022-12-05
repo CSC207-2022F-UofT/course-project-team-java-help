@@ -72,6 +72,7 @@ public class LambdaSearchDataAccess extends RESTAPIGateway<SearchResult> impleme
         for (String filter : filters) {
             filterBodyBuilder.add(Json.createObjectBuilder()
                     .add(String.format("filter_%s", i), filter));
+            i = i + 1;
         }
         bodyBuilder.add("filters", filterBodyBuilder);
 
