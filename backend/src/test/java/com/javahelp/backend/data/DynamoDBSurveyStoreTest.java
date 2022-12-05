@@ -22,7 +22,7 @@ public class DynamoDBSurveyStoreTest {
 
     @Test
     public void testCreateRead() {
-        this.db.cleanTable();
+        //this.db.cleanTable();
 
         Survey survey = setupSurvey();
 
@@ -37,7 +37,7 @@ public class DynamoDBSurveyStoreTest {
 
     @Test(timeout = 5000)
     public void testDelete() {
-        this.db.cleanTable();
+        //this.db.cleanTable();
 
         Survey survey = setupSurvey();
 

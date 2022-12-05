@@ -35,8 +35,8 @@ public class DynamoDBSurveyResponseStoreTest {
         assumeTrue(surveyDatabaseAccessible());
         assumeTrue(responseDatabaseAccessible());
 
-        this.surveyDB.cleanTable();
-        this.responseDB.cleanTable();
+        //this.surveyDB.cleanTable();
+        //this.responseDB.cleanTable();
 
         User user = setupUser();
         Survey survey = setupSurvey();
@@ -63,8 +63,8 @@ public class DynamoDBSurveyResponseStoreTest {
         assumeTrue(surveyDatabaseAccessible());
         assumeTrue(responseDatabaseAccessible());
 
-        this.surveyDB.cleanTable();
-        this.responseDB.cleanTable();
+        //this.surveyDB.cleanTable();
+        //this.responseDB.cleanTable();
 
         User user = setupUser();
         Survey survey = setupSurvey();
@@ -90,8 +90,8 @@ public class DynamoDBSurveyResponseStoreTest {
         assumeTrue(surveyDatabaseAccessible());
         assumeTrue(responseDatabaseAccessible());
 
-        this.surveyDB.cleanTable();
-        this.responseDB.cleanTable();
+        //this.surveyDB.cleanTable();
+        //this.responseDB.cleanTable();
 
         User user = setupUser();
         Survey survey = setupSurvey();
