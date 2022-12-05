@@ -1,5 +1,6 @@
 package com.javahelp.frontend.activity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -88,8 +89,21 @@ public class ProviderRegistrationActivity extends AppCompatActivity {
         || binding.lastname.getText().toString().isEmpty() || binding.home.getText().toString().isEmpty()
         ||binding.phonenumber.getText().toString().isEmpty()){
             providerRegistrationViewmodel.setRegisterError("Please enter your personal information");
-            return;
-        }
+            return;}
+            providerRegistrationViewmodel.setRegisterError("Registering");
+            requestPermissions(new String[]{Manifest.permission.INTERNET}, REQUEST_INTERNET_REGISTER);
+            new Thread(() -> {
+                try {
+                    Thread.sleep(750);
+                } catch (InterruptedException ignored) {
+
+                }
+                runOnUiThread(() -> {
+                    Intent intent = new Intent(ProviderRegistrationActivity.this, FrontPageActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                });
+            }).start();
     }
 
     /**
@@ -117,6 +131,7 @@ public class ProviderRegistrationActivity extends AppCompatActivity {
         if (result.isSuccess()) {
             binding.registerErrorText.setText("Register successful");
             storeCredentials(result.getUser(), result.getToken());
+            Toast.makeText(this, "Register successful", Toast.LENGTH_SHORT);
             startActivity(new Intent(ProviderRegistrationActivity.this, FrontPageActivity.class));
         } else {
             binding.registerErrorText.setText(result.getErrorMessage());

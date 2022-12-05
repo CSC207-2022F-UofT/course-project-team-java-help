@@ -9,12 +9,10 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.javahelp.frontend.domain.user.register.IRegisterDataAccess;
 import com.javahelp.frontend.domain.user.register.IRegisterOutput;
-import com.javahelp.frontend.domain.user.register.ISaltDataAccess;
 import com.javahelp.frontend.domain.user.register.RegisterInteractor;
 import com.javahelp.frontend.domain.user.register.RegisterResult;
 
 import com.javahelp.frontend.gateway.LambdaRegisterDataAccess;
-import com.javahelp.frontend.gateway.LambdaSaltDataAccessProvider;
 
 import com.javahelp.model.token.Token;
 import com.javahelp.model.user.IPasswordHasher;
@@ -46,10 +44,9 @@ public class ProviderRegistrationViewmodel extends AndroidViewModel implements I
 
     public ProviderRegistrationViewmodel(@NonNull Application application) {
         super(application);
-        ISaltDataAccess salt = LambdaSaltDataAccessProvider.getInstance();
         IRegisterDataAccess register = LambdaRegisterDataAccess.getInstance();
         IPasswordHasher hasher = SHAPasswordHasher.getInstance();
-        registerInteractor = new RegisterInteractor(this, salt, register, hasher);
+        registerInteractor = new RegisterInteractor(this, register, hasher);
     }
 
     /**
@@ -139,10 +136,8 @@ public class ProviderRegistrationViewmodel extends AndroidViewModel implements I
 
 
     public boolean passwordMatch(String password1, String password2){
-        if (password1.equals(password2)){
-            return true;
-        }
-        return false;
+        return password1.equals(password2);
+
     }
 
 
