@@ -115,7 +115,7 @@ public class ProviderRegistrationActivity extends AppCompatActivity {
         if(registerResult.isPresent()){
             updateOnPresentRegisterResult(registerResult.get());
         } else {
-            binding.registerErrorText.setVisibility(View.GONE);
+            binding.registerResultText.setVisibility(View.GONE);
         }
     }
 
@@ -129,14 +129,14 @@ public class ProviderRegistrationActivity extends AppCompatActivity {
      */
     private void updateOnPresentRegisterResult(RegisterResult result) {
         if (result.isSuccess()) {
-            binding.registerErrorText.setText("Register successful");
+            binding.registerResultText.setText("Register successful");
             storeCredentials(result.getUser(), result.getToken());
             Toast.makeText(this, "Register successful", Toast.LENGTH_SHORT);
             startActivity(new Intent(ProviderRegistrationActivity.this, FrontPageActivity.class));
         } else {
-            binding.registerErrorText.setText(result.getErrorMessage());
+            binding.registerResultText.setText(result.getErrorMessage());
         }
-        binding.registerErrorText.setVisibility(View.VISIBLE);
+        binding.registerResultText.setVisibility(View.VISIBLE);
     }
 
     /**

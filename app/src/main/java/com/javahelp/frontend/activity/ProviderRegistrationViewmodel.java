@@ -19,6 +19,7 @@ import com.javahelp.model.user.IPasswordHasher;
 import com.javahelp.model.user.ProviderUserInfo;
 import com.javahelp.model.user.SHAPasswordHasher;
 import com.javahelp.model.user.User;
+import com.javahelp.model.user.UserInfo;
 
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;

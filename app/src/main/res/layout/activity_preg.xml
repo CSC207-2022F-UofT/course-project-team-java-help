@@ -168,7 +168,7 @@
                     android:textColorHint="@color/black" />
 
                 <TextView
-                    android:id="@+id/registerErrorText"
+                    android:id="@+id/registerResultText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Register Error Message"
