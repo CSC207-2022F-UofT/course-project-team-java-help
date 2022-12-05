@@ -30,13 +30,10 @@ public class DynamoDBSurveyResponseStoreTest {
             regions,
             surveyDB);
 
-    @Test
+    @Test(timeout = 5000)
     public void testCreateRead() {
         assumeTrue(surveyDatabaseAccessible());
         assumeTrue(responseDatabaseAccessible());
-
-        //this.surveyDB.cleanTable();
-        //this.responseDB.cleanTable();
 
         User user = setupUser();
         Survey survey = setupSurvey();
@@ -62,9 +59,6 @@ public class DynamoDBSurveyResponseStoreTest {
     public void testDelete() {
         assumeTrue(surveyDatabaseAccessible());
         assumeTrue(responseDatabaseAccessible());
-
-        //this.surveyDB.cleanTable();
-        //this.responseDB.cleanTable();
 
         User user = setupUser();
         Survey survey = setupSurvey();
