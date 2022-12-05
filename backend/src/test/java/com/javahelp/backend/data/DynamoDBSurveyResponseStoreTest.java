@@ -56,6 +56,31 @@ public class DynamoDBSurveyResponseStoreTest {
     }
 
     @Test(timeout = 5000)
+    public void testReadByUser() {
+        assumeTrue(surveyDatabaseAccessible());
+        assumeTrue(responseDatabaseAccessible());
+
+        User user = setupUser();
+        Survey survey = setupSurvey();
+        survey = this.surveyDB.create(survey);
+
+        SurveyResponse sr = setupSurveyResponse(survey);
+
+        sr = this.responseDB.create(user.getStringID(), sr, true);
+
+        SurveyResponse read = this.responseDB.readByUser(user.getStringID()).get(0);
+
+        try {
+            testSurveyEqual(sr.getSurvey(), read.getSurvey());
+            testResponsesEqual(survey, sr, read);
+        }
+        finally {
+            this.surveyDB.delete(survey.getID());
+            this.responseDB.delete(sr.getID());
+        }
+    }
+
+    @Test(timeout = 5000)
     public void testDelete() {
         assumeTrue(surveyDatabaseAccessible());
         assumeTrue(responseDatabaseAccessible());
