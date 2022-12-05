@@ -37,7 +37,7 @@ public abstract class HTTPTokenHandler extends HTTPHandler implements ITokenAuth
 
         if (!headers.containsKey("authorization")) {
             return APIGatewayResponse.error(UNAUTHENTICATED, "Request must authenticate with" +
-                    "authorization header");
+                    " authorization header");
         }
 
         String authString = headers.get("authorization")[0];
