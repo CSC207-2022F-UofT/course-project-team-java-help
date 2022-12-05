@@ -48,7 +48,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginBottom="10dp"
-                    android:background="#23857C7C"
+                    android:background="#287E7C7C"
                     android:drawablePadding="20dp"
                     android:hint="Username"
                     android:padding="20dp"
@@ -177,7 +177,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="15dp"
                     android:layout_marginBottom="20dp"
-                    android:backgroundTint="#5F9590"
+                    android:backgroundTint="@color/teal_700"
                     android:text="REGISTER"
                     android:textColor="@color/white"
                     android:textSize="30dp" />
