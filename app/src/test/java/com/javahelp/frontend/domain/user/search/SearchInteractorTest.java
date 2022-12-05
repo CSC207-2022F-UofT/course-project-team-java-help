@@ -53,8 +53,8 @@ public class SearchInteractorTest {
         SearchInteractor interactor = new SearchInteractor(output, LambdaSearchDataAccess.getInstance());
         interactor.search("test", filterSet, false);
 
-        // give enough time for response to come backv
-        Thread.sleep(15000);
+        // give enough time for response to come back
+        Thread.sleep(20000);
 
         assertTrue(result.isSuccess());
     }
