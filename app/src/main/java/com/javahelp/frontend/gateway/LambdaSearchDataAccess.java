@@ -80,9 +80,9 @@ public class LambdaSearchDataAccess extends RESTAPIGateway<SearchResult> impleme
         request.setHeader("Content-Type", "application/json");
 
         request.setConfig(RequestConfig.custom()
-                .setConnectionRequestTimeout(15000, TimeUnit.MILLISECONDS)
-                .setResponseTimeout(15000, TimeUnit.MILLISECONDS)
-                .setConnectTimeout(15000, TimeUnit.MILLISECONDS)
+                .setConnectionRequestTimeout(30000, TimeUnit.MILLISECONDS)
+                .setResponseTimeout(30000, TimeUnit.MILLISECONDS)
+                .setConnectTimeout(30000, TimeUnit.MILLISECONDS)
                 .build());
 
         FutureCallback<RESTAPIGatewayResponse<SearchResult>> passedCallback = callback == null ? null : new FutureCallback<RESTAPIGatewayResponse<SearchResult>>() {
@@ -146,16 +146,15 @@ public class LambdaSearchDataAccess extends RESTAPIGateway<SearchResult> impleme
             List<SurveyResponse> surveyResponses = new ArrayList<>();
 
             JsonObject json = response.getBody();
-            if (json.containsKey("users" ) && json.containsKey("responses") && json.containsKey("success")) {
+            if (json.containsKey("users" ) && json.containsKey("responses")) {
                 JsonArray usersArray = json.getJsonArray("users");
                 JsonArray srArray = json.getJsonArray("responses");
-                JsonObject success = json.getJsonObject("success");
 
                 for (int i = 0; i < usersArray.size(); i++) {
                     JsonObject userObj = usersArray.getJsonObject(i);
                     JsonObject srObj = srArray.getJsonObject(i);
-                    User user = userConverter.fromJSON(userObj);
-                    SurveyResponse sr = srConverter.fromJSON(srObj);
+                    User user = userConverter.fromJSON(userObj.getJsonObject(String.format("user_%s", i)));
+                    SurveyResponse sr = srConverter.fromJSON(srObj.getJsonObject(String.format("response_%s", i)));
 
                     if (user == null || sr == null) {
                         return new RESTAPIGatewayResponse<>("Unable to parse user or token");
