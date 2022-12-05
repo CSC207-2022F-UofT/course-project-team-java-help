@@ -60,7 +60,8 @@ public class SearchFragmentVM extends AndroidViewModel implements ISearchOutput 
 
     public void setFilter(String filter) {
         Set<String> filters = this.filters.getValue();
-        if (filters.remove(filter)) {
+        if (filters != null && filters.contains(filter)) {
+            filters.remove(filters);
             this.filters.setValue(filters);;
         }
         else {
