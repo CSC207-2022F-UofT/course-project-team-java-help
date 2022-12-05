@@ -55,6 +55,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".frontend.activity.DeleteActivity"
+            android:exported="false"
+            android:parentActivityName=".frontend.activity.FrontPageActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
     </application>
 
 </manifest>

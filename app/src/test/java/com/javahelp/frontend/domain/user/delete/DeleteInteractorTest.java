@@ -27,23 +27,23 @@ public class DeleteInteractorTest {
         user = new User("test", userInfo, "username");
         output = new IDeleteOutput() {
             @Override
-            public void success(User user) {
+            public void deleteSuccess(User user) {
                 result = Optional.of(new DeleteResult(user));
             }
 
             @Override
-            public void failure(String errorMessage) {
+            public void deleteFailure(String errorMessage) {
                 result = Optional.of(new DeleteResult(errorMessage));
             }
 
             @Override
-            public void error(String errorMessage) {
+            public void deleteError(String errorMessage) {
                 result = Optional.empty();
                 errorOutput = errorMessage;
             }
 
             @Override
-            public void abort() {
+            public void deleteAbort() {
                 result = Optional.empty();
             }
         };
