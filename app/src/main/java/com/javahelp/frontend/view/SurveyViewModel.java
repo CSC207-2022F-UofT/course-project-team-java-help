@@ -4,37 +4,35 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
-import com.javahelp.frontend.gateway.ISurveyInformationProvider;
 import com.javahelp.model.survey.SurveyQuestion;
+
+import java.util.ArrayList;
 
 /**
  * {@link AndroidViewModel} for {@link SurveyActivity}
  */
-public class SurveyViewModel extends AndroidViewModel implements ISurveyInformationProvider {
+public class SurveyViewModel extends ViewModel {
+    MutableLiveData<ArrayList<SurveyQuestion>> surveyQuestionsLiveData;
+    ArrayList<SurveyQuestion> surveyQuestions;
 
-    public SurveyViewModel(@NonNull Application application) {
-        super(application);
+    public SurveyViewModel() {
+        surveyQuestionsLiveData = new MutableLiveData<>();
     }
 
-    @Override
-    public String getQuestion() {
-        return "";
+    public MutableLiveData<ArrayList<SurveyQuestion>> getSurveyQuestionsLiveData(){
+        return surveyQuestionsLiveData;
     }
 
-    @Override
-    public int getNumberOfResponses() {
-        return 0;
+    public void init() {
+        populateList();
+        surveyQuestionsLiveData.setValue(surveyQuestions);
     }
 
-    @Override
-    public Iterable<String> getAnswers() {
-        return null;
-    }
-
-    @Override
-    public Iterable<SurveyQuestion> getQuestions() {
-        return null;
+    public void populateList() {
+        //populate surveyQuestions list
     }
 
 }
