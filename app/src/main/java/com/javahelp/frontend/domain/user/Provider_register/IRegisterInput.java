@@ -1,6 +1,5 @@
-package com.javahelp.frontend.domain.user.register;
+package com.javahelp.frontend.domain.user.Provider_register;
 
-import com.javahelp.frontend.domain.user.login.ILoginOutput;
 import com.javahelp.model.user.ProviderUserInfo;
 import com.javahelp.model.user.User;
 
@@ -15,7 +14,7 @@ public interface IRegisterInput {
      *
      * @param username     username of {@link User} to register or null
      * @param password     password of {@link User} to register
-     * @param providerUserInfo        email of {@link User} to of register or null
+     * @param providerUserInfo        providerUserInfo of {@link User} to of register or null
      */
     void register(String username, String password, ProviderUserInfo providerUserInfo);
 

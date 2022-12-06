@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.javahelp.R;
 import com.javahelp.databinding.ActivityPregBinding;
 
-import com.javahelp.frontend.domain.user.register.RegisterResult;
+import com.javahelp.frontend.domain.user.Provider_register.RegisterResult;
 import com.javahelp.frontend.util.auth.SharedPreferencesAuthInformationProvider;
 import com.javahelp.model.token.Token;
 import com.javahelp.model.user.User;
@@ -38,6 +38,7 @@ public class ProviderRegistrationActivity extends AppCompatActivity {
      * Permission request code to get internet access for register
      */
     private static final int REQUEST_INTERNET_REGISTER = 1;
+
     ProviderRegistrationViewmodel providerRegistrationViewmodel;
     ActivityPregBinding binding;
 
@@ -67,8 +68,7 @@ public class ProviderRegistrationActivity extends AppCompatActivity {
         providerRegistrationViewmodel.setPassword1(binding.password.getText().toString());
         providerRegistrationViewmodel.setPassword2(binding.repassword.getText().toString());
         providerRegistrationViewmodel.setProviderUserInfo(binding.email.getText().toString(),
-                binding.firstname.getText().toString(),
-                binding.lastname.getText().toString(),
+                binding.practicename.getText().toString(),
                 binding.home.getText().toString(),
                 binding.phonenumber.getText().toString());
         registerAttempt();
@@ -79,31 +79,30 @@ public class ProviderRegistrationActivity extends AppCompatActivity {
      */
     private void registerAttempt() {
         if (binding.username.getText().toString().isEmpty() || binding.password.getText().toString().isEmpty()
-        || binding.repassword.getText().toString().isEmpty()) {
+            || binding.repassword.getText().toString().isEmpty()) {
             providerRegistrationViewmodel.setRegisterError("Please enter username and password");
             return; // early return on invalid username or password
         }else if(!binding.password.getText().toString().equals(binding.repassword.getText().toString())){
             providerRegistrationViewmodel.setRegisterError("Passwords do not match");
             return;
-            }else if(binding.email.getText().toString().isEmpty() || binding.firstname.getText().toString().isEmpty()
-        || binding.lastname.getText().toString().isEmpty() || binding.home.getText().toString().isEmpty()
-        ||binding.phonenumber.getText().toString().isEmpty()){
+            }else if(binding.email.getText().toString().isEmpty() || binding.practicename.getText().toString().isEmpty()
+            || binding.home.getText().toString().isEmpty() ||binding.phonenumber.getText().toString().isEmpty()){
             providerRegistrationViewmodel.setRegisterError("Please enter your personal information");
             return;}
             providerRegistrationViewmodel.setRegisterError("Registering");
             requestPermissions(new String[]{Manifest.permission.INTERNET}, REQUEST_INTERNET_REGISTER);
-            new Thread(() -> {
-                try {
-                    Thread.sleep(750);
-                } catch (InterruptedException ignored) {
-
-                }
-                runOnUiThread(() -> {
-                    Intent intent = new Intent(ProviderRegistrationActivity.this, FrontPageActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                });
-            }).start();
+//            new Thread(() -> {
+//                try {
+//                    Thread.sleep(750);
+//                } catch (InterruptedException ignored) {
+//
+//                }
+//                runOnUiThread(() -> {
+//                    Intent intent = new Intent(ProviderRegistrationActivity.this, FrontPageActivity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                    startActivity(intent);
+//                });
+//            }).start();
     }
 
     /**

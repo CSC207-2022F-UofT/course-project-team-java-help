@@ -7,19 +7,18 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 
-import com.javahelp.frontend.domain.user.register.IRegisterDataAccess;
-import com.javahelp.frontend.domain.user.register.IRegisterOutput;
-import com.javahelp.frontend.domain.user.register.RegisterInteractor;
-import com.javahelp.frontend.domain.user.register.RegisterResult;
+import com.javahelp.frontend.domain.user.Provider_register.IRegisterDataAccess;
+import com.javahelp.frontend.domain.user.Provider_register.IRegisterOutput;
+import com.javahelp.frontend.domain.user.Provider_register.RegisterInteractor;
+import com.javahelp.frontend.domain.user.Provider_register.RegisterResult;
 
-import com.javahelp.frontend.gateway.LambdaRegisterDataAccess;
+import com.javahelp.frontend.gateway.LambdaPRegisterDataAccess;
 
 import com.javahelp.model.token.Token;
 import com.javahelp.model.user.IPasswordHasher;
 import com.javahelp.model.user.ProviderUserInfo;
 import com.javahelp.model.user.SHAPasswordHasher;
 import com.javahelp.model.user.User;
-import com.javahelp.model.user.UserInfo;
 
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
@@ -31,8 +30,7 @@ public class ProviderRegistrationViewmodel extends AndroidViewModel implements I
     private MutableLiveData<String> password1 = new MutableLiveData<>("");
     private MutableLiveData<String> password2 = new MutableLiveData<>("");
     private MutableLiveData<String> email = new MutableLiveData<>("");
-    private MutableLiveData<String> firstname = new MutableLiveData<>("");
-    private MutableLiveData<String> lastname = new MutableLiveData<>("");
+    private MutableLiveData<String> practicename = new MutableLiveData<>("");
     private MutableLiveData<String> address = new MutableLiveData<>("");
     private MutableLiveData<String> phone = new MutableLiveData<>("");
     private MutableLiveData<Boolean> certified = new MutableLiveData<>(Boolean.FALSE);
@@ -45,7 +43,7 @@ public class ProviderRegistrationViewmodel extends AndroidViewModel implements I
 
     public ProviderRegistrationViewmodel(@NonNull Application application) {
         super(application);
-        IRegisterDataAccess register = LambdaRegisterDataAccess.getInstance();
+        IRegisterDataAccess register = LambdaPRegisterDataAccess.getInstance();
         IPasswordHasher hasher = SHAPasswordHasher.getInstance();
         registerInteractor = new RegisterInteractor(this, register, hasher);
     }
@@ -79,16 +77,10 @@ public class ProviderRegistrationViewmodel extends AndroidViewModel implements I
     public void setEmail(String email) { this.email.setValue(email);}
 
     /**
-     * Sets the firstname for this {@link ProviderRegistrationViewmodel}
-     * @param firstname {@link String} firstname to use
+     * Sets the practicename for this {@link ProviderRegistrationViewmodel}
+     * @param practicename {@link String} firstname to use
      */
-    public void setFirstname(String firstname) { this.firstname.setValue(firstname);}
-
-    /**
-     * Sets the lastname for this {@link ProviderRegistrationViewmodel}
-     * @param lastname {@link String} lastname to use
-     */
-    public void setLastname(String lastname) { this.lastname.setValue(lastname);}
+    public void setPracticename(String practicename) { this.practicename.setValue(practicename);}
 
     /**
      * Sets the address for this {@link ProviderRegistrationViewmodel}
@@ -117,11 +109,11 @@ public class ProviderRegistrationViewmodel extends AndroidViewModel implements I
 
     /**
      * Sets the provideruserinfo for this {@link ProviderRegistrationViewmodel}
-     * @param email, firstname, lastname, phone, address {@link String}
+     * @param email, practicename, phone, address {@link String}
      */
-    public void setProviderUserInfo(String email, String firstname, String lastname, String phone, String address){
+    public void setProviderUserInfo(String email, String practicename, String phone, String address){
         this.providerUserInfo.setEmailAddress(email);
-        this.providerUserInfo.setPracticeName(firstname + lastname);
+        this.providerUserInfo.setPracticeName(practicename);
         this.providerUserInfo.setCertified(false);
         this.providerUserInfo.setAddress(address);
         this.providerUserInfo.setPhoneNumber(phone);
@@ -135,7 +127,11 @@ public class ProviderRegistrationViewmodel extends AndroidViewModel implements I
         return registerResult;
     }
 
-
+    /**
+     *
+     * @return the boolean of the input passwords are matched or not
+     * @param password1, password2 {@link String}
+     */
     public boolean passwordMatch(String password1, String password2){
         return password1.equals(password2);
 
@@ -143,7 +139,7 @@ public class ProviderRegistrationViewmodel extends AndroidViewModel implements I
 
 
     /**
-     * Tries to log in
+     * Tries to Register in
      */
     public void attemptRegister() {
         executor.execute(() -> {
@@ -165,31 +161,24 @@ public class ProviderRegistrationViewmodel extends AndroidViewModel implements I
         });
     }
 
+
     @Override
     public void success(User user, Token token) {
-        RegisterResult.postValue(Optional.of(new RegisterResult(user, token)));
+
     }
 
     @Override
     public void failure() {
-        RegisterResult.postValue(Optional.of(new RegisterResult("Incorrect input of information")));
+
     }
 
     @Override
     public void error(String errorMessage) {
-        if (errorMessage == null) {
-            errorMessage = "Connection error, try again";
-        }
-        RegisterResult.postValue(Optional.of(new RegisterResult(errorMessage)));
+
     }
 
     @Override
     public void abort() {
-        RegisterResult.postValue(Optional.empty());
+
     }
-
-
-
-
-
 }

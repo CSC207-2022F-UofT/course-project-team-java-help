@@ -1,4 +1,4 @@
-package com.javahelp.frontend.domain.user.register;
+package com.javahelp.frontend.domain.user.Provider_register;
 
 
 import com.javahelp.model.user.ProviderUserInfo;
@@ -37,7 +37,7 @@ public class RegisterInteractor implements IRegisterInput {
      * Register with the specified {@link byte[]}
      *
      * @param username     username to register, or null
-     * @param password     {@link byte[]} to register into
+     * @param password     password to register into
      * @param providerUserInfo user's personal information to register, or null
      */
     @Override

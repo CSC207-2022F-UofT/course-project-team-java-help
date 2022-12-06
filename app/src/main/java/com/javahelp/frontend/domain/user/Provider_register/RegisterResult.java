@@ -1,4 +1,4 @@
-package com.javahelp.frontend.domain.user.register;
+package com.javahelp.frontend.domain.user.Provider_register;
 
 import com.javahelp.model.token.Token;
 import com.javahelp.model.user.User;
