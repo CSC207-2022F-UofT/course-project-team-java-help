@@ -28,6 +28,7 @@ package:
 functions:
   login:
     handler: com.javahelp.backend.endpoint.login.LoginHandler
+    timeout: 20
     events:
       - httpApi:
           path: /login
@@ -35,6 +36,7 @@ functions:
 
   salt:
     handler: com.javahelp.backend.endpoint.login.SaltHandler
+    timeout: 20
     events:
       - httpApi:
           path: /users/salt
@@ -42,6 +44,7 @@ functions:
 
   saltByID:
     handler: com.javahelp.backend.endpoint.login.SaltHandler
+    timeout: 20
     events:
       - httpApi:
           path: /users/{userid}/salt
@@ -49,6 +52,7 @@ functions:
 
   deleteUser:
     handler: com.javahelp.backend.endpoint.delete.DeleteHandler
+    timeout: 20
     events:
       - httpApi:
           path: /users/{userid}
@@ -56,6 +60,7 @@ functions:
 
   readUser:
     handler: com.javahelp.backend.endpoint.user.ReadHandler
+    timeout: 20
     events:
       - httpApi:
           path: /users/{userid}
@@ -63,6 +68,7 @@ functions:
 
   search:
     handler: com.javahelp.backend.endpoint.search.SearchHandler
+    timeout: 20
     events:
       - httpApi:
           path: /providers/search
