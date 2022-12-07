@@ -30,7 +30,7 @@ public class SearchInteractorTest {
 
     @Before
     public void setup() {
-        this.dataPopulater = new RandomDataPopulater(false);
+        this.dataPopulater = new RandomDataPopulater();
         this.client = dataPopulater.getRandomClient();
         this.providers = dataPopulater.getRandomProviders();
         this.responses = dataPopulater.getRandomResponses();

@@ -53,7 +53,7 @@ public class SearchHandlerTest {
         assumeTrue(surveyDatabaseAccessible());
         assumeTrue(srDatabaseAccessible());
 
-        RandomDataPopulater dataPopulater = new RandomDataPopulater(true);
+        RandomDataPopulater dataPopulater = new RandomDataPopulater();
         User client = dataPopulater.getRandomClient();
 
         JsonObject json = Json.createObjectBuilder()

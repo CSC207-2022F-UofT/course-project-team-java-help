@@ -34,16 +34,10 @@ public class RandomDataPopulater {
     private ISurveyResponseStore srDB = ISurveyResponseStore.getDefaultImplementation();
     private IUserStore userDB = IUserStore.getDefaultImplementation();
 
-    public RandomDataPopulater(boolean cleanTables) {
+    public RandomDataPopulater() {
         assumeTrue(userDatabaseAccessible());
         assumeTrue(srDatabaseAccessible());
         assumeTrue(surveyDatabaseAccessible());
-
-        if (cleanTables) {
-            this.surveyDB.cleanTable();
-            this.srDB.cleanTable();
-            this.userDB.cleanTable();
-        }
 
         this.survey = setupSurvey();
         this.survey = this.surveyDB.create(survey);

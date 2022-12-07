@@ -62,12 +62,6 @@ public interface IUserStore {
     void delete(String id);
 
     /**
-     * Removes all {@link SurveyResponse}s in database.
-     * ONLY use during preliminary testing!
-     */
-    void cleanTable();
-
-    /**
      * Updates the password of a {@link User}
      *
      * @param userId   {@link String} ID of the {@link User} to update

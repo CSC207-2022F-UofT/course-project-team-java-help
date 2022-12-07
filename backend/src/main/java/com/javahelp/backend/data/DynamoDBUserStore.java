@@ -156,24 +156,6 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
         getClient().deleteItem(request);
     }
 
-    /**
-     * Removes all {@link User}s in database.
-     * ONLY use during preliminary testing!
-     */
-    @Override
-    public void cleanTable() {
-        ScanRequest scanRequest = new ScanRequest()
-                .withTableName(tableName);
-        ScanResult result = getClient().scan(scanRequest);
-
-        for (Map<String, AttributeValue> item : result.getItems()) {
-            if (item != null) {
-                delete(item.get("id").getS());
-            }
-        }
-    }
-
-
     @Override
     public User create(User u, UserPassword password) {
         String id = UUID.randomUUID().toString();

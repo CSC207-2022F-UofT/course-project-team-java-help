@@ -90,19 +90,6 @@ public class DynamoDBSurveyStore extends DynamoDBStore implements ISurveyStore{
         getClient().deleteItem(request);
     }
 
-    @Override
-    public void cleanTable() {
-        ScanRequest scanRequest = new ScanRequest()
-                .withTableName(this.tableName);
-        ScanResult result = getClient().scan(scanRequest);
-
-        for (Map<String, AttributeValue> item : result.getItems()) {
-            if (item != null) {
-                delete(item.get("id").getS());
-            }
-        }
-    }
-
     private static Map<String, AttributeValue> fromSurvey(Survey s) {
         Map<String, AttributeValue> survey = new HashMap<>();
 

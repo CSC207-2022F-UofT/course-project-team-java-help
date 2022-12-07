@@ -115,23 +115,6 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
     }
 
     /**
-     * Removes all {@link SurveyResponse}s in database.
-     * ONLY use during preliminary testing!
-     */
-    @Override
-    public void cleanTable() {
-        ScanRequest scanRequest = new ScanRequest()
-                .withTableName(this.tableName);
-        ScanResult result = getClient().scan(scanRequest);
-
-        for (Map<String, AttributeValue> item : result.getItems()) {
-            if (item != null) {
-                delete(item.get("id").getS());
-            }
-        }
-    }
-
-    /**
      *
      * @param userID {@link String} id of the user to be queried.
      * @return {@link List <SurveyResponse>} of the specified user.

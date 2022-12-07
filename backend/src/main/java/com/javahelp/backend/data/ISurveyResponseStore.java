@@ -52,12 +52,6 @@ public interface ISurveyResponseStore {
     void delete(String id);
 
     /**
-     * Removes all {@link SurveyResponse}s in database.
-     * ONLY use during preliminary testing!
-     */
-    void cleanTable();
-
-    /**
      *
      * @param userID {@link String} id of the user to be queried.
      * @return {@link List<SurveyResponse>} of the specified user.

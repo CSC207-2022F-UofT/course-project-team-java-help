@@ -37,10 +37,6 @@ public class UserQueryConstraintTest {
         assumeTrue(srDatabaseAccessible());
         assumeTrue(surveyDatabaseAccessible());
 
-        this.surveyDB.cleanTable();
-        this.srDB.cleanTable();
-        this.userDB.cleanTable();
-
         UserPassword p = randomUserPassword();
         User u1 = setupUser1();
         User u2 = setupUser2();
@@ -82,10 +78,6 @@ public class UserQueryConstraintTest {
         assumeTrue(srDatabaseAccessible());
         assumeTrue(surveyDatabaseAccessible());
 
-        this.surveyDB.cleanTable();
-        this.srDB.cleanTable();
-        this.userDB.cleanTable();
-
         UserPassword p = randomUserPassword();
         User u1 = setupUser1();
         User u2 = setupUser2();
@@ -126,10 +118,6 @@ public class UserQueryConstraintTest {
         assumeTrue(userDatabaseAccessible());
         assumeTrue(srDatabaseAccessible());
         assumeTrue(surveyDatabaseAccessible());
-
-        this.surveyDB.cleanTable();
-        this.srDB.cleanTable();
-        this.userDB.cleanTable();
 
         UserPassword p = randomUserPassword();
         User u1 = setupUser1();
