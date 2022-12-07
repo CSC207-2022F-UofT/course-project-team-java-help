@@ -10,7 +10,7 @@ import java.time.Instant;
 /**
  * Interactor for authenticating with {@link Token}s
  */
-public class TokenAuthManager {
+public class TokenAuthInteractor {
     private final IUserStore userStore;
     private final ITokenStore tokenStore;
     private TokenAuthResult authenticate;
@@ -21,7 +21,7 @@ public class TokenAuthManager {
      * @param userStore:  interface that manages users
      * @param tokenStore: interface that manages tokens
      */
-    public TokenAuthManager(IUserStore userStore, ITokenStore tokenStore) {
+    public TokenAuthInteractor(IUserStore userStore, ITokenStore tokenStore) {
         this.userStore = userStore;
         this.tokenStore = tokenStore;
     }

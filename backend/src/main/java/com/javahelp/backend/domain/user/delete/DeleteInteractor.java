@@ -6,7 +6,7 @@ import com.javahelp.model.user.User;
 /**
  * A class for managing an account deletion action.
  */
-public class DeleteManager {
+public class DeleteInteractor {
 
     /**
      * The {@link IUserStore} to use.
@@ -14,11 +14,11 @@ public class DeleteManager {
     private final IUserStore userStore;
 
     /**
-     * Constructs a {@link DeleteManager} instance.
+     * Constructs a {@link DeleteInteractor} instance.
      *
      * @param userStore: the {@link IUserStore} used to store users.
      */
-    public DeleteManager(IUserStore userStore) {
+    public DeleteInteractor(IUserStore userStore) {
         this.userStore = userStore;
     }
 

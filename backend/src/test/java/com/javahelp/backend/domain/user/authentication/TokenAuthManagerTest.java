@@ -58,7 +58,7 @@ public class TokenAuthManagerTest {
             token.setUserID(user.getStringID());
             tokenStore.create(token);
 
-            TokenAuthManager manager = new TokenAuthManager(userStore, tokenStore);
+            TokenAuthInteractor manager = new TokenAuthInteractor(userStore, tokenStore);
             TokenAuthResult testResult = manager.authenticate(new ITokenAuthInputBoundary() {
                 @Override
                 public String getUserID() {

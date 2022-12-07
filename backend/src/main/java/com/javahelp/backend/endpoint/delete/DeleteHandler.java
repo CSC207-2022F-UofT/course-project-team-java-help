@@ -5,7 +5,7 @@ import static com.javahelp.backend.endpoint.APIGatewayResponse.OK;
 
 import com.amazonaws.HttpMethod;
 import com.javahelp.backend.data.IUserStore;
-import com.javahelp.backend.domain.user.delete.DeleteManager;
+import com.javahelp.backend.domain.user.delete.DeleteInteractor;
 import com.javahelp.backend.domain.user.delete.DeleteResult;
 import com.javahelp.backend.domain.user.delete.IDeleteInputBoundary;
 import com.javahelp.backend.endpoint.APIGatewayResponse;
@@ -52,7 +52,7 @@ public class DeleteHandler extends HTTPTokenHandler implements IDeleteInputBound
         }
 
         userID = u.getStringID();
-        final DeleteManager deleteManager = new DeleteManager(IUserStore.getDefaultImplementation());
+        final DeleteInteractor deleteManager = new DeleteInteractor(IUserStore.getDefaultImplementation());
         final DeleteResult deleteResult = deleteManager.delete(this);
         String deleteResponse;
 

@@ -9,9 +9,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeTrue;
 
 import com.javahelp.backend.data.IUserStore;
-import com.javahelp.backend.domain.user.delete.DeleteManager;
-import com.javahelp.backend.domain.user.delete.DeleteResult;
-import com.javahelp.backend.domain.user.delete.IDeleteInputBoundary;
 import com.javahelp.model.user.ClientUserInfo;
 import com.javahelp.model.user.User;
 import com.javahelp.model.user.UserPassword;
@@ -27,7 +24,7 @@ public class DeleteManagerTest {
 
     ClientUserInfo clientUserInfo;
 
-    DeleteManager deleteManager;
+    DeleteInteractor deleteManager;
 
     byte[] salt;
     byte[] password;
@@ -55,7 +52,7 @@ public class DeleteManagerTest {
                 "123-456-7890", "J", "M");
         user = new User("123456QWERTY", clientUserInfo, "cs207");
 
-        deleteManager = new DeleteManager(userStore);
+        deleteManager = new DeleteInteractor(userStore);
 
         // Same setup as in UserPasswordTest
         Random rand = new Random();

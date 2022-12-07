@@ -7,7 +7,7 @@ import com.amazonaws.HttpMethod;
 import com.javahelp.backend.data.ITokenStore;
 import com.javahelp.backend.data.IUserStore;
 import com.javahelp.backend.domain.user.authentication.ITokenAuthInputBoundary;
-import com.javahelp.backend.domain.user.authentication.TokenAuthManager;
+import com.javahelp.backend.domain.user.authentication.TokenAuthInteractor;
 import com.javahelp.backend.domain.user.authentication.TokenAuthResult;
 import com.javahelp.model.token.Token;
 import com.javahelp.model.user.User;
@@ -55,7 +55,7 @@ public abstract class HTTPTokenHandler extends HTTPHandler implements ITokenAuth
                     "in authorization header");
         }
 
-        TokenAuthManager interactor = new TokenAuthManager(IUserStore.getDefaultImplementation(), ITokenStore.getDefaultImplementation());
+        TokenAuthInteractor interactor = new TokenAuthInteractor(IUserStore.getDefaultImplementation(), ITokenStore.getDefaultImplementation());
         TokenAuthResult result = interactor.authenticate(this);
 
         if (result.isSuccess()) {
