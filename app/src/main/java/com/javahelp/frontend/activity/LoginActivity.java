@@ -121,7 +121,7 @@ public class LoginActivity extends AppCompatActivity {
             credentialStore.setTokenString(token.getToken());
             credentialStore.setUserID(user.getStringID());
         } catch (NoSuchPaddingException | IllegalBlockSizeException | NoSuchAlgorithmException | BadPaddingException | InvalidKeyException ignored) {
-            Toast.makeText(this, "Error Storing Credentials", Toast.LENGTH_LONG);
+            Toast.makeText(this, "Error Storing Credentials", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -144,7 +144,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     viewModel.attemptLogin();
                 } else {
-                    Toast.makeText(this, "Internet access denied, cannot log in", Toast.LENGTH_LONG);
+                    Toast.makeText(this, "Internet access denied, cannot log in", Toast.LENGTH_LONG).show();
                 }
                 return;
         }

@@ -91,7 +91,7 @@ public class DeleteActivity extends AppCompatActivity {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     deleteViewModel.attemptLogin();
                 } else {
-                    Toast.makeText(this, "Internet access denied, cannot log in", Toast.LENGTH_LONG);
+                    Toast.makeText(this, "Internet access denied, cannot log in", Toast.LENGTH_LONG).show();
                 }
                 break;
 
@@ -99,7 +99,7 @@ public class DeleteActivity extends AppCompatActivity {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     deleteViewModel.attemptDelete();
                 } else {
-                    Toast.makeText(this, "Internet access denied, cannot delete", Toast.LENGTH_LONG);
+                    Toast.makeText(this, "Internet access denied, cannot delete", Toast.LENGTH_LONG).show();
                 }
                 break;
         }
@@ -177,7 +177,7 @@ public class DeleteActivity extends AppCompatActivity {
         if (result.isSuccess()) {
             startActivity(new Intent(DeleteActivity.this, LoginActivity.class));
         } else {
-            Toast.makeText(this, result.getErrorMessage(), Toast.LENGTH_LONG);
+            Toast.makeText(this, result.getErrorMessage(), Toast.LENGTH_LONG).show();
         }
     }
 }
