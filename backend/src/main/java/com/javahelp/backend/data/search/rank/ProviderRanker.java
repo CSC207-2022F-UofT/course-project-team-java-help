@@ -1,11 +1,8 @@
-package com.javahelp.backend.search.rank;
+package com.javahelp.backend.data.search.rank;
 
-import com.amazonaws.services.dynamodbv2.xspec.S;
-import com.javahelp.model.survey.Survey;
 import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.User;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;

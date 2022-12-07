@@ -1,4 +1,4 @@
-package com.javahelp.backend.search.constraint;
+package com.javahelp.backend.data.search.constraint;
 
 import java.util.Set;
 

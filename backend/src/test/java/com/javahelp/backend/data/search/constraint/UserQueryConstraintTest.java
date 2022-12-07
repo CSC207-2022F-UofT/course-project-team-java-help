@@ -1,4 +1,4 @@
-package com.javahelp.backend.search.constraint;
+package com.javahelp.backend.data.search.constraint;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assume.assumeTrue;

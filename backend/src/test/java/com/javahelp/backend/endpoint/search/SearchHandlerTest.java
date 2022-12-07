@@ -7,7 +7,7 @@ import static io.restassured.RestAssured.given;
 import com.javahelp.backend.data.ISurveyResponseStore;
 import com.javahelp.backend.data.ISurveyStore;
 import com.javahelp.backend.data.IUserStore;
-import com.javahelp.backend.search.RandomDataPopulater;
+import com.javahelp.backend.data.search.RandomDataPopulater;
 import com.javahelp.model.user.User;
 
 import org.junit.Test;

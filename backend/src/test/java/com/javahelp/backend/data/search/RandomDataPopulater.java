@@ -1,4 +1,4 @@
-package com.javahelp.backend.search;
+package com.javahelp.backend.data.search;
 
 import static org.junit.Assume.assumeTrue;
 

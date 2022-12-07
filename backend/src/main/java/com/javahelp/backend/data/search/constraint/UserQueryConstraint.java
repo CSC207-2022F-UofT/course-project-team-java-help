@@ -1,4 +1,4 @@
-package com.javahelp.backend.search.constraint;
+package com.javahelp.backend.data.search.constraint;
 
 import com.javahelp.backend.data.ISurveyResponseStore;
 import com.javahelp.model.survey.SurveyResponse;
@@ -6,9 +6,7 @@ import com.javahelp.model.user.User;
 import com.javahelp.backend.data.IUserStore;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * This class subsets the list of Providers in the database based on query constraints

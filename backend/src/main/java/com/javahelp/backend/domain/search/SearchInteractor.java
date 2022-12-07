@@ -3,12 +3,12 @@ package com.javahelp.backend.domain.search;
 import com.javahelp.backend.data.ISurveyResponseStore;
 import com.javahelp.backend.data.ISurveyStore;
 import com.javahelp.backend.data.IUserStore;
-import com.javahelp.backend.search.constraint.IConstraint;
-import com.javahelp.backend.search.constraint.UserQueryConstraint;
-import com.javahelp.backend.search.rank.IProviderRanker;
-import com.javahelp.backend.search.rank.ISimilarityScorer;
-import com.javahelp.backend.search.rank.ProviderRanker;
-import com.javahelp.backend.search.rank.SimilarityScorer;
+import com.javahelp.backend.data.search.constraint.IConstraint;
+import com.javahelp.backend.data.search.constraint.UserQueryConstraint;
+import com.javahelp.backend.data.search.rank.IProviderRanker;
+import com.javahelp.backend.data.search.rank.ISimilarityScorer;
+import com.javahelp.backend.data.search.rank.ProviderRanker;
+import com.javahelp.backend.data.search.rank.SimilarityScorer;
 import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.User;
 

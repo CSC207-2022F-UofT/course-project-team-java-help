@@ -1,8 +1,5 @@
-package com.javahelp.backend.search.rank;
+package com.javahelp.backend.data.search.rank;
 
-import com.amazonaws.regions.Regions;
-import com.javahelp.backend.data.DynamoDBUserStore;
-import com.javahelp.backend.data.IUserStore;
 import com.javahelp.model.survey.SurveyResponse;
 
 public interface ISimilarityScorer {

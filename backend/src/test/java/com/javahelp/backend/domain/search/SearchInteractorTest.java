@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 import com.javahelp.backend.data.ISurveyResponseStore;
 import com.javahelp.backend.data.ISurveyStore;
 import com.javahelp.backend.data.IUserStore;
-import com.javahelp.backend.search.RandomDataPopulater;
+import com.javahelp.backend.data.search.RandomDataPopulater;
 import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.User;
 

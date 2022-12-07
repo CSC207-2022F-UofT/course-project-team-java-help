@@ -1,11 +1,6 @@
-package com.javahelp.backend.search.rank;
+package com.javahelp.backend.data.search.rank;
 
-import com.javahelp.model.survey.SurveyQuestion;
-import com.javahelp.model.survey.SurveyQuestionResponse;
 import com.javahelp.model.survey.SurveyResponse;
-
-import java.util.Map;
-import java.util.Objects;
 
 public class SimilarityScorer implements ISimilarityScorer{
     public SimilarityScorer() {}

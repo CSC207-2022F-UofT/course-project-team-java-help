@@ -1,4 +1,4 @@
-package com.javahelp.backend.search.rank;
+package com.javahelp.backend.data.search.rank;
 
 import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.User;

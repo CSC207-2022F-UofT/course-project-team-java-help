@@ -1,13 +1,19 @@
-package com.javahelp.backend.search.constraint;
+package com.javahelp.backend.data.search.constraint;
 
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-public class Constraint implements IConstraint {
+public class MultiOptionConstraint implements IConstraint {
     private Set<String> constraints = new HashSet<>();
 
-    public Constraint() {}
+    public MultiOptionConstraint() {}
+
+    public void setMultiConstraint(List<String> constraintList) {
+        for (String constraint : constraintList) {
+            setConstraint(constraint);
+        }
+    }
 
     @Override
     public void setConstraint(String constraint) {
@@ -17,7 +23,7 @@ public class Constraint implements IConstraint {
     @Override
     public Set<String> getConstraints(){
         return this.constraints;
-    };
+    }
 
     @Override
     public int size() { return this.constraints.size(); }
