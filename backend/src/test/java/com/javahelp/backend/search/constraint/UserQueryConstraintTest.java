@@ -1,11 +1,10 @@
-package com.javahelp.backend.query;
+package com.javahelp.backend.search.constraint;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assume.assumeTrue;
 
 import org.junit.Test;
 
-import com.amazonaws.regions.Regions;
 import com.javahelp.backend.data.ISurveyStore;
 import com.javahelp.backend.data.IUserStore;
 import com.javahelp.model.survey.Survey;
@@ -13,7 +12,6 @@ import com.javahelp.model.survey.SurveyQuestion;
 import com.javahelp.model.survey.SurveyQuestionResponse;
 import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.ClientUserInfo;
-import com.javahelp.model.user.ProviderUserInfo;
 import com.javahelp.model.user.User;
 import com.javahelp.model.user.UserPassword;
 
@@ -54,15 +52,13 @@ public class UserQueryConstraintTest {
 
         SurveyResponse sr1 = setupSurveyResponse1(survey);
         SurveyResponse sr2 = setupSurveyResponse2(survey);
-        sr1 = this.srDB.create(u1.getStringID(), sr1);
-        sr2 = this.srDB.create(u2.getStringID(), sr2);
+        sr1 = this.srDB.create(u1.getStringID(), sr1, true);
+        sr2 = this.srDB.create(u2.getStringID(), sr2, true);
 
-        Constraint constraint = new VanillaConstraint(sr1.getSurvey().get(0).getQuestion());
-        List<Constraint> constraintList = new ArrayList<>();
-        constraintList.add(constraint);
+        Constraint constraint = new Constraint();
 
         UserQueryConstraint userQueryConstraint = new UserQueryConstraint(this.srDB, this.userDB);
-        Map<String, SurveyResponse> responses = userQueryConstraint.getResponsesWithConstraints(constraintList);
+        Map<String, SurveyResponse> responses = userQueryConstraint.getResponsesWithConstraints(constraint);
 
         Map<String, SurveyResponse> expected = new HashMap<>();
         expected.put(u1.getStringID(), sr1);
@@ -101,16 +97,14 @@ public class UserQueryConstraintTest {
 
         SurveyResponse sr1 = setupSurveyResponse1(survey);
         SurveyResponse sr2 = setupSurveyResponse2(survey);
-        sr1 = this.srDB.create(u1.getStringID(), sr1);
-        sr2 = this.srDB.create(u2.getStringID(), sr2);
+        sr1 = this.srDB.create(u1.getStringID(), sr1, true);
+        sr2 = this.srDB.create(u2.getStringID(), sr2, true);
 
-        Constraint constraint = new VanillaConstraint(sr1.getSurvey().get(0).getQuestion());
-        constraint.setConstraint("1");
-        List<Constraint> constraintList = new ArrayList<>();
-        constraintList.add(constraint);
+        Constraint constraint = new Constraint();
+        constraint.setConstraint("attr1");
 
         UserQueryConstraint userQueryConstraint = new UserQueryConstraint(this.srDB, this.userDB);
-        Map<String, SurveyResponse> responses = userQueryConstraint.getResponsesWithConstraints(constraintList);
+        Map<String, SurveyResponse> responses = userQueryConstraint.getResponsesWithConstraints(constraint);
 
         Map<String, SurveyResponse> expected = new HashMap<>();
         expected.put(u1.getStringID(), sr1);
@@ -148,23 +142,18 @@ public class UserQueryConstraintTest {
 
         SurveyResponse sr1 = setupSurveyResponse1(survey);
         SurveyResponse sr2 = setupSurveyResponse2(survey);
-        sr1 = this.srDB.create(u1.getStringID(), sr1);
-        sr2 = this.srDB.create(u2.getStringID(), sr2);
+        sr1 = this.srDB.create(u1.getStringID(), sr1, true);
+        sr2 = this.srDB.create(u2.getStringID(), sr2, true);
 
-        Constraint constraint1 = new VanillaConstraint(sr1.getSurvey().get(0).getQuestion());
-        constraint1.setConstraint("2");
-        Constraint constraint2 = new VanillaConstraint(sr1.getSurvey().get(1).getQuestion());
-        constraint2.setConstraint("2");
-
-        List<Constraint> constraintList = new ArrayList<>();
-        constraintList.add(constraint1);
-        constraintList.add(constraint2);
+        Constraint constraint = new Constraint();
+        constraint.setConstraint("attr0");
+        constraint.setConstraint("attr1");
 
         UserQueryConstraint userQueryConstraint = new UserQueryConstraint(this.srDB, this.userDB);
-        Map<String, SurveyResponse> responses = userQueryConstraint.getResponsesWithConstraints(constraintList);
+        Map<String, SurveyResponse> responses = userQueryConstraint.getResponsesWithConstraints(constraint);
 
         Map<String, SurveyResponse> expected = new HashMap<>();
-        expected.put(u2.getStringID(), sr2);
+        expected.put(u1.getStringID(), sr1);
 
         assertEquals(expected.keySet(), responses.keySet());
         for (String id : expected.keySet()) {
@@ -236,12 +225,20 @@ public class UserQueryConstraintTest {
         SurveyQuestion second = new SurveyQuestion("This is the second survey question",
                 responses);
 
+        first.setAnswerAttribute(0, "attr0");
+        first.setAnswerAttribute(1, "attr1");
+        first.setAnswerAttribute(2, "attr2");
+
+        second.setAnswerAttribute(0, "attr0");
+        second.setAnswerAttribute(1, "attr1");
+        second.setAnswerAttribute(2, "attr2");
+
         List<SurveyQuestion> questions = new ArrayList<>();
 
         questions.add(first);
         questions.add(second);
 
-        return new Survey("survey1", "Test Survey", questions);
+        return new Survey("PSurvey_1", "Test Survey", questions);
     }
 
     private SurveyResponse setupSurveyResponse1(Survey survey) {

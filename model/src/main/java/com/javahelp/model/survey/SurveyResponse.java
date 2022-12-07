@@ -1,6 +1,8 @@
 package com.javahelp.model.survey;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A filled out {@link Survey}
@@ -12,6 +14,8 @@ public class SurveyResponse {
     private Map<SurveyQuestion, SurveyQuestionResponse> responses;
 
     private String id;
+
+    private Set<String> attributes = new HashSet<>();
 
     /**
      * Creates a new {@link SurveyResponse}
@@ -26,7 +30,18 @@ public class SurveyResponse {
         this.id = id;
         this.survey = survey;
         this.responses = responses;
+
+        for (int i = 0; i < survey.size(); i++) {
+            SurveyQuestionResponse response = this.getResponse(i);
+            this.attributes.addAll(survey.get(i).getAnswerAttribute(response.getResponseNumber()));
+        }
     }
+
+    /**
+     *
+     * @return the {@link Set} of {@link String} attributes that this set of response represents.
+     */
+    public Set<String> getAttributes(){ return this.attributes; }
 
     /**
      *

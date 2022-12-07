@@ -30,13 +30,10 @@ public class DynamoDBSurveyResponseStoreTest {
             regions,
             surveyDB);
 
-    @Test
+    @Test(timeout = 5000)
     public void testCreateRead() {
         assumeTrue(surveyDatabaseAccessible());
         assumeTrue(responseDatabaseAccessible());
-
-        this.surveyDB.cleanTable();
-        this.responseDB.cleanTable();
 
         User user = setupUser();
         Survey survey = setupSurvey();
@@ -44,9 +41,34 @@ public class DynamoDBSurveyResponseStoreTest {
 
         SurveyResponse sr = setupSurveyResponse(survey);
 
-        sr = this.responseDB.create(user.getStringID(), sr);
+        sr = this.responseDB.create(user.getStringID(), sr, true);
 
         SurveyResponse read = this.responseDB.read(sr.getID());
+
+        try {
+            testSurveyEqual(sr.getSurvey(), read.getSurvey());
+            testResponsesEqual(survey, sr, read);
+        }
+        finally {
+            this.surveyDB.delete(survey.getID());
+            this.responseDB.delete(sr.getID());
+        }
+    }
+
+    @Test(timeout = 5000)
+    public void testReadByUser() {
+        assumeTrue(surveyDatabaseAccessible());
+        assumeTrue(responseDatabaseAccessible());
+
+        User user = setupUser();
+        Survey survey = setupSurvey();
+        survey = this.surveyDB.create(survey);
+
+        SurveyResponse sr = setupSurveyResponse(survey);
+
+        sr = this.responseDB.create(user.getStringID(), sr, true);
+
+        SurveyResponse read = this.responseDB.readByUser(user.getStringID()).get(0);
 
         try {
             testSurveyEqual(sr.getSurvey(), read.getSurvey());
@@ -63,15 +85,12 @@ public class DynamoDBSurveyResponseStoreTest {
         assumeTrue(surveyDatabaseAccessible());
         assumeTrue(responseDatabaseAccessible());
 
-        this.surveyDB.cleanTable();
-        this.responseDB.cleanTable();
-
         User user = setupUser();
         Survey survey = setupSurvey();
         survey = this.surveyDB.create(survey);
         SurveyResponse sr = setupSurveyResponse(survey);
 
-        this.responseDB.create(user.getStringID(), sr);
+        this.responseDB.create(user.getStringID(), sr, true);
 
         SurveyResponse read = this.responseDB.read(sr.getID());
         try {
@@ -90,8 +109,8 @@ public class DynamoDBSurveyResponseStoreTest {
         assumeTrue(surveyDatabaseAccessible());
         assumeTrue(responseDatabaseAccessible());
 
-        this.surveyDB.cleanTable();
-        this.responseDB.cleanTable();
+        //this.surveyDB.cleanTable();
+        //this.responseDB.cleanTable();
 
         User user = setupUser();
         Survey survey = setupSurvey();
@@ -100,12 +119,12 @@ public class DynamoDBSurveyResponseStoreTest {
         SurveyResponse sr2 = setupSurveyResponseAlt(survey);
 
         try {
-            sr1 = this.responseDB.create(user.getStringID(), sr1);
+            sr1 = this.responseDB.create(user.getStringID(), sr1, true);
             SurveyResponse read1 = this.responseDB.read(sr1.getID());
             testSurveyEqual(sr1.getSurvey(), read1.getSurvey());
             testResponsesEqual(sr1.getSurvey(), sr1, read1);
 
-            sr2 = this.responseDB.create(user.getStringID(), sr2);
+            sr2 = this.responseDB.create(user.getStringID(), sr2, true);
             assertEquals(sr2.getID(), sr1.getID());
             SurveyResponse read2 = this.responseDB.read(sr1.getID());
             testSurveyEqual(sr1.getSurvey(), read2.getSurvey());
@@ -127,6 +146,7 @@ public class DynamoDBSurveyResponseStoreTest {
             assertEquals(surveyQuestion.getNumberOfResponses(), readQuestion.getNumberOfResponses());
             for (int j = 0; j < surveyQuestion.getNumberOfResponses(); j++) {
                 assertEquals(surveyQuestion.getAnswer(j), readQuestion.getAnswer(j));
+                assertEquals(surveyQuestion.getAnswerAttribute(j), readQuestion.getAnswerAttribute(j));
             }
         }
     }
@@ -134,6 +154,7 @@ public class DynamoDBSurveyResponseStoreTest {
     private void testResponsesEqual(Survey survey, SurveyResponse sr1, SurveyResponse sr2) {
         assertEquals(survey.size(), sr1.size());
         assertEquals(survey.size(), sr2.size());
+        assertEquals(sr1.getAttributes(), sr1.getAttributes());
         for (int i = 0; i < survey.size(); i++) {
             SurveyQuestionResponse response1 = sr1.getResponse(i);
             SurveyQuestionResponse response2 = sr2.getResponse(i);
@@ -184,6 +205,10 @@ public class DynamoDBSurveyResponseStoreTest {
                 responses);
         SurveyQuestion second = new SurveyQuestion("This is the second survey question",
                 responses);
+
+        first.setAnswerAttribute(0, "attr1");
+        first.setAnswerAttribute(1, "attr2");
+        first.setAnswerAttribute(2, "attr3");
 
         List<SurveyQuestion> questions = new ArrayList<>();
 

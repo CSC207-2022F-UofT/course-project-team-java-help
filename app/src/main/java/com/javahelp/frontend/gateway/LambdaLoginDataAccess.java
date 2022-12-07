@@ -118,9 +118,7 @@ public class LambdaLoginDataAccess extends RESTAPIGateway<LoginResult> implement
             }
 
             @Override
-            public boolean isDone() {
-                return response.isDone();
-            }
+            public boolean isDone() { return response.isDone(); }
 
             @Override
             public LoginResult get() throws ExecutionException, InterruptedException {
