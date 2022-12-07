@@ -49,7 +49,7 @@ public class SearchInteractor {
             userToResponseMap.put(users.get(userID), responses.get(userID));
         }
 
-        if (input.getIsRanking() && input.getUserID() != null && input.getUserID() != "null") {
+        if (input.getIsRanking() && input.getUserID() != null) {
             SurveyResponse responseMain = this.responseStore.readByUser(input.getUserID()).get(0);
             ISimilarityScorer similarityScorer = new SimilarityScorer();
             IProviderRanker ranker = new ProviderRanker(similarityScorer);
