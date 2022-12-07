@@ -1,35 +1,37 @@
-package com.javahelp.frontend.domain.user.login;
+package com.javahelp.frontend.domain.user.Provider_register;
 
 import com.javahelp.model.token.Token;
 import com.javahelp.model.user.User;
 
-/**
- * Result of a request to log in made with a {@link ILoginDataAccess}
- */
-public class LoginResult {
+import java.util.Optional;
 
-    private String errorMessage;
+/**
+ * Result of a request to log in made with a {@link IRegisterDataAccess}
+ */
+public class RegisterResult {
+    private  String errorMessage;
     private Token token;
     private User user;
 
     /**
-     * Creates a new failure {@link LoginResult}
+     * Creates a new failure {@link RegisterResult}
      *
      * @param errorMessage {@link String} error message received
      */
-    public LoginResult(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
+    public RegisterResult(String errorMessage) {this.errorMessage = errorMessage;}
 
     /**
-     * Creates a new successful {@link LoginResult}
+     * Creates a new successful {@link RegisterResult}
      *
      * @param user  {@link User} that authenticated
      * @param token {@link Token} used to authenticate
      */
-    public LoginResult(User user, Token token) {
+    public RegisterResult(User user, Token token) {
         this.user = user;
         this.token = token;
+    }
+
+    public static void postValue(Optional<RegisterResult> registerResult) {
     }
 
     /**
@@ -59,3 +61,6 @@ public class LoginResult {
     }
 
 }
+
+
+
