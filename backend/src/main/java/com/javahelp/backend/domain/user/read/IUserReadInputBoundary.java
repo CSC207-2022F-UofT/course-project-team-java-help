@@ -5,7 +5,7 @@ import com.javahelp.model.user.User;
 /**
  * Interface with input for a {@link UserReadInteractor}
  */
-public interface IUserReadInput {
+public interface IUserReadInputBoundary {
 
     /**
      *

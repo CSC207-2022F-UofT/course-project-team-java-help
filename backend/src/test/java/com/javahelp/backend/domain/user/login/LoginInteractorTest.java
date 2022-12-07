@@ -50,7 +50,7 @@ public class LoginInteractorTest {
 
             LoginInteractor interactor = new LoginInteractor(db, tokens);
 
-            LoginResult result = interactor.login(new ILoginInput() {
+            LoginResult result = interactor.login(new ILoginInputBoundary() {
                 @Override
                 public String getUsername() {
                     return u.getUsername();

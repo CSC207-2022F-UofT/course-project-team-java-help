@@ -9,7 +9,7 @@ import com.javahelp.backend.data.ISurveyStore;
 import com.javahelp.backend.data.IUserStore;
 import com.javahelp.backend.endpoint.APIGatewayResponse;
 import com.javahelp.backend.endpoint.HTTPHandler;
-import com.javahelp.backend.domain.search.ISearchInput;
+import com.javahelp.backend.domain.search.ISearchInputBoundary;
 import com.javahelp.backend.domain.search.SearchInteractor;
 import com.javahelp.backend.domain.search.SearchResult;
 import com.javahelp.model.survey.SurveyQuestion;
@@ -26,7 +26,7 @@ import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 
-public class SearchHandler extends HTTPHandler implements ISearchInput {
+public class SearchHandler extends HTTPHandler implements ISearchInputBoundary {
     private String userID;
     private Set<String> constraint = new HashSet<>();
     private boolean isRanking;

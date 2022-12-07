@@ -5,7 +5,7 @@ import com.javahelp.model.survey.SurveyQuestion;
 import java.util.Map;
 import java.util.Set;
 
-public interface ISearchInput {
+public interface ISearchInputBoundary {
 
     /**
      *

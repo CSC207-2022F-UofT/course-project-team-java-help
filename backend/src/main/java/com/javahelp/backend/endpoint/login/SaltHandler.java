@@ -1,13 +1,12 @@
 package com.javahelp.backend.endpoint.login;
 
 import static com.javahelp.backend.endpoint.APIGatewayResponse.BAD_REQUEST;
-import static com.javahelp.backend.endpoint.APIGatewayResponse.INTERNAL_SERVER_ERROR;
 import static com.javahelp.backend.endpoint.APIGatewayResponse.NOT_FOUND;
 import static com.javahelp.backend.endpoint.APIGatewayResponse.OK;
 
 import com.amazonaws.HttpMethod;
 import com.javahelp.backend.data.IUserStore;
-import com.javahelp.backend.domain.user.authentication.ISaltInput;
+import com.javahelp.backend.domain.user.authentication.ISaltInputBoundary;
 import com.javahelp.backend.domain.user.authentication.SaltInteractor;
 import com.javahelp.backend.domain.user.authentication.SaltResult;
 import com.javahelp.backend.endpoint.APIGatewayResponse;
@@ -22,7 +21,7 @@ import jakarta.json.JsonObject;
 /**
  * Handler for getting salt for a {@link User}
  */
-public class SaltHandler extends HTTPHandler implements ISaltInput {
+public class SaltHandler extends HTTPHandler implements ISaltInputBoundary {
 
     private String username;
 

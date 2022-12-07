@@ -6,7 +6,7 @@ import static com.javahelp.backend.endpoint.APIGatewayResponse.UNAUTHENTICATED;
 import com.amazonaws.HttpMethod;
 import com.javahelp.backend.data.ITokenStore;
 import com.javahelp.backend.data.IUserStore;
-import com.javahelp.backend.domain.user.authentication.ITokenAuthInput;
+import com.javahelp.backend.domain.user.authentication.ITokenAuthInputBoundary;
 import com.javahelp.backend.domain.user.authentication.TokenAuthManager;
 import com.javahelp.backend.domain.user.authentication.TokenAuthResult;
 import com.javahelp.model.token.Token;
@@ -21,7 +21,7 @@ import jakarta.json.JsonObject;
  * the token {@link String} to use to authenticate, and the id of the {@link User} to authenticate
  * for respectively.
  */
-public abstract class HTTPTokenHandler extends HTTPHandler implements ITokenAuthInput {
+public abstract class HTTPTokenHandler extends HTTPHandler implements ITokenAuthInputBoundary {
 
     /**
      * JavaHelp authentication type identifier

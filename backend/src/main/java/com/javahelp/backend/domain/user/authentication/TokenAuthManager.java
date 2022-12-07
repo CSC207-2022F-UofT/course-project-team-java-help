@@ -29,10 +29,10 @@ public class TokenAuthManager {
     /**
      * Authenticates with the specified {@link Token} for the specified {@link User}
      *
-     * @param input {@link ITokenAuthInput} supplying input information
+     * @param input {@link ITokenAuthInputBoundary} supplying input information
      * @return TokenAuthResult object with the results of the comparison
      */
-    public TokenAuthResult authenticate(ITokenAuthInput input) {
+    public TokenAuthResult authenticate(ITokenAuthInputBoundary input) {
         User u = userStore.read(input.getUserID());
         Token t = tokenStore.read(input.getToken());
         if (u == null) {

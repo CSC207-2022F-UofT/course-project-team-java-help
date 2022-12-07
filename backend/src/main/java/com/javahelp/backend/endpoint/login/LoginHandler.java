@@ -6,7 +6,7 @@ import static com.javahelp.backend.endpoint.APIGatewayResponse.OK;
 import com.amazonaws.HttpMethod;
 import com.javahelp.backend.data.ITokenStore;
 import com.javahelp.backend.data.IUserStore;
-import com.javahelp.backend.domain.user.login.ILoginInput;
+import com.javahelp.backend.domain.user.login.ILoginInputBoundary;
 import com.javahelp.backend.domain.user.login.LoginInteractor;
 import com.javahelp.backend.domain.user.login.LoginResult;
 import com.javahelp.backend.endpoint.APIGatewayResponse;
@@ -30,7 +30,7 @@ import jakarta.json.JsonObject;
  *      <li>Contains saltHash key with base64 encoded salt + hash</li>
  * </ul>
  */
-public class LoginHandler extends HTTPHandler implements ILoginInput {
+public class LoginHandler extends HTTPHandler implements ILoginInputBoundary {
 
     private String username, email, id;
 

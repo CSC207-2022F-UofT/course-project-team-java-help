@@ -11,14 +11,11 @@ import com.javahelp.model.user.ClientUserInfo;
 import com.javahelp.model.user.User;
 import com.javahelp.model.user.UserPassword;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAmount;
-import java.time.temporal.TemporalUnit;
 import java.util.TimeZone;
 
 public class TokenAuthManagerTest {
@@ -62,7 +59,7 @@ public class TokenAuthManagerTest {
             tokenStore.create(token);
 
             TokenAuthManager manager = new TokenAuthManager(userStore, tokenStore);
-            TokenAuthResult testResult = manager.authenticate(new ITokenAuthInput() {
+            TokenAuthResult testResult = manager.authenticate(new ITokenAuthInputBoundary() {
                 @Override
                 public String getUserID() {
                     return user.getStringID();

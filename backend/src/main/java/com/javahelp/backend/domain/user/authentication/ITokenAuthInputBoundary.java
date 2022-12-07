@@ -5,7 +5,7 @@ import com.javahelp.model.user.User;
 /**
  * Input boundary for {@link TokenAuthManager}
  */
-public interface ITokenAuthInput {
+public interface ITokenAuthInputBoundary {
 
     /**
      * @return ID of the {@link User} to authenticate for

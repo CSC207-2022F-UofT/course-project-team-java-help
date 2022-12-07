@@ -7,7 +7,7 @@ import com.javahelp.model.user.UserPassword;
  * <p>
  * Must supply one of username, id, or email, the other two can be null
  */
-public interface ILoginInput {
+public interface ILoginInputBoundary {
 
     /**
      * @return the desired {@link String} username for login,

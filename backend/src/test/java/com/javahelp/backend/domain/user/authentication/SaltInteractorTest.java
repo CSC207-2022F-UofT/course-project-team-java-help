@@ -51,7 +51,7 @@ public class SaltInteractorTest {
             users.create(u, p);
 
             SaltInteractor interactor = new SaltInteractor(users);
-            SaltResult result = interactor.get(new ISaltInput() {
+            SaltResult result = interactor.get(new ISaltInputBoundary() {
                 @Override
                 public String getUserID() {
                     return u.getStringID();
@@ -87,7 +87,7 @@ public class SaltInteractorTest {
         User u = new User("ghfgh", info, "testing_user_login_123");
 
         SaltInteractor interactor = new SaltInteractor(users);
-        SaltResult result = interactor.get(new ISaltInput() {
+        SaltResult result = interactor.get(new ISaltInputBoundary() {
             @Override
             public String getUserID() {
                 return null;

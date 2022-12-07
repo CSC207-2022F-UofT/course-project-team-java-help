@@ -30,7 +30,7 @@ public class SearchInteractor {
         this.userStore = userStore;
     }
 
-    public SearchResult search(ISearchInput input) {
+    public SearchResult search(ISearchInputBoundary input) {
         IConstraint constraint = IConstraint.getDefaultImplementation();
         for (String c : input.getConstraints()) {
             constraint.setConstraint(c);

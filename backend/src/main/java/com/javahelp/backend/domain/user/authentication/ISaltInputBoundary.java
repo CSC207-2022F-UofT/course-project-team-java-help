@@ -5,7 +5,7 @@ import com.javahelp.model.user.User;
 /**
  * Input boundary for {@link SaltInteractor}
  */
-public interface ISaltInput {
+public interface ISaltInputBoundary {
 
     /**
      * @return {@link String} ID of the {@link User} to get salt for

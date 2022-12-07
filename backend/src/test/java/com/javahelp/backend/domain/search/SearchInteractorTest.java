@@ -6,9 +6,6 @@ import static org.junit.Assert.assertTrue;
 import com.javahelp.backend.data.ISurveyResponseStore;
 import com.javahelp.backend.data.ISurveyStore;
 import com.javahelp.backend.data.IUserStore;
-import com.javahelp.backend.domain.search.ISearchInput;
-import com.javahelp.backend.domain.search.SearchInteractor;
-import com.javahelp.backend.domain.search.SearchResult;
 import com.javahelp.backend.search.RandomDataPopulater;
 import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.User;
@@ -57,7 +54,7 @@ public class SearchInteractorTest {
                     this.srDB,
                     this.userDB);
 
-            SearchResult result = interactor.search(new ISearchInput() {
+            SearchResult result = interactor.search(new ISearchInputBoundary() {
                 @Override
                 public String getUserID() { return mainClient.getStringID(); }
                 @Override
@@ -86,7 +83,7 @@ public class SearchInteractorTest {
                     this.srDB,
                     this.userDB);
 
-            SearchResult result = interactor.search(new ISearchInput() {
+            SearchResult result = interactor.search(new ISearchInputBoundary() {
                 @Override
                 public String getUserID() { return mainClient.getStringID(); }
                 @Override
