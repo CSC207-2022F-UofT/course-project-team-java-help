@@ -13,7 +13,6 @@ import java.time.Instant;
 public class TokenAuthInteractor {
     private final IUserStore userStore;
     private final ITokenStore tokenStore;
-    private TokenAuthResult authenticate;
 
     /**
      * Constructs a TokenAuthManager object.
@@ -41,7 +40,6 @@ public class TokenAuthInteractor {
             return new TokenAuthResult("Authentication failed");
         }
 
-        this.authenticate = new TokenAuthResult(u, t);
-        return authenticate;
+        return new TokenAuthResult(u, t);
     }
 }
