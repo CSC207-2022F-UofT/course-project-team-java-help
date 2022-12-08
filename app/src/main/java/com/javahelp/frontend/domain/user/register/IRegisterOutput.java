@@ -10,7 +10,7 @@ import com.javahelp.model.user.User;
 public interface IRegisterOutput {
 
     /**
-     * Called when the provided credentials authenticate
+     * Called when a new {@link User} is created
      *
      * @param user  {@link User} authenticated for
      * @param token {@link Token} authenticated with
@@ -18,19 +18,14 @@ public interface IRegisterOutput {
     void success(User user, Token token);
 
     /**
-     * Called when provided credentials did not authenticate
-     */
-    void failure();
-
-    /**
-     * Called when something goes wrong before authentication
+     * Called when something goes wrong and no {@link User} is created
      *
      * @param errorMessage {@link String} error message received
      */
     void error(String errorMessage);
 
     /**
-     * Abort the Register attempt
+     * Abort the register attempt
      */
     void abort();
 
