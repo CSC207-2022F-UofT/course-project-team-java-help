@@ -52,6 +52,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:text="attr0"
+                    android:theme="@style/Theme.MaterialComponents"
                     app:chipBackgroundColor="@color/bp_chip_state_list" />
 
                 <com.google.android.material.chip.Chip
@@ -63,7 +64,8 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:text="attr1"
-                    app:chipBackgroundColor="@color/bp_chip_state_list"/>
+                    android:theme="@style/Theme.MaterialComponents"
+                    app:chipBackgroundColor="@color/bp_chip_state_list" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip2"
@@ -74,7 +76,8 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:text="attr2"
-                    app:chipBackgroundColor="@color/bp_chip_state_list"/>
+                    android:theme="@style/Theme.MaterialComponents"
+                    app:chipBackgroundColor="@color/bp_chip_state_list" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip3"
@@ -85,7 +88,8 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:text="attr3"
-                    app:chipBackgroundColor="@color/bp_chip_state_list"/>
+                    android:theme="@style/Theme.MaterialComponents"
+                    app:chipBackgroundColor="@color/bp_chip_state_list" />
 
             </LinearLayout>
 
