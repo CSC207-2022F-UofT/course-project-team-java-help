@@ -192,11 +192,6 @@ public class ProviderRegistrationViewmodel extends AndroidViewModel implements I
     }
 
     @Override
-    public void failure() {
-
-    }
-
-    @Override
     public void error(String errorMessage) {
 
     }

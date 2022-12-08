@@ -184,11 +184,6 @@ public class ClientRegistrationVm extends AndroidViewModel implements IRegisterO
     }
 
     @Override
-    public void failure() {
-
-    }
-
-    @Override
     public void error(String errorMessage) {
 
     }
