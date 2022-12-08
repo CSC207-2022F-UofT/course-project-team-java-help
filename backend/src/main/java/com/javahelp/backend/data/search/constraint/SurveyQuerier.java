@@ -43,7 +43,7 @@ public class SurveyQuerier {
      * Finds the {@link SurveyResponse}s matching the specified {@link IConstraint}
      *
      * @param constraint {@link IConstraint} to use to fetch  {@link SurveyResponse}s
-     * @return
+     * @return {@link Map} of {@link User} ids and {@link SurveyResponse}s
      */
     public Map<String, SurveyResponse> getSurveyResponses(IConstraint constraint) {
         return dbSRStore.readProviderByConstraint(constraint);

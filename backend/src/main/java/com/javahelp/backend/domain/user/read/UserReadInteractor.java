@@ -11,8 +11,8 @@ public class UserReadInteractor {
     private final IUserStore users;
 
     /**
-     * *
-     * @param users
+     * Creates a new {@link UserReadInteractor}
+     * @param users {@link IUserStore} to use
      */
     public UserReadInteractor(IUserStore users) {
         this.users = users;
