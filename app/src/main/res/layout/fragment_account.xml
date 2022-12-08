@@ -5,16 +5,16 @@
     <data>
         <variable
             name="adata"
-            type="com.javahelp.frontend.fragments.AccountFragment" />
+            type="com.javahelp.frontend.view.AccountFragment" />
     </data>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".frontend.fragments.AccountFragment">
+        tools:context=".frontend.view.AccountFragment">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".frontend.fragments.AccountFragment">
+            tools:context=".frontend.view.AccountFragment">
 
             <LinearLayout
                 android:id="@+id/linear_layout_top"

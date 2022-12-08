@@ -1,4 +1,4 @@
-package com.javahelp.frontend.fragments;
+package com.javahelp.frontend.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.javahelp.R;
-import com.javahelp.frontend.activity.DeleteActivity;
 import com.javahelp.databinding.FragmentAccountBinding;
 
 /**

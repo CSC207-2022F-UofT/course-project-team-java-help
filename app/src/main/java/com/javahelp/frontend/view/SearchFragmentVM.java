@@ -1,4 +1,4 @@
-package com.javahelp.frontend.fragments;
+package com.javahelp.frontend.view;
 
 import android.app.Application;
 
@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.javahelp.frontend.activity.LoginViewModel;
+import com.javahelp.frontend.view.LoginViewModel;
 import com.javahelp.frontend.gateway.LambdaSearchDataAccess;
 import com.javahelp.frontend.domain.user.search.ISearchDataAccess;
 import com.javahelp.frontend.domain.user.search.ISearchInput;

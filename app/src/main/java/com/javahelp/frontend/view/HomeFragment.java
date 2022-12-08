@@ -1,4 +1,4 @@
-package com.javahelp.frontend.fragments;
+package com.javahelp.frontend.view;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
