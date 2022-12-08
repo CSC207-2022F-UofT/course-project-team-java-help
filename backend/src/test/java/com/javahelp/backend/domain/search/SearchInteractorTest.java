@@ -40,7 +40,7 @@ public class SearchInteractorTest {
 
             SearchResult result = interactor.search(new ISearchInputBoundary() {
                 @Override
-                public String getUserID() {
+                public String getSearchUserID() {
                     return population.getRandomClient().getStringID();
                 }
 
@@ -75,7 +75,7 @@ public class SearchInteractorTest {
 
             SearchResult result = interactor.search(new ISearchInputBoundary() {
                 @Override
-                public String getUserID() { return population.getRandomClient().getStringID(); }
+                public String getSearchUserID() { return population.getRandomClient().getStringID(); }
                 @Override
                 public Set<String> getConstraints() { return attributes; }
                 @Override
