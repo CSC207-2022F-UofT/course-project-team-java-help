@@ -6,7 +6,7 @@
     <data>
         <variable
             name="data"
-            type="com.javahelp.frontend.activity.LoginViewModel" />
+            type="com.javahelp.frontend.view.LoginViewModel" />
 
     </data>
 
@@ -16,7 +16,7 @@
         android:orientation="vertical"
         android:padding="10dp"
         android:background="@drawable/leaves"
-        tools:context=".frontend.activity.LoginActivity">
+        tools:context=".frontend.view.LoginActivity">
 
 
         <TextView

@@ -1,4 +1,4 @@
-package com.javahelp.frontend.activity;
+package com.javahelp.frontend.view;
 
 import android.os.Bundle;
 
@@ -9,9 +9,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.javahelp.R;
 import com.javahelp.databinding.ActivityFgBinding;
-import com.javahelp.frontend.fragments.AccountFragment;
-import com.javahelp.frontend.fragments.HomeFragment;
-import com.javahelp.frontend.fragments.SearchFragment;
 
 public class FrontPageActivity extends AppCompatActivity {
     ActivityFgBinding binding;

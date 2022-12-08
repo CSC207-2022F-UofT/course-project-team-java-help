@@ -1,4 +1,4 @@
-package com.javahelp.frontend.activity;
+package com.javahelp.frontend.view;
 
 import android.Manifest;
 import android.content.Intent;

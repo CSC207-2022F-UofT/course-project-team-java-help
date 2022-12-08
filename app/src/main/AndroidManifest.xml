@@ -14,7 +14,7 @@
         android:theme="@style/Theme.JavaHelpFrontend"
         tools:targetApi="31" >
         <activity
-            android:name=".frontend.activity.FrontPage2Activity"
+            android:name=".frontend.view.FrontPage2Activity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.NoActionBar" >
             <meta-data
@@ -22,31 +22,31 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".frontend.activity.ClientRegistrationActivity"
+            android:name=".frontend.view.ClientRegistrationActivity"
             android:exported="false"
-            android:parentActivityName=".frontend.activity.LoginActivity" >
+            android:parentActivityName=".frontend.view.LoginActivity" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".frontend.activity.ProviderRegistrationActivity"
+            android:name=".frontend.view.ProviderRegistrationActivity"
             android:exported="false"
-            android:parentActivityName=".frontend.activity.LoginActivity" >
+            android:parentActivityName=".frontend.view.LoginActivity" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".frontend.activity.FrontPageActivity"
+            android:name=".frontend.view.FrontPageActivity"
             android:exported="false"
-            android:parentActivityName=".frontend.activity.FrontPageActivity" >
+            android:parentActivityName=".frontend.view.FrontPageActivity" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".frontend.activity.LoginActivity"
+            android:name=".frontend.view.LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.NoActionBar" >
             <intent-filter>
@@ -56,9 +56,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".frontend.activity.DeleteActivity"
+            android:name=".frontend.view.DeleteActivity"
             android:exported="false"
-            android:parentActivityName=".frontend.activity.FrontPageActivity">
+            android:parentActivityName=".frontend.view.FrontPageActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

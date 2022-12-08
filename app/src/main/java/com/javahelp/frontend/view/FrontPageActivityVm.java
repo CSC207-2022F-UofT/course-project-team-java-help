@@ -1,4 +1,4 @@
-package com.javahelp.frontend.activity;
+package com.javahelp.frontend.view;
 
 import android.app.Application;
 import androidx.annotation.NonNull;

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="pdata"
-            type="com.javahelp.frontend.activity.ProviderRegistrationViewmodel" />
+            type="com.javahelp.frontend.view.ProviderRegistrationViewmodel" />
 
     </data>
 
@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@color/white"
-        tools:context=".frontend.activity.ProviderRegistrationActivity">
+        tools:context=".frontend.view.ProviderRegistrationActivity">
 
         <ScrollView
             android:layout_width="match_parent"

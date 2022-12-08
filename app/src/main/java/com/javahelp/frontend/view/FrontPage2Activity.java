@@ -1,4 +1,4 @@
-package com.javahelp.frontend.activity;
+package com.javahelp.frontend.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
