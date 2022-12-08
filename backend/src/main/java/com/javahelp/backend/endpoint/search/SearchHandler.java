@@ -2,6 +2,7 @@ package com.javahelp.backend.endpoint.search;
 
 import static com.javahelp.backend.endpoint.APIGatewayResponse.BAD_REQUEST;
 import static com.javahelp.backend.endpoint.APIGatewayResponse.FORBIDDEN;
+import static com.javahelp.backend.endpoint.APIGatewayResponse.INTERNAL_SERVER_ERROR;
 import static com.javahelp.backend.endpoint.APIGatewayResponse.OK;
 
 import com.amazonaws.HttpMethod;
@@ -57,10 +58,6 @@ public class SearchHandler extends HTTPTokenHandler implements ISearchInputBound
         isRanking = body.getBoolean("ranking", false);
         JsonArray filters = body.getJsonArray("filters");
 
-        if (userID == null || filters == null) {
-            return APIGatewayResponse.error(BAD_REQUEST, "Request must contain \"userID\" and \"filters\"");
-        }
-
         try {
             for (int i = 0; i < filters.size(); i++) {
                 String filter_key = String.format("filter_%s", i);
@@ -81,7 +78,7 @@ public class SearchHandler extends HTTPTokenHandler implements ISearchInputBound
         try {
             result = interactor.search(this);
         } catch (RuntimeException e) {
-            return APIGatewayResponse.error(BAD_REQUEST, "Failed search.");
+            return APIGatewayResponse.error(INTERNAL_SERVER_ERROR, "Failed search.");
         }
 
         String response;
@@ -104,10 +101,7 @@ public class SearchHandler extends HTTPTokenHandler implements ISearchInputBound
             jsonBuilder.add("success", true);
             response = jsonBuilder.build().toString();
         } else {
-            response = Json.createObjectBuilder()
-                    .add("errorMessage", result.getErrorMessage())
-                    .add("success", false)
-                    .build().toString();
+            return APIGatewayResponse.error(INTERNAL_SERVER_ERROR, result.getErrorMessage());
         }
 
         return APIGatewayResponse.builder()
