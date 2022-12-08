@@ -7,7 +7,7 @@ import static io.restassured.RestAssured.given;
 import com.javahelp.backend.data.ISurveyResponseStore;
 import com.javahelp.backend.data.ISurveyStore;
 import com.javahelp.backend.data.IUserStore;
-import com.javahelp.backend.data.search.RandomDataPopulater;
+import com.javahelp.backend.data.search.RandomSurveyPopulation;
 import com.javahelp.model.user.User;
 
 import org.junit.Test;
@@ -17,12 +17,19 @@ import io.restassured.http.Header;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 
+/**
+ * Tests {@link SearchHandler}*
+ */
 public class SearchHandlerTest {
     private static final String SEARCH = "https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/providers/search";
 
+    IUserStore users = IUserStore.getDefaultImplementation();
+    ISurveyStore surveys = ISurveyStore.getDefaultImplementation();
+    ISurveyResponseStore responses = ISurveyResponseStore.getDefaultImplementation();
+
     public boolean userDatabaseAccessible() {
         try {
-            IUserStore.getDefaultImplementation().read("test");
+            users.read("test");
             return true;
         } catch (Exception e) {
             return false;
@@ -31,16 +38,16 @@ public class SearchHandlerTest {
 
     public boolean surveyDatabaseAccessible() {
         try {
-            ISurveyStore.getDefaultImplementation().read("test");
+            surveys.read("test");
             return true;
         } catch (Exception e) {
             return false;
         }
     }
 
-    public boolean srDatabaseAccessible() {
+    public boolean responseDatabaseAccessible() {
         try {
-            ISurveyResponseStore.getDefaultImplementation().read("test");
+            responses.read("test");
             return true;
         } catch (Exception e) {
             return false;
@@ -51,10 +58,11 @@ public class SearchHandlerTest {
     public void testValidSearch() {
         assumeTrue(userDatabaseAccessible());
         assumeTrue(surveyDatabaseAccessible());
-        assumeTrue(srDatabaseAccessible());
+        assumeTrue(responseDatabaseAccessible());
 
-        RandomDataPopulater dataPopulater = new RandomDataPopulater();
-        User client = dataPopulater.getRandomClient();
+        RandomSurveyPopulation population = new RandomSurveyPopulation(surveys, responses, users);
+        population.populate();
+        User client = population.getRandomClient();
 
         JsonObject json = Json.createObjectBuilder()
                 .add("userID", client.getStringID())
@@ -67,6 +75,6 @@ public class SearchHandlerTest {
                 .contentType(ContentType.JSON)
                 .body("success", equalTo(true));
 
-        //dataPopulater.deleteRandomPopulation();
+        population.delete();
     }
 }

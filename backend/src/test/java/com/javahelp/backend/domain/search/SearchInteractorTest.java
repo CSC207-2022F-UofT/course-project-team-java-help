@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 import com.javahelp.backend.data.ISurveyResponseStore;
 import com.javahelp.backend.data.ISurveyStore;
 import com.javahelp.backend.data.IUserStore;
-import com.javahelp.backend.data.search.RandomDataPopulater;
+import com.javahelp.backend.data.search.RandomSurveyPopulation;
 import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.User;
 
@@ -17,92 +17,82 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Tests the {@link SearchInteractor}
+ */
 public class SearchInteractorTest {
-    private User client;
-    private List<User> providers;
-    private List<SurveyResponse> responses;
 
-    private ISurveyStore surveyDB;
-    private ISurveyResponseStore srDB;
-    private IUserStore userDB;
-
-    private RandomDataPopulater dataPopulater;
-
-    @Before
-    public void setup() {
-        this.dataPopulater = new RandomDataPopulater();
-        this.client = dataPopulater.getRandomClient();
-        this.providers = dataPopulater.getRandomProviders();
-        this.responses = dataPopulater.getRandomResponses();
-
-        this.surveyDB = dataPopulater.getSurveyDB();
-        this.srDB = dataPopulater.getSrDB();
-        this.userDB = dataPopulater.getUserDB();
-    }
+    private ISurveyStore surveyDB = ISurveyStore.getDefaultImplementation();
+    private ISurveyResponseStore srDB = ISurveyResponseStore.getDefaultImplementation();
+    private IUserStore userDB = IUserStore.getDefaultImplementation();
 
     @Test
     public void testSearchWithConstraint() {
-        User mainClient = this.dataPopulater.getRandomClient();
-
-        User randomProvider1 = this.providers.get(0);
-        SurveyResponse randomResponse1 = this.responses.get(0);
-        Set<String> attributes1 = new HashSet<>();
-        attributes1.add("attr0");
+        RandomSurveyPopulation population = new RandomSurveyPopulation(surveyDB, srDB, userDB);
 
         try {
-            SearchInteractor interactor = new SearchInteractor(this.surveyDB,
-                    this.srDB,
-                    this.userDB);
+            population.populate();
+
+            Set<String> attributes = new HashSet<>();
+            attributes.add("attr0");
+
+            SearchInteractor interactor = new SearchInteractor(surveyDB, srDB, userDB);
 
             SearchResult result = interactor.search(new ISearchInputBoundary() {
                 @Override
-                public String getUserID() { return mainClient.getStringID(); }
+                public String getUserID() {
+                    return population.getRandomClient().getStringID();
+                }
+
                 @Override
-                public Set<String> getConstraints() { return attributes1; }
+                public Set<String> getConstraints() {
+                    return attributes;
+                }
+
                 @Override
-                public boolean getIsRanking() { return false; }
+                public boolean getIsRanking() {
+                    return false;
+                }
             });
 
             assertTrue(result.getUsers().size() > 0);
         }
         finally {
-            this.dataPopulater.deleteRandomPopulation();
+            population.delete();
         }
     }
 
     @Test
     public void testSearchWithoutConstraint() {
-        User mainClient = this.dataPopulater.getRandomClient();
+        RandomSurveyPopulation population = new RandomSurveyPopulation(surveyDB, srDB, userDB);
+
         Set<String> attributes = new HashSet<>();
 
-        List<User> randomProviders = this.providers;
-        List<SurveyResponse> randomResponses = this.responses;
-
         try {
-            SearchInteractor interactor = new SearchInteractor(this.surveyDB,
-                    this.srDB,
-                    this.userDB);
+            population.populate();
+
+            SearchInteractor interactor = new SearchInteractor(surveyDB, srDB, userDB);
 
             SearchResult result = interactor.search(new ISearchInputBoundary() {
                 @Override
-                public String getUserID() { return mainClient.getStringID(); }
+                public String getUserID() { return population.getRandomClient().getStringID(); }
                 @Override
                 public Set<String> getConstraints() { return attributes; }
                 @Override
                 public boolean getIsRanking() { return false; }
             });
 
-            assertEquals(this.dataPopulater.getPopulationNumber(), result.getUsers().size());
-            assertEquals(randomProviders.size(), result.getUsers().size());
+            assertEquals(population.getPopulationSize(), result.getUsers().size());
 
             Set<String> expectedUsers = new HashSet<>();
             Set<String> actualUsers = new HashSet<>();
             Set<String> expectedResponses = new HashSet<>();
             Set<String> actualResponses = new HashSet<>();
-            for (int i = 0; i < randomProviders.size(); i++) {
-                expectedUsers.add(randomProviders.get(i).getStringID());
+
+            for (int i = 0; i < population.getPopulationSize(); i++) {
+                expectedUsers.add(population.getRandomProviders().get(i).getStringID());
                 actualUsers.add(result.getUsers().get(i).getStringID());
-                expectedResponses.add(randomResponses.get(i).getID());
+                expectedResponses.add(population.getRandomResponses().get(i).getID());
                 actualResponses.add(result.getResponses().get(i).getID());
             }
 
@@ -110,7 +100,7 @@ public class SearchInteractorTest {
             assertEquals(expectedResponses, actualResponses);
         }
         finally {
-            this.dataPopulater.deleteRandomPopulation();
+            population.delete();
         }
     }
 }
