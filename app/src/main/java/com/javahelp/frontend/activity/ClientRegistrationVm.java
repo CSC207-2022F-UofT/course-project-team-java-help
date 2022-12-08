@@ -6,11 +6,11 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.javahelp.frontend.domain.user.Client_register.IRegisterDataAccess;
-import com.javahelp.frontend.domain.user.Client_register.IRegisterOutput;
-import com.javahelp.frontend.domain.user.Client_register.RegisterInteractor;
-import com.javahelp.frontend.domain.user.Client_register.RegisterResult;
-import com.javahelp.frontend.gateway.LambdaCRegisterDataAccess;
+import com.javahelp.frontend.domain.user.register.IRegisterDataAccess;
+import com.javahelp.frontend.domain.user.register.IRegisterOutput;
+import com.javahelp.frontend.domain.user.register.RegisterInteractor;
+import com.javahelp.frontend.domain.user.register.RegisterResult;
+import com.javahelp.frontend.gateway.LambdaRegisterDataAccess;
 import com.javahelp.model.token.Token;
 import com.javahelp.model.user.ClientUserInfo;
 import com.javahelp.model.user.IPasswordHasher;
@@ -39,7 +39,7 @@ public class ClientRegistrationVm extends AndroidViewModel implements IRegisterO
     public ClientRegistrationVm(@NonNull Application application) {
 
         super(application);
-        IRegisterDataAccess register = LambdaCRegisterDataAccess.getInstance();
+        IRegisterDataAccess register = LambdaRegisterDataAccess.getInstance();
         IPasswordHasher hasher = SHAPasswordHasher.getInstance();
         registerInteractor = new RegisterInteractor(this, register, hasher);
     }
@@ -166,7 +166,14 @@ public class ClientRegistrationVm extends AndroidViewModel implements IRegisterO
 
             }
             if (passwordMatch(password1.getValue(), password2.getValue())) {
-                registerInteractor.register(username.getValue(), password1.getValue(), clientUserInfo);
+                ClientUserInfo info = new ClientUserInfo(
+                        email.getValue(),
+                        address.getValue(),
+                        phone.getValue(),
+                        firstname.getValue(),
+                        lastname.getValue());
+                User u = new User("", info, username.getValue());
+                registerInteractor.register(u, password1.getValue());
             }
         });
     }

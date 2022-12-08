@@ -14,8 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.javahelp.R;
 import com.javahelp.databinding.ActivityPregBinding;
-
-import com.javahelp.frontend.domain.user.Provider_register.RegisterResult;
+import com.javahelp.frontend.domain.user.register.RegisterResult;
 import com.javahelp.frontend.util.auth.SharedPreferencesAuthInformationProvider;
 import com.javahelp.model.token.Token;
 import com.javahelp.model.user.User;
@@ -79,18 +78,19 @@ public class ProviderRegistrationActivity extends AppCompatActivity {
      */
     private void registerAttempt() {
         if (binding.username.getText().toString().isEmpty() || binding.password.getText().toString().isEmpty()
-            || binding.repassword.getText().toString().isEmpty()) {
+                || binding.repassword.getText().toString().isEmpty()) {
             providerRegistrationViewmodel.setRegisterError("Please enter username and password");
             return; // early return on invalid username or password
-        }else if(!binding.password.getText().toString().equals(binding.repassword.getText().toString())){
+        } else if (!binding.password.getText().toString().equals(binding.repassword.getText().toString())) {
             providerRegistrationViewmodel.setRegisterError("Passwords do not match");
             return;
-            }else if(binding.email.getText().toString().isEmpty() || binding.practicename.getText().toString().isEmpty()
-            || binding.home.getText().toString().isEmpty() ||binding.phonenumber.getText().toString().isEmpty()){
+        } else if (binding.email.getText().toString().isEmpty() || binding.practicename.getText().toString().isEmpty()
+                || binding.home.getText().toString().isEmpty() || binding.phonenumber.getText().toString().isEmpty()) {
             providerRegistrationViewmodel.setRegisterError("Please enter your personal information");
-            return;}
-            providerRegistrationViewmodel.setRegisterError("Registering");
-            requestPermissions(new String[]{Manifest.permission.INTERNET}, REQUEST_INTERNET_REGISTER);
+            return;
+        }
+        providerRegistrationViewmodel.setRegisterError("Registering");
+        requestPermissions(new String[]{Manifest.permission.INTERNET}, REQUEST_INTERNET_REGISTER);
 //            new Thread(() -> {
 //                try {
 //                    Thread.sleep(750);
@@ -111,7 +111,7 @@ public class ProviderRegistrationActivity extends AppCompatActivity {
      * @param registerResult {@link Optional} {@link RegisterResult} to update on
      */
     private void updateOnRegisterResult(Optional<RegisterResult> registerResult) {
-        if(registerResult.isPresent()){
+        if (registerResult.isPresent()) {
             updateOnPresentRegisterResult(registerResult.get());
         } else {
             binding.registerResultText.setVisibility(View.GONE);

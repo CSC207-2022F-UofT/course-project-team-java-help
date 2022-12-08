@@ -1,7 +1,7 @@
 package com.javahelp.frontend.gateway;
 
-import com.javahelp.frontend.domain.user.Client_register.IRegisterDataAccess;
-import com.javahelp.frontend.domain.user.Client_register.RegisterResult;
+import com.javahelp.frontend.domain.user.register.IRegisterDataAccess;
+import com.javahelp.frontend.domain.user.register.RegisterResult;
 import com.javahelp.model.token.Token;
 import com.javahelp.model.user.ClientUserInfo;
 import com.javahelp.model.user.User;
@@ -25,10 +25,11 @@ import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 
-public class LambdaCRegisterDataAccess extends RESTAPIGateway<RegisterResult> implements IRegisterDataAccess {
+public class LambdaRegisterDataAccess extends RESTAPIGateway<RegisterResult> implements IRegisterDataAccess {
 
-    private static final String ENDPOINT = "";
-    private static final LambdaCRegisterDataAccess instance = new LambdaCRegisterDataAccess();
+    private static final String ENDPOINT = "https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/register/user";
+
+    private static final LambdaRegisterDataAccess instance = new LambdaRegisterDataAccess();
 
     private static java.net.URI URI = null;
 
@@ -41,36 +42,29 @@ public class LambdaCRegisterDataAccess extends RESTAPIGateway<RegisterResult> im
     }
 
     /**
-     * @return an instance of {@link LambdaCRegisterDataAccess}
+     * @return an instance of {@link LambdaRegisterDataAccess}
      */
-    public static LambdaCRegisterDataAccess getInstance() {
+    public static LambdaRegisterDataAccess getInstance() {
         return instance;
     }
 
     /**
      * Private constructor
      */
-    private LambdaCRegisterDataAccess() {
+    private LambdaRegisterDataAccess() {
 
     }
 
     @Override
-    public Future<RegisterResult> register(String username, ClientUserInfo clientUserInfo, UserPassword password, FutureCallback<RegisterResult> callback) {
+    public Future<RegisterResult> register(User user, UserPassword password, FutureCallback<RegisterResult> callback) {
 
-        JsonObjectBuilder bodyBuilder = Json.createObjectBuilder()
-                .add("saltHas", password.getBase64SaltHash());
-        if (username != null) {
-            bodyBuilder.add("username", username);
-        } else if (clientUserInfo != null) {
-            bodyBuilder.add("infotype", "PROVIDER");
-            bodyBuilder.add("email", clientUserInfo.getEmailAddress());
-            bodyBuilder.add("address", clientUserInfo.getAddress());
-            bodyBuilder.add("phonenumber", clientUserInfo.getPhoneNumber());
-            bodyBuilder.add("firstname", clientUserInfo.getFirstName());
-            bodyBuilder.add("lastname", clientUserInfo.getLastName());
-        }
+        JsonObject body = Json.createObjectBuilder()
+                .add("saltHash", password.getBase64SaltHash())
+                .add("user", UserConverter.getInstance().toJSON(user))
+                .build();
+
         SimpleHttpRequest request = SimpleHttpRequest.create("POST", URI);
-        request.setBody(bodyBuilder.build().toString(), ContentType.APPLICATION_JSON);
+        request.setBody(body.toString(), ContentType.APPLICATION_JSON);
         request.setHeader("Content-Type", "application/json");
 
         request.setConfig(RequestConfig.custom()
@@ -127,10 +121,6 @@ public class LambdaCRegisterDataAccess extends RESTAPIGateway<RegisterResult> im
                 return response.get(l, timeUnit).get();
             }
         };
-
-
-
-
     }
 
     @Override
@@ -141,7 +131,7 @@ public class LambdaCRegisterDataAccess extends RESTAPIGateway<RegisterResult> im
 
         if (response.shouldHaveBody() && response.isSuccessfullyParsed()) {
             JsonObject json = response.getBody();
-            if (json.containsKey("user" ) && json.containsKey("token")) {
+            if (response.getResponseCode() == 200 && json.containsKey("user" ) && json.containsKey("token")) {
                 JsonObject userO = json.getJsonObject("user");
                 JsonObject tokenO = json.getJsonObject("token");
                 User user = userConverter.fromJSON(userO);
@@ -152,8 +142,6 @@ public class LambdaCRegisterDataAccess extends RESTAPIGateway<RegisterResult> im
                 }
 
                 return new RESTAPIGatewayResponse<>(new RegisterResult(user, token));
-            } else if (response.getResponseCode() == 200) {
-                return new RESTAPIGatewayResponse<>(new RegisterResult("Authentication failed"));
             }
             else if (json.containsKey("errorMessage")) {
                 return new RESTAPIGatewayResponse<>(json.getString("errorMessage"));

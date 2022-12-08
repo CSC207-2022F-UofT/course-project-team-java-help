@@ -1,7 +1,8 @@
-package com.javahelp.frontend.domain.user.Client_register;
+package com.javahelp.frontend.domain.user.register;
 
 import com.javahelp.model.user.ClientUserInfo;
 
+import com.javahelp.model.user.User;
 import com.javahelp.model.user.UserPassword;
 
 import org.apache.hc.core5.concurrent.FutureCallback;
@@ -14,11 +15,10 @@ public interface IRegisterDataAccess {
     /**
      * Register with the provided credentials
      *
-     * @param username      username to log in for, or null
+     * @param user          the {@link User} to register
      * @param password      the {@link UserPassword} to register in with
      * @param callback      the {@link FutureCallback} to call, or null
-     * @param clientUserInfo       the {@link ClientUserInfo} tp register, or null
      * @return {@link Future} with {@link RegisterResult}
      */
-    Future<RegisterResult> register(String username, ClientUserInfo clientUserInfo, UserPassword password, FutureCallback<RegisterResult> callback);
+    Future<RegisterResult> register(User user, UserPassword password, FutureCallback<RegisterResult> callback);
 }

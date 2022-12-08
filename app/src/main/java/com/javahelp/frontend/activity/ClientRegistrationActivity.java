@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.javahelp.R;
 import com.javahelp.databinding.ActivityClientRegistrationBinding;
-import com.javahelp.frontend.domain.user.Client_register.RegisterResult;
+import com.javahelp.frontend.domain.user.register.RegisterResult;
 import com.javahelp.frontend.util.auth.SharedPreferencesAuthInformationProvider;
 import com.javahelp.model.token.Token;
 import com.javahelp.model.user.User;
