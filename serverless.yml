@@ -20,6 +20,7 @@ provider:
             - dynamodb:PutItem
             - dynamodb:UpdateItem
             - dynamodb:DeleteItem
+            - dynamodb:BatchGetItem
           Resource: 'arn:aws:dynamodb:us-east-1:*:*'
 
 package:
@@ -27,28 +28,32 @@ package:
 
 functions:
   login:
-    handler: com.javahelp.backend.endpoint.login.LoginHandler
+    handler: com.javahelp.backend.endpoint.user.LoginHandler
+    timeout: 20
     events:
       - httpApi:
           path: /login
           method: post
 
   salt:
-    handler: com.javahelp.backend.endpoint.login.SaltHandler
+    handler: com.javahelp.backend.endpoint.user.SaltHandler
+    timeout: 20
     events:
       - httpApi:
           path: /users/salt
           method: get
 
   saltByID:
-    handler: com.javahelp.backend.endpoint.login.SaltHandler
+    handler: com.javahelp.backend.endpoint.user.SaltHandler
+    timeout: 20
     events:
       - httpApi:
           path: /users/{userid}/salt
           method: get
 
   deleteUser:
-    handler: com.javahelp.backend.endpoint.delete.DeleteHandler
+    handler: com.javahelp.backend.endpoint.user.DeleteHandler
+    timeout: 20
     events:
       - httpApi:
           path: /users/{userid}
@@ -56,6 +61,7 @@ functions:
 
   readUser:
     handler: com.javahelp.backend.endpoint.user.ReadHandler
+    timeout: 20
     events:
       - httpApi:
           path: /users/{userid}
@@ -63,6 +69,7 @@ functions:
 
   search:
     handler: com.javahelp.backend.endpoint.search.SearchHandler
+    timeout: 20
     events:
       - httpApi:
           path: /providers/search

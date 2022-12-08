@@ -1,7 +1,6 @@
 package com.javahelp.backend.domain.user.register;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeTrue;
 
@@ -80,6 +79,11 @@ public class ClientRegisterTest {
         UserRegisterResult result = null;
 
         try {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ignored) {
+
+            }
             result = client.register(input);
             assertTrue(result.isSuccess());
         }
@@ -143,6 +147,13 @@ public class ClientRegisterTest {
 
         try {
             userStore.create(u, p);
+
+            userStore.read(u.getStringID());
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ignored) {
+
+            }
 
             result = client.register(input);
 

@@ -9,29 +9,22 @@ import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.amazonaws.services.dynamodbv2.model.UpdateItemRequest;
-import com.javahelp.backend.search.constraint.Constraint;
-import com.javahelp.backend.search.constraint.IConstraint;
+import com.javahelp.backend.data.search.constraint.IConstraint;
 import com.javahelp.model.survey.Survey;
 import com.javahelp.model.survey.SurveyQuestion;
 import com.javahelp.model.survey.SurveyQuestionResponse;
 import com.javahelp.model.survey.SurveyResponse;
-import com.javahelp.model.user.User;
-import com.javahelp.model.user.UserPassword;
-
-import org.w3c.dom.Attr;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 
 public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurveyResponseStore{
-    private String tableName;
-    private ISurveyStore surveyStore;
+    private final String tableName;
+    private final ISurveyStore surveyStore;
 
     DynamoDBSurveyResponseStore(String tableName, Regions region, ISurveyStore surveyStore) {
         super(region);
@@ -79,7 +72,8 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
 
         GetItemRequest request = new GetItemRequest()
                 .withTableName(tableName)
-                .withKey(key);
+                .withKey(key)
+                .withConsistentRead(true);
 
         GetItemResult result = getClient().getItem(request);
 
@@ -119,23 +113,6 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
                 .withKey(key);
 
         getClient().deleteItem(request);
-    }
-
-    /**
-     * Removes all {@link SurveyResponse}s in database.
-     * ONLY use during preliminary testing!
-     */
-    @Override
-    public void cleanTable() {
-        ScanRequest scanRequest = new ScanRequest()
-                .withTableName(this.tableName);
-        ScanResult result = getClient().scan(scanRequest);
-
-        for (Map<String, AttributeValue> item : result.getItems()) {
-            if (item != null) {
-                delete(item.get("id").getS());
-            }
-        }
     }
 
     /**
@@ -204,15 +181,8 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
         }
     }
 
-    /**
-     *
-     * @param constraint {@link Map <>} which specifies the required attributes
-     *                   from the User.
-     * @return {@link Map} of all users and their corresponding survey responses
-     * with the specific constraints.
-     */
     @Override
-    public Map<String, SurveyResponse> readByConstraint(IConstraint constraint) {
+    public Map<String, SurveyResponse> readProviderByConstraint(IConstraint constraint) {
         Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
         expressionAttributeValues.put(":provider_survey_val", new AttributeValue().withBOOL(true));
 
@@ -267,6 +237,7 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
         ScanRequest scanRequest = new ScanRequest()
                 .withTableName(this.tableName)
                 .withFilterExpression(keyConditionExpression)
+                .withConsistentRead(true)
                 .withExpressionAttributeValues(expressionAttributeValues);
         ScanResult result = getClient().scan(scanRequest);
 

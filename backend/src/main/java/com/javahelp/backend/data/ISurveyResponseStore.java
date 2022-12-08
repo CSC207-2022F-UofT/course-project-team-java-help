@@ -1,7 +1,7 @@
 package com.javahelp.backend.data;
 
 import com.amazonaws.regions.Regions;
-import com.javahelp.backend.search.constraint.IConstraint;
+import com.javahelp.backend.data.search.constraint.IConstraint;
 import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.User;
 
@@ -52,12 +52,6 @@ public interface ISurveyResponseStore {
     void delete(String id);
 
     /**
-     * Removes all {@link SurveyResponse}s in database.
-     * ONLY use during preliminary testing!
-     */
-    void cleanTable();
-
-    /**
      *
      * @param userID {@link String} id of the user to be queried.
      * @return {@link List<SurveyResponse>} of the specified user.
@@ -70,7 +64,7 @@ public interface ISurveyResponseStore {
      *                   from the User.
      * @return {@link Set<User>} with the specified constraints.
      */
-    Map<String, SurveyResponse> readByConstraint(IConstraint constraint);
+    Map<String, SurveyResponse> readProviderByConstraint(IConstraint constraint);
 
     /**
      *

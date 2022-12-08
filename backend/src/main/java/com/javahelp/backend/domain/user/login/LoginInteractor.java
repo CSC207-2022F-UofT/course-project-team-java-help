@@ -15,9 +15,9 @@ import java.time.Duration;
  */
 public class LoginInteractor {
 
-    private IUserStore userStore;
+    private final IUserStore userStore;
 
-    private ITokenStore tokenStore;
+    private final ITokenStore tokenStore;
 
     /**
      * Creates a new {@link LoginInteractor}
@@ -31,11 +31,11 @@ public class LoginInteractor {
     }
 
     /**
-     * Logs in with the specified {@link ILoginInput}
+     * Logs in with the specified {@link ILoginInputBoundary}
      *
-     * @param input {@link ILoginInput} providing login information
+     * @param input {@link ILoginInputBoundary} providing login information
      */
-    public LoginResult login(ILoginInput input) {
+    public LoginResult login(ILoginInputBoundary input) {
         User u = locateUser(input.getUsername(), input.getEmail(), input.getID());
 
         if (u == null) {

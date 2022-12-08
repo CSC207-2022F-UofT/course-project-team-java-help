@@ -19,12 +19,12 @@ public class Token {
     /**
      * Expiry date of the token.
      */
-    private Instant expiry;
+    private final Instant expiry;
 
     /**
      * Issued date of the token.
      */
-    private Instant issued;
+    private final Instant issued;
 
     /**
      * ID of {@link User} for {@link Token}.

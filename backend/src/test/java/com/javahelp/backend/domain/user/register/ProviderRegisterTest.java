@@ -3,14 +3,12 @@ package com.javahelp.backend.domain.user.register;
 import com.javahelp.backend.data.IUserStore;
 import com.javahelp.backend.domain.user.register.provider.IProviderRegisterInputBoundary;
 import com.javahelp.backend.domain.user.register.provider.ProviderRegisterInteractor;
-import com.javahelp.model.user.ClientUserInfo;
 import com.javahelp.model.user.ProviderUserInfo;
 import com.javahelp.model.user.SHAPasswordHasher;
 import com.javahelp.model.user.User;
 import com.javahelp.model.user.UserPassword;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeTrue;
 
@@ -81,6 +79,11 @@ public class ProviderRegisterTest {
         UserRegisterResult result = null;
 
         try {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ignored) {
+
+            }
             result = provider.register(input);
             assertTrue(result.isSuccess());
         } finally {
@@ -144,6 +147,12 @@ public class ProviderRegisterTest {
 
         try {
             userStore.create(u, p);
+            userStore.read(u.getStringID());
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ignored) {
+
+            }
             result = provider.register(input);
             assertEquals("Username already taken", result.getErrorMessage());}
         finally{

@@ -13,6 +13,7 @@ import com.javahelp.model.user.UserPassword;
 
 import org.junit.Test;
 
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -27,7 +28,6 @@ public class DynamoDBUserStoreTest {
     DynamoDBUserStore db = new DynamoDBUserStore(tableName, regions);
 
     /**
-     *
      * @return whether the database is accessible from the current process
      */
     public boolean databaseAccessible() {
@@ -220,7 +220,43 @@ public class DynamoDBUserStoreTest {
             db.delete(read.getStringID());
 
         }
+    }
 
+    @Test
+    public void testMultiRead() {
+        assumeTrue(databaseAccessible());
+
+        UserPassword p1 = randomUserPassword();
+        UserPassword p2 = randomUserPassword();
+
+        User u1 = new User("", new ClientUserInfo(
+                "test.client@mail.com",
+                "123  client road",
+                "289375034875093",
+                "Erin",
+                "McDonald"), "first_user");
+
+        User u2 = new User("", new ClientUserInfo(
+                "test.client@mail.com",
+                "123  client road",
+                "289375034875093",
+                "Erin",
+                "McDonald"), "second_user");
+
+        Map<String, User> users = null;
+
+        try {
+            db.create(u1, p1);
+            db.create(u2, p2);
+
+            users = db.read(u1.getStringID(), u2.getStringID());
+
+            assertEquals(u1.getUsername(), users.get(u1.getStringID()).getUsername());
+            assertEquals(u2.getUsername(), users.get(u2.getStringID()).getUsername());
+        } finally {
+            db.delete(u1.getStringID());
+            db.delete(u2.getStringID());
+        }
     }
 
     /**

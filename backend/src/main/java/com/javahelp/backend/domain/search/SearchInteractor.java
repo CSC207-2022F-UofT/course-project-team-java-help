@@ -1,14 +1,14 @@
 package com.javahelp.backend.domain.search;
 
 import com.javahelp.backend.data.ISurveyResponseStore;
-import com.javahelp.backend.data.ISurveyStore;
 import com.javahelp.backend.data.IUserStore;
-import com.javahelp.backend.search.constraint.IConstraint;
-import com.javahelp.backend.search.constraint.UserQueryConstraint;
-import com.javahelp.backend.search.rank.IProviderRanker;
-import com.javahelp.backend.search.rank.ISimilarityScorer;
-import com.javahelp.backend.search.rank.ProviderRanker;
-import com.javahelp.backend.search.rank.SimilarityScorer;
+import com.javahelp.backend.data.search.constraint.Constraint;
+import com.javahelp.backend.data.search.constraint.IConstraint;
+import com.javahelp.backend.data.search.constraint.SurveyQuerier;
+import com.javahelp.backend.data.search.rank.IProviderRanker;
+import com.javahelp.backend.data.search.rank.ISimilarityScorer;
+import com.javahelp.backend.data.search.rank.ProviderRanker;
+import com.javahelp.backend.data.search.rank.SimilarityScorer;
 import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.User;
 
@@ -17,28 +17,39 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Interactor for looking up {@link User}s
+ */
 public class SearchInteractor {
-    ISurveyStore surveyStore;
-    ISurveyResponseStore responseStore;
-    IUserStore userStore;
 
-    public SearchInteractor(ISurveyStore surveyStore,
-                         ISurveyResponseStore responseStore,
+    private final ISurveyResponseStore responseStore;
+    private final IUserStore userStore;
+
+    /**
+     * Creates a new {@link SearchInteractor}
+     * @param responseStore {@link ISurveyResponseStore} to use
+     * @param userStore {@link IUserStore} to use
+     */
+    public SearchInteractor(ISurveyResponseStore responseStore,
                          IUserStore userStore) {
-        this.surveyStore = surveyStore;
         this.responseStore = responseStore;
         this.userStore = userStore;
     }
 
-    public SearchResult search(ISearchInput input) {
-        IConstraint constraint = IConstraint.getDefaultImplementation();
+    /**
+     * Searches for providers relevant to a client based on input
+     * @param input {@link ISearchInputBoundary} to use
+     * @return the relevant {@link SearchResult}
+     */
+    public SearchResult search(ISearchInputBoundary input) {
+        IConstraint constraint = new Constraint();
         for (String c : input.getConstraints()) {
-            constraint.setConstraint(c);
+            constraint.addConstraint(c);
         }
 
-        UserQueryConstraint userQueryConstraint = new UserQueryConstraint(this.responseStore, this.userStore);
-        Map<String, User> users = userQueryConstraint.getProvidersWithConstraints(constraint);
-        Map<String, SurveyResponse> responses = userQueryConstraint.getResponsesWithConstraints(constraint);
+        SurveyQuerier userQueryConstraint = new SurveyQuerier(responseStore, userStore);
+        Map<String, User> users = userQueryConstraint.getUsersByConstraint(constraint);
+        Map<String, SurveyResponse> responses = userQueryConstraint.getSurveyResponses(constraint);
 
         List<User> userList = new ArrayList<>();
         List<SurveyResponse> responseList = new ArrayList<>();
@@ -49,8 +60,8 @@ public class SearchInteractor {
             userToResponseMap.put(users.get(userID), responses.get(userID));
         }
 
-        if (input.getIsRanking() && input.getUserID() != null && input.getUserID() != "null") {
-            SurveyResponse responseMain = this.responseStore.readByUser(input.getUserID()).get(0);
+        if (input.getIsRanking() && input.getSearchUserID() != null) {
+            SurveyResponse responseMain = responseStore.readByUser(input.getSearchUserID()).get(0);
             ISimilarityScorer similarityScorer = new SimilarityScorer();
             IProviderRanker ranker = new ProviderRanker(similarityScorer);
             userList = ranker.rank(responseMain, userToResponseMap);

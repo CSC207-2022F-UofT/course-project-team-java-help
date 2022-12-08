@@ -31,10 +31,4 @@ public interface ISurveyStore {
      * @param id {@link String} id of the {@link Survey} to delete
      */
     void delete(String id);
-
-    /**
-     * Removes all {@link Survey}s in database.
-     * ONLY use during preliminary testing!
-     */
-    void cleanTable();
 }

@@ -3,7 +3,7 @@ package com.javahelp.backend.domain.user.delete;
 import com.javahelp.model.user.User;
 
 /**
- * A class used by a {@link DeleteManager} that encodes the result of an account deletion action.
+ * A class used by a {@link DeleteInteractor} that encodes the result of an account deletion action.
  */
 public class DeleteResult {
     private final User user;

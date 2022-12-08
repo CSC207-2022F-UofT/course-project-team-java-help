@@ -21,10 +21,10 @@ public class SaltInteractor {
 
     /**
      * Gets the salt for the specified {@link User}
-     * @param input {@link ISaltInput} to use
+     * @param input {@link ISaltInputBoundary} to use
      * @return {@link SaltResult} with the result
      */
-    public SaltResult get(ISaltInput input) {
+    public SaltResult get(ISaltInputBoundary input) {
         if (input.getEmail() == null && input.getUsername() == null && input.getUserID() == null) {
             throw new IllegalArgumentException("Must specify at least one of email, username, and user id");
         }

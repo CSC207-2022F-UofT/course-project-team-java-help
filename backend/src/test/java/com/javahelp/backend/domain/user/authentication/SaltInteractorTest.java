@@ -1,7 +1,6 @@
 package com.javahelp.backend.domain.user.authentication;
 
 import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -51,7 +50,7 @@ public class SaltInteractorTest {
             users.create(u, p);
 
             SaltInteractor interactor = new SaltInteractor(users);
-            SaltResult result = interactor.get(new ISaltInput() {
+            SaltResult result = interactor.get(new ISaltInputBoundary() {
                 @Override
                 public String getUserID() {
                     return u.getStringID();
@@ -87,7 +86,7 @@ public class SaltInteractorTest {
         User u = new User("ghfgh", info, "testing_user_login_123");
 
         SaltInteractor interactor = new SaltInteractor(users);
-        SaltResult result = interactor.get(new ISaltInput() {
+        SaltResult result = interactor.get(new ISaltInputBoundary() {
             @Override
             public String getUserID() {
                 return null;

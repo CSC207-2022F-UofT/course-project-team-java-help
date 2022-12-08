@@ -10,11 +10,11 @@ import java.util.Set;
  */
 public class SurveyQuestion {
 
-    private String question;
+    private final String question;
 
-    private List<String> answers;
+    private final List<String> answers;
 
-    private List<Set<String>> attributes;
+    private final List<Set<String>> attributes;
 
     /**
      * Creates a new {@link SurveyQuestion}

@@ -53,7 +53,7 @@ public class UserReadTest {
                 " gets leaked no one will know the password for the rest of my accounts!",
                 SHAPasswordHasher.getInstance());
 
-        IUserReadInput input = u::getStringID;
+        IUserReadInputBoundary input = u::getStringID;
 
         UserReadInteractor interactor = new UserReadInteractor(store);
 

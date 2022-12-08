@@ -1,7 +1,7 @@
 package com.javahelp.backend.domain.user.delete;
 
 /**
- * An interface for classes that want to supply input of a {@link String} userID to a {@link DeleteManager}.
+ * An interface for classes that want to supply input of a {@link String} userID to a {@link DeleteInteractor}.
  *
  */
 public interface IDeleteInputBoundary {

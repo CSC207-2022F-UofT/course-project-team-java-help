@@ -6,6 +6,9 @@ import com.javahelp.model.user.User;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Result of searching for {@link User}s
+ */
 public class SearchResult {
     private final List<User> users;
     private final List<SurveyResponse> responses;

@@ -3,11 +3,9 @@ package com.javahelp.frontend.activity;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.javahelp.R;
 import com.javahelp.databinding.ActivityFgBinding;
@@ -25,10 +23,6 @@ public class FrontPageActivity extends AppCompatActivity {
         binding = ActivityFgBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         replaceFragment(new HomeFragment());
-
-        //viewModel = new FrontPageActivityVm(this).get(LoginViewModel.class);
-        //binding.setData(viewModel);
-        //binding.setLifecycleOwner(this);
 
         binding.bottomNavigationView.setOnItemSelectedListener(item ->{
             switch(item.getItemId()){

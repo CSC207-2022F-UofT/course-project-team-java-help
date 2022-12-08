@@ -12,12 +12,12 @@ import jakarta.json.JsonObject;
  */
 public class UserInfoConverter implements IJSONConverter<UserInfo> {
 
-    private static UserInfoConverter instance = new UserInfoConverter(ClientUserInfoConverter.getInstance(),
+    private static final UserInfoConverter instance = new UserInfoConverter(ClientUserInfoConverter.getInstance(),
             ProviderUserInfoConverter.getInstance());
 
-    private ClientUserInfoConverter clientConverter;
+    private final ClientUserInfoConverter clientConverter;
 
-    private ProviderUserInfoConverter providerConverter;
+    private final ProviderUserInfoConverter providerConverter;
 
     /**
      * Private constructor

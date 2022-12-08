@@ -11,7 +11,7 @@ import jakarta.json.JsonObject;
  */
 public class UserConverter implements IJSONConverter<User> {
 
-    private static UserConverter instance = new UserConverter(UserInfoConverter.getInstance());
+    private static final UserConverter instance = new UserConverter(UserInfoConverter.getInstance());
 
     /**
      * Private constructor

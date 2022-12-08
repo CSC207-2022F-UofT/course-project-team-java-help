@@ -7,7 +7,7 @@ import static com.javahelp.backend.endpoint.APIGatewayResponse.OK;
 
 import com.amazonaws.HttpMethod;
 import com.javahelp.backend.data.IUserStore;
-import com.javahelp.backend.domain.user.read.IUserReadInput;
+import com.javahelp.backend.domain.user.read.IUserReadInputBoundary;
 import com.javahelp.backend.domain.user.read.UserReadInteractor;
 import com.javahelp.backend.endpoint.APIGatewayResponse;
 import com.javahelp.backend.endpoint.HTTPTokenHandler;
@@ -22,7 +22,7 @@ import jakarta.json.JsonObject;
 /**
  * Handler for getting {@link User} information for the logged in {@link User}
  */
-public class ReadHandler extends HTTPTokenHandler implements IUserReadInput {
+public class ReadHandler extends HTTPTokenHandler implements IUserReadInputBoundary {
 
     private String userId;
 

@@ -6,23 +6,19 @@ import com.amazonaws.services.dynamodbv2.model.DeleteItemRequest;
 import com.amazonaws.services.dynamodbv2.model.GetItemRequest;
 import com.amazonaws.services.dynamodbv2.model.GetItemResult;
 import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
-import com.amazonaws.services.dynamodbv2.model.ScanRequest;
-import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.javahelp.model.survey.Survey;
 import com.javahelp.model.survey.SurveyQuestion;
-import com.javahelp.model.user.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 
 public class DynamoDBSurveyStore extends DynamoDBStore implements ISurveyStore{
-    private String tableName;
+    private final String tableName;
     DynamoDBSurveyStore(String tableName, Regions region) {
         super(region);
         this.tableName = tableName;
@@ -62,7 +58,8 @@ public class DynamoDBSurveyStore extends DynamoDBStore implements ISurveyStore{
 
         GetItemRequest request = new GetItemRequest()
                 .withTableName(tableName)
-                .withKey(key);
+                .withKey(key)
+                .withConsistentRead(true);
 
         GetItemResult result = getClient().getItem(request);
 
@@ -88,19 +85,6 @@ public class DynamoDBSurveyStore extends DynamoDBStore implements ISurveyStore{
                 .withKey(key);
 
         getClient().deleteItem(request);
-    }
-
-    @Override
-    public void cleanTable() {
-        ScanRequest scanRequest = new ScanRequest()
-                .withTableName(this.tableName);
-        ScanResult result = getClient().scan(scanRequest);
-
-        for (Map<String, AttributeValue> item : result.getItems()) {
-            if (item != null) {
-                delete(item.get("id").getS());
-            }
-        }
     }
 
     private static Map<String, AttributeValue> fromSurvey(Survey s) {

@@ -1,119 +1,97 @@
 package com.javahelp.backend.domain.search;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.javahelp.backend.data.ISurveyResponseStore;
 import com.javahelp.backend.data.ISurveyStore;
 import com.javahelp.backend.data.IUserStore;
-import com.javahelp.backend.domain.search.ISearchInput;
-import com.javahelp.backend.domain.search.SearchInteractor;
-import com.javahelp.backend.domain.search.SearchResult;
-import com.javahelp.backend.search.RandomDataPopulater;
-import com.javahelp.model.survey.SurveyResponse;
+import com.javahelp.backend.data.search.RandomSurveyPopulation;
 import com.javahelp.model.user.User;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
+/**
+ * Tests the {@link SearchInteractor}
+ */
 public class SearchInteractorTest {
-    private User client;
-    private List<User> providers;
-    private List<SurveyResponse> responses;
 
-    private ISurveyStore surveyDB;
-    private ISurveyResponseStore srDB;
-    private IUserStore userDB;
-
-    private RandomDataPopulater dataPopulater;
-
-    @Before
-    public void setup() {
-        this.dataPopulater = new RandomDataPopulater(false);
-        this.client = dataPopulater.getRandomClient();
-        this.providers = dataPopulater.getRandomProviders();
-        this.responses = dataPopulater.getRandomResponses();
-
-        this.surveyDB = dataPopulater.getSurveyDB();
-        this.srDB = dataPopulater.getSrDB();
-        this.userDB = dataPopulater.getUserDB();
-    }
+    private final ISurveyStore surveyDB = ISurveyStore.getDefaultImplementation();
+    private final ISurveyResponseStore srDB = ISurveyResponseStore.getDefaultImplementation();
+    private final IUserStore userDB = IUserStore.getDefaultImplementation();
 
     @Test
     public void testSearchWithConstraint() {
-        User mainClient = this.dataPopulater.getRandomClient();
-
-        User randomProvider1 = this.providers.get(0);
-        SurveyResponse randomResponse1 = this.responses.get(0);
-        Set<String> attributes1 = new HashSet<>();
-        attributes1.add("attr0");
+        RandomSurveyPopulation population = new RandomSurveyPopulation(surveyDB, srDB, userDB);
 
         try {
-            SearchInteractor interactor = new SearchInteractor(this.surveyDB,
-                    this.srDB,
-                    this.userDB);
+            population.populate();
 
-            SearchResult result = interactor.search(new ISearchInput() {
+            Set<String> attributes = new HashSet<>();
+            attributes.add("attr0");
+
+            SearchInteractor interactor = new SearchInteractor(srDB, userDB);
+
+            SearchResult result = interactor.search(new ISearchInputBoundary() {
                 @Override
-                public String getUserID() { return mainClient.getStringID(); }
+                public String getSearchUserID() {
+                    return population.getRandomClient().getStringID();
+                }
+
                 @Override
-                public Set<String> getConstraints() { return attributes1; }
+                public Set<String> getConstraints() {
+                    return attributes;
+                }
+
                 @Override
-                public boolean getIsRanking() { return false; }
+                public boolean getIsRanking() {
+                    return false;
+                }
             });
 
             assertTrue(result.getUsers().size() > 0);
-        }
-        finally {
-            this.dataPopulater.deleteRandomPopulation();
+        } finally {
+            population.delete();
         }
     }
 
     @Test
     public void testSearchWithoutConstraint() {
-        User mainClient = this.dataPopulater.getRandomClient();
+        RandomSurveyPopulation population = new RandomSurveyPopulation(surveyDB, srDB, userDB);
+
         Set<String> attributes = new HashSet<>();
 
-        List<User> randomProviders = this.providers;
-        List<SurveyResponse> randomResponses = this.responses;
-
         try {
-            SearchInteractor interactor = new SearchInteractor(this.surveyDB,
-                    this.srDB,
-                    this.userDB);
+            population.populate();
 
-            SearchResult result = interactor.search(new ISearchInput() {
+            SearchInteractor interactor = new SearchInteractor(srDB, userDB);
+
+            SearchResult result = interactor.search(new ISearchInputBoundary() {
                 @Override
-                public String getUserID() { return mainClient.getStringID(); }
+                public String getSearchUserID() {
+                    return population.getRandomClient().getStringID();
+                }
+
                 @Override
-                public Set<String> getConstraints() { return attributes; }
+                public Set<String> getConstraints() {
+                    return attributes;
+                }
+
                 @Override
-                public boolean getIsRanking() { return false; }
+                public boolean getIsRanking() {
+                    return false;
+                }
             });
 
-            assertEquals(this.dataPopulater.getPopulationNumber(), result.getUsers().size());
-            assertEquals(randomProviders.size(), result.getUsers().size());
+            assertTrue(population.getPopulationSize() <= result.getUsers().size());
 
-            Set<String> expectedUsers = new HashSet<>();
-            Set<String> actualUsers = new HashSet<>();
-            Set<String> expectedResponses = new HashSet<>();
-            Set<String> actualResponses = new HashSet<>();
-            for (int i = 0; i < randomProviders.size(); i++) {
-                expectedUsers.add(randomProviders.get(i).getStringID());
-                actualUsers.add(result.getUsers().get(i).getStringID());
-                expectedResponses.add(randomResponses.get(i).getID());
-                actualResponses.add(result.getResponses().get(i).getID());
+            for (User u : population.getRandomProviders()) {
+                assertTrue(result.getUsers().stream().map(User::getStringID).anyMatch(x -> u.getStringID().equals(x)));
             }
-
-            assertEquals(expectedUsers, actualUsers);
-            assertEquals(expectedResponses, actualResponses);
-        }
-        finally {
-            this.dataPopulater.deleteRandomPopulation();
+        } finally {
+            population.delete();
         }
     }
 }

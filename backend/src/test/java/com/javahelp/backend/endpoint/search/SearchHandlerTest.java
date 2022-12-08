@@ -6,41 +6,78 @@ import static io.restassured.RestAssured.given;
 
 import com.javahelp.backend.data.ISurveyResponseStore;
 import com.javahelp.backend.data.ISurveyStore;
+import com.javahelp.backend.data.ITokenStore;
 import com.javahelp.backend.data.IUserStore;
-import com.javahelp.backend.search.RandomDataPopulater;
+import com.javahelp.backend.data.search.RandomSurveyPopulation;
+import com.javahelp.model.token.Token;
 import com.javahelp.model.user.User;
 
 import org.junit.Test;
+
+import java.time.Duration;
 
 import io.restassured.http.ContentType;
 import io.restassured.http.Header;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 
+/**
+ * Tests {@link SearchHandler}
+ */
 public class SearchHandlerTest {
     private static final String SEARCH = "https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/providers/search";
 
-    public boolean userDatabaseAccessible() {
+    IUserStore users = IUserStore.getDefaultImplementation();
+    ISurveyStore surveys = ISurveyStore.getDefaultImplementation();
+    ISurveyResponseStore responses = ISurveyResponseStore.getDefaultImplementation();
+    ITokenStore tokens = ITokenStore.getDefaultImplementation();
+
+    /**
+     *
+     * @return whether the user table is accessible
+     */
+    private boolean tokenDatabaseAccessible() {
         try {
-            IUserStore.getDefaultImplementation().read("test");
+            tokens.read("test");
             return true;
         } catch (Exception e) {
             return false;
         }
     }
 
-    public boolean surveyDatabaseAccessible() {
+    /**
+     *
+     * @return whether the user table is accessible
+     */
+    private boolean userDatabaseAccessible() {
         try {
-            ISurveyStore.getDefaultImplementation().read("test");
+            users.read("test");
             return true;
         } catch (Exception e) {
             return false;
         }
     }
 
-    public boolean srDatabaseAccessible() {
+    /**
+     *
+     * @return whether the survey table is accessible
+     */
+    private boolean surveyDatabaseAccessible() {
         try {
-            ISurveyResponseStore.getDefaultImplementation().read("test");
+            surveys.read("test");
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     *
+     * @return whether the response table is accessible
+     */
+    private boolean responseDatabaseAccessible() {
+        try {
+            responses.read("test");
             return true;
         } catch (Exception e) {
             return false;
@@ -51,22 +88,31 @@ public class SearchHandlerTest {
     public void testValidSearch() {
         assumeTrue(userDatabaseAccessible());
         assumeTrue(surveyDatabaseAccessible());
-        assumeTrue(srDatabaseAccessible());
+        assumeTrue(responseDatabaseAccessible());
+        assumeTrue(tokenDatabaseAccessible());
 
-        RandomDataPopulater dataPopulater = new RandomDataPopulater(true);
-        User client = dataPopulater.getRandomClient();
+        RandomSurveyPopulation population = new RandomSurveyPopulation(surveys, responses, users);
 
-        JsonObject json = Json.createObjectBuilder()
-                .add("userID", client.getStringID())
-                .add("ranking", false)
-                .add("filters", Json.createArrayBuilder())
-                .build();
+        try {
+            population.populate();
+            User client = population.getRandomClient();
 
-        given().header(new Header("Content-Type", "application/json"))
-                .body(json.toString()).when().post(SEARCH).then().statusCode(200)
-                .contentType(ContentType.JSON)
-                .body("success", equalTo(true));
+            Token token = tokens.create(new Token(Duration.ofDays(1), "", client.getStringID()));
 
-        //dataPopulater.deleteRandomPopulation();
+            JsonObject json = Json.createObjectBuilder()
+                    .add("userID", client.getStringID())
+                    .add("ranking", false)
+                    .add("filters", Json.createArrayBuilder())
+                    .build();
+
+            given().header(new Header("Content-Type", "application/json"))
+                    .header(new Header("Authorization", "JavaHelp id=" +
+                            client.getStringID() + " token=" + token.getToken()))
+                    .body(json.toString()).when().post(SEARCH).then().statusCode(200)
+                    .contentType(ContentType.JSON)
+                    .body("success", equalTo(true));
+        } finally {
+            population.delete();
+        }
     }
 }

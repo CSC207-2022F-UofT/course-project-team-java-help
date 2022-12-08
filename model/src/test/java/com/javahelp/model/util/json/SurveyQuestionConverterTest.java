@@ -3,7 +3,6 @@ package com.javahelp.model.util.json;
 import static org.junit.Assert.assertEquals;
 
 import com.javahelp.model.survey.SurveyQuestion;
-import com.javahelp.model.user.User;
 
 import org.junit.Test;
 
@@ -13,8 +12,8 @@ import java.util.List;
 import jakarta.json.JsonObject;
 
 public class SurveyQuestionConverterTest {
-    private SurveyQuestion question = setupQuestion();
-    private SurveyQuestionConverter converter = SurveyQuestionConverter.getInstance();
+    private final SurveyQuestion question = setupQuestion();
+    private final SurveyQuestionConverter converter = SurveyQuestionConverter.getInstance();
 
     @Test
     public void convert() {

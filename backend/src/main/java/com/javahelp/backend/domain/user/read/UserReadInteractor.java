@@ -11,8 +11,8 @@ public class UserReadInteractor {
     private final IUserStore users;
 
     /**
-     * *
-     * @param users
+     * Creates a new {@link UserReadInteractor}
+     * @param users {@link IUserStore} to use
      */
     public UserReadInteractor(IUserStore users) {
         this.users = users;
@@ -20,10 +20,10 @@ public class UserReadInteractor {
 
     /**
      * Returns the {@link User} with the specified id, or null if not found
-     * @param input {@link IUserReadInput} containing information about the specified {@link User}
+     * @param input {@link IUserReadInputBoundary} containing information about the specified {@link User}
      * @return the {@link User} or null
      */
-    public User readUser(IUserReadInput input) {
+    public User readUser(IUserReadInputBoundary input) {
         return users.read(input.getID());
     }
 

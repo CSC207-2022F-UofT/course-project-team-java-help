@@ -48,9 +48,16 @@ public class LoginInteractorTest {
         try {
             db.create(u, p);
 
+            db.read(u.getStringID()); // consistent read should block until information propagated
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ignored) {
+
+            }
+
             LoginInteractor interactor = new LoginInteractor(db, tokens);
 
-            LoginResult result = interactor.login(new ILoginInput() {
+            LoginResult result = interactor.login(new ILoginInputBoundary() {
                 @Override
                 public String getUsername() {
                     return u.getUsername();

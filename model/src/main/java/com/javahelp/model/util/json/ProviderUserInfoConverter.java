@@ -1,6 +1,5 @@
 package com.javahelp.model.util.json;
 
-import com.javahelp.model.user.ClientUserInfo;
 import com.javahelp.model.user.ProviderUserInfo;
 import com.javahelp.model.user.UserType;
 
@@ -12,7 +11,7 @@ import jakarta.json.JsonObject;
  */
 public class ProviderUserInfoConverter implements IJSONConverter<ProviderUserInfo> {
 
-    private static ProviderUserInfoConverter instance = new ProviderUserInfoConverter();
+    private static final ProviderUserInfoConverter instance = new ProviderUserInfoConverter();
 
     /**
      * Private constructor

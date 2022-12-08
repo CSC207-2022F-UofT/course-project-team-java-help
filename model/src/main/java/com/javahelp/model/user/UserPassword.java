@@ -3,7 +3,6 @@ package com.javahelp.model.user;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.function.Function;
 
 /**
  * A class for the password of a {@link User}

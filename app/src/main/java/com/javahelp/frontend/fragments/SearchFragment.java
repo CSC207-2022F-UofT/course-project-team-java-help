@@ -16,7 +16,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.chip.Chip;
 import com.javahelp.R;
-import com.javahelp.frontend.activity.LoginViewModel;
 import com.javahelp.frontend.domain.user.login.LoginResult;
 import com.javahelp.frontend.domain.user.search.SearchResult;
 import com.javahelp.model.survey.Survey;
@@ -79,18 +78,18 @@ public class SearchFragment extends Fragment {
         // Inflate the layout for this fragment
         contentView = inflater.inflate(R.layout.fragment_search, container, false);
 
-        progressBar = (ProgressBar) contentView.findViewById(R.id.progressBar2);
+        progressBar = contentView.findViewById(R.id.progressBar2);
 
-        smartSwitch = (Switch) contentView.findViewById(R.id.switch1);
+        smartSwitch = contentView.findViewById(R.id.switch1);
         smartSwitch.setOnClickListener(this::rankClick);
 
-        chip0 = (Chip) contentView.findViewById(R.id.chip0);
+        chip0 = contentView.findViewById(R.id.chip0);
         chip0.setOnClickListener(this::chip0Click);
-        chip1 = (Chip) contentView.findViewById(R.id.chip1);
+        chip1 = contentView.findViewById(R.id.chip1);
         chip1.setOnClickListener(this::chip1Click);
-        chip2 = (Chip) contentView.findViewById(R.id.chip2);
+        chip2 = contentView.findViewById(R.id.chip2);
         chip2.setOnClickListener(this::chip2Click);
-        chip3 = (Chip) contentView.findViewById(R.id.chip3);
+        chip3 = contentView.findViewById(R.id.chip3);
         chip3.setOnClickListener(this::chip3Click);
 
         viewModel.getIsFiltering().observe(getViewLifecycleOwner(), this::updateOnNewSearch);
