@@ -50,6 +50,8 @@ public class DeleteHandler extends HTTPTokenHandler implements IDeleteInputBound
     @Override
     public APIGatewayResponse authenticatedGetResponse(User u, Token t, JsonObject body, HttpMethod method, Map<String, String[]> headers, Map<String, String[]> parameters, Map<String, String> pathParameters) {
 
+        userID = null;
+
         if (!verifyUser(u, pathParameters)) {
             return APIGatewayResponse.error(FORBIDDEN, "The path parameters do not match the given current user");
         }

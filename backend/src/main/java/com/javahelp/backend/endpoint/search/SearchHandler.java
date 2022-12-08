@@ -1,18 +1,20 @@
 package com.javahelp.backend.endpoint.search;
 
 import static com.javahelp.backend.endpoint.APIGatewayResponse.BAD_REQUEST;
+import static com.javahelp.backend.endpoint.APIGatewayResponse.FORBIDDEN;
 import static com.javahelp.backend.endpoint.APIGatewayResponse.OK;
 
 import com.amazonaws.HttpMethod;
 import com.javahelp.backend.data.ISurveyResponseStore;
-import com.javahelp.backend.data.ISurveyStore;
 import com.javahelp.backend.data.IUserStore;
-import com.javahelp.backend.endpoint.APIGatewayResponse;
-import com.javahelp.backend.endpoint.HTTPHandler;
 import com.javahelp.backend.domain.search.ISearchInputBoundary;
 import com.javahelp.backend.domain.search.SearchInteractor;
 import com.javahelp.backend.domain.search.SearchResult;
+import com.javahelp.backend.endpoint.APIGatewayResponse;
+import com.javahelp.backend.endpoint.HTTPTokenHandler;
 import com.javahelp.model.survey.SurveyQuestion;
+import com.javahelp.model.token.Token;
+import com.javahelp.model.user.User;
 import com.javahelp.model.util.json.SurveyResponseConverter;
 import com.javahelp.model.util.json.UserConverter;
 
@@ -29,26 +31,29 @@ import jakarta.json.JsonObjectBuilder;
 /**
  * Handler for searches for providers
  */
-public class SearchHandler extends HTTPHandler implements ISearchInputBoundary {
+public class SearchHandler extends HTTPTokenHandler implements ISearchInputBoundary {
     private String userID;
     private Set<String> constraint = new HashSet<>();
     private boolean isRanking;
 
-    /**
-     * Gets the response to the specified request
-     *
-     * @param body           {@link JsonObject} request body
-     * @param method         {@link HttpMethod} http method called
-     * @param headers        {@link Map} of {@link String} headers to {@link String} array header values
-     * @param parameters     {@link Map} of {@link String} parameters to {@link String}
-     *                       array parameter values
-     * @param pathParameters {@link Map} of {@link String} path parameter names to {@link String} values
-     * @return response object
-     */
     @Override
-    public APIGatewayResponse getResponse(JsonObject body, HttpMethod method, Map<String, String[]> headers, Map<String, String[]> parameters, Map<String, String> pathParameters) {
+    public String[] requiredBodyFields() {
+        return new String[]{"userID", "filters"};
+    }
+
+    @Override
+    public APIGatewayResponse authenticatedGetResponse(User u, Token t, JsonObject body, HttpMethod method, Map<String, String[]> headers, Map<String, String[]> parameters, Map<String, String> pathParameters) {
+
+        userID = null; // set to default in case not new handler
+        constraint = new HashSet<>();
+        isRanking = false;
 
         userID = body.getString("userID", null);
+
+        if (!userID.equals(u.getStringID())) {
+            return APIGatewayResponse.error(FORBIDDEN, "No access to search from specified user");
+        }
+
         isRanking = body.getBoolean("ranking", false);
         JsonArray filters = body.getJsonArray("filters");
 
@@ -98,8 +103,7 @@ public class SearchHandler extends HTTPHandler implements ISearchInputBoundary {
             jsonBuilder.add("responses", jsonResponseBuilder);
             jsonBuilder.add("success", true);
             response = jsonBuilder.build().toString();
-        }
-        else {
+        } else {
             response = Json.createObjectBuilder()
                     .add("errorMessage", result.getErrorMessage())
                     .add("success", false)
@@ -117,7 +121,9 @@ public class SearchHandler extends HTTPHandler implements ISearchInputBoundary {
      * or null if no desired token identifier is known/specified.
      */
     @Override
-    public String getUserID() { return this.userID; }
+    public String getSearchUserID() {
+        return userID;
+    }
 
     /**
      * @return the desired {@link Map} of {@link SurveyQuestion} to {@link String} answer
@@ -125,11 +131,15 @@ public class SearchHandler extends HTTPHandler implements ISearchInputBoundary {
      * or null if no desired question is known/specified
      */
     @Override
-    public Set<String> getConstraints() { return this.constraint; }
+    public Set<String> getConstraints() {
+        return constraint;
+    }
 
     /**
      * @return whether to rank list of providers based on user survey data
      */
     @Override
-    public boolean getIsRanking() { return this.isRanking; }
+    public boolean getIsRanking() {
+        return isRanking;
+    }
 }

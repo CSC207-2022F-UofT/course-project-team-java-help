@@ -12,7 +12,7 @@ public interface ISearchInputBoundary {
      * @return the desired ID of the client
      * or null if no desired token identifier is known/specified.
      */
-    String getUserID();
+    String getSearchUserID();
     /**
      * @return the desired {@link Map} of {@link SurveyQuestion} to {@link String} answer
      * for setting query constraint.
