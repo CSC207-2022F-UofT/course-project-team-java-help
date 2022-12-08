@@ -142,6 +142,7 @@ public class ProviderRegisterTest {
 
         try {
             userStore.create(u, p);
+            userStore.read(u.getStringID());
             result = provider.register(input);
             assertEquals("Username already taken", result.getErrorMessage());}
         finally{

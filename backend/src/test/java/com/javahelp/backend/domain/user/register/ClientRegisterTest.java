@@ -143,6 +143,8 @@ public class ClientRegisterTest {
         try {
             userStore.create(u, p);
 
+            userStore.read(u.getStringID());
+
             result = client.register(input);
 
             assertEquals("Email and username already taken", result.getErrorMessage());

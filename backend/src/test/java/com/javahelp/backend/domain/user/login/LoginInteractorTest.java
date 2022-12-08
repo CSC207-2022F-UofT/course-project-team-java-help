@@ -48,6 +48,8 @@ public class LoginInteractorTest {
         try {
             db.create(u, p);
 
+            db.read(u.getStringID()); // consistent read should block until information propagated
+
             LoginInteractor interactor = new LoginInteractor(db, tokens);
 
             LoginResult result = interactor.login(new ILoginInputBoundary() {
