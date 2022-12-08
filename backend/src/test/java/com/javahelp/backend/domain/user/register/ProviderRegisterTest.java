@@ -79,6 +79,11 @@ public class ProviderRegisterTest {
         UserRegisterResult result = null;
 
         try {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ignored) {
+
+            }
             result = provider.register(input);
             assertTrue(result.isSuccess());
         } finally {
@@ -143,6 +148,11 @@ public class ProviderRegisterTest {
         try {
             userStore.create(u, p);
             userStore.read(u.getStringID());
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ignored) {
+
+            }
             result = provider.register(input);
             assertEquals("Username already taken", result.getErrorMessage());}
         finally{

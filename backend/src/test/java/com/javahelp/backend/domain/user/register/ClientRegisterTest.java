@@ -79,6 +79,11 @@ public class ClientRegisterTest {
         UserRegisterResult result = null;
 
         try {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ignored) {
+
+            }
             result = client.register(input);
             assertTrue(result.isSuccess());
         }
@@ -144,6 +149,11 @@ public class ClientRegisterTest {
             userStore.create(u, p);
 
             userStore.read(u.getStringID());
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ignored) {
+
+            }
 
             result = client.register(input);
 

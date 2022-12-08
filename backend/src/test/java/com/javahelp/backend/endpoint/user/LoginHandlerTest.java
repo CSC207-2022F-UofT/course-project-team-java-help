@@ -71,6 +71,13 @@ public class LoginHandlerTest {
         try {
             db.create(u, p);
 
+            db.read(u.getStringID());
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ignored) {
+
+            }
+
             JsonObject json = Json.createObjectBuilder()
                     .add("username", "testing_user_login_123")
                     .add("saltHash", q.getBase64SaltHash())
@@ -100,6 +107,13 @@ public class LoginHandlerTest {
 
         try {
             db.create(u, p);
+
+            db.read(u.getStringID());
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ignored) {
+
+            }
 
             JsonObject json = Json.createObjectBuilder()
                     .add("username", "testing_user_login_123")
