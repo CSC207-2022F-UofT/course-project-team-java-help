@@ -36,7 +36,7 @@ public class SearchInteractorTest {
             Set<String> attributes = new HashSet<>();
             attributes.add("attr0");
 
-            SearchInteractor interactor = new SearchInteractor(surveyDB, srDB, userDB);
+            SearchInteractor interactor = new SearchInteractor(srDB, userDB);
 
             SearchResult result = interactor.search(new ISearchInputBoundary() {
                 @Override
@@ -71,7 +71,7 @@ public class SearchInteractorTest {
         try {
             population.populate();
 
-            SearchInteractor interactor = new SearchInteractor(surveyDB, srDB, userDB);
+            SearchInteractor interactor = new SearchInteractor(srDB, userDB);
 
             SearchResult result = interactor.search(new ISearchInputBoundary() {
                 @Override

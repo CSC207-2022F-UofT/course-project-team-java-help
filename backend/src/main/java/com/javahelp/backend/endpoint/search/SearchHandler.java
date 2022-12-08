@@ -66,8 +66,7 @@ public class SearchHandler extends HTTPHandler implements ISearchInputBoundary {
             return APIGatewayResponse.error(BAD_REQUEST, "Invalid filters");
         }
 
-        SearchInteractor interactor = new SearchInteractor(ISurveyStore.getDefaultImplementation(),
-                ISurveyResponseStore.getDefaultImplementation(),
+        SearchInteractor interactor = new SearchInteractor(ISurveyResponseStore.getDefaultImplementation(),
                 IUserStore.getDefaultImplementation());
 
         SearchResult result;

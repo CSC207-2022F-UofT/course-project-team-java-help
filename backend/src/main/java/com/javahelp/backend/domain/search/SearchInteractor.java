@@ -23,20 +23,16 @@ import java.util.Map;
  */
 public class SearchInteractor {
 
-    private final ISurveyStore surveyStore;
     private final ISurveyResponseStore responseStore;
     private final IUserStore userStore;
 
     /**
      * Creates a new {@link SearchInteractor}
-     * @param surveyStore {@link ISurveyStore} to use
      * @param responseStore {@link ISurveyResponseStore} to use
      * @param userStore {@link IUserStore} to use
      */
-    public SearchInteractor(ISurveyStore surveyStore,
-                         ISurveyResponseStore responseStore,
+    public SearchInteractor(ISurveyResponseStore responseStore,
                          IUserStore userStore) {
-        this.surveyStore = surveyStore;
         this.responseStore = responseStore;
         this.userStore = userStore;
     }
