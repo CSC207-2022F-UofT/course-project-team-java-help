@@ -82,22 +82,11 @@ public class SearchInteractorTest {
                 public boolean getIsRanking() { return false; }
             });
 
-            assertEquals(population.getPopulationSize(), result.getUsers().size());
+            assertTrue(population.getPopulationSize() <= result.getUsers().size());
 
-            Set<String> expectedUsers = new HashSet<>();
-            Set<String> actualUsers = new HashSet<>();
-            Set<String> expectedResponses = new HashSet<>();
-            Set<String> actualResponses = new HashSet<>();
-
-            for (int i = 0; i < population.getPopulationSize(); i++) {
-                expectedUsers.add(population.getRandomProviders().get(i).getStringID());
-                actualUsers.add(result.getUsers().get(i).getStringID());
-                expectedResponses.add(population.getRandomResponses().get(i).getID());
-                actualResponses.add(result.getResponses().get(i).getID());
+            for (User u : population.getRandomProviders()) {
+                assertTrue(result.getUsers().stream().map(User::getStringID).anyMatch(x -> u.getStringID().equals(x)));
             }
-
-            assertEquals(expectedUsers, actualUsers);
-            assertEquals(expectedResponses, actualResponses);
         }
         finally {
             population.delete();
