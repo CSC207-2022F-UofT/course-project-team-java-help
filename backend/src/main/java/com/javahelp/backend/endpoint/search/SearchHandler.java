@@ -26,6 +26,9 @@ import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 
+/**
+ * Handler for searches for providers
+ */
 public class SearchHandler extends HTTPHandler implements ISearchInputBoundary {
     private String userID;
     private Set<String> constraint = new HashSet<>();

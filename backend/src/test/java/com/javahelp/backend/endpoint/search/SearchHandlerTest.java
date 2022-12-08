@@ -18,7 +18,7 @@ import jakarta.json.Json;
 import jakarta.json.JsonObject;
 
 /**
- * Tests {@link SearchHandler}*
+ * Tests {@link SearchHandler}
  */
 public class SearchHandlerTest {
     private static final String SEARCH = "https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/providers/search";
@@ -73,20 +73,23 @@ public class SearchHandlerTest {
         assumeTrue(responseDatabaseAccessible());
 
         RandomSurveyPopulation population = new RandomSurveyPopulation(surveys, responses, users);
-        population.populate();
-        User client = population.getRandomClient();
 
-        JsonObject json = Json.createObjectBuilder()
-                .add("userID", client.getStringID())
-                .add("ranking", false)
-                .add("filters", Json.createArrayBuilder())
-                .build();
+        try {
+            population.populate();
+            User client = population.getRandomClient();
 
-        given().header(new Header("Content-Type", "application/json"))
-                .body(json.toString()).when().post(SEARCH).then().statusCode(200)
-                .contentType(ContentType.JSON)
-                .body("success", equalTo(true));
+            JsonObject json = Json.createObjectBuilder()
+                    .add("userID", client.getStringID())
+                    .add("ranking", false)
+                    .add("filters", Json.createArrayBuilder())
+                    .build();
 
-        population.delete();
+            given().header(new Header("Content-Type", "application/json"))
+                    .body(json.toString()).when().post(SEARCH).then().statusCode(200)
+                    .contentType(ContentType.JSON)
+                    .body("success", equalTo(true));
+        } finally {
+            population.delete();
+        }
     }
 }
