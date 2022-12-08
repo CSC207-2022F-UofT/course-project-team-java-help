@@ -27,7 +27,7 @@ package:
 
 functions:
   login:
-    handler: com.javahelp.backend.endpoint.login.LoginHandler
+    handler: com.javahelp.backend.endpoint.user.LoginHandler
     timeout: 20
     events:
       - httpApi:
@@ -35,7 +35,7 @@ functions:
           method: post
 
   salt:
-    handler: com.javahelp.backend.endpoint.login.SaltHandler
+    handler: com.javahelp.backend.endpoint.user.SaltHandler
     timeout: 20
     events:
       - httpApi:
@@ -43,7 +43,7 @@ functions:
           method: get
 
   saltByID:
-    handler: com.javahelp.backend.endpoint.login.SaltHandler
+    handler: com.javahelp.backend.endpoint.user.SaltHandler
     timeout: 20
     events:
       - httpApi:
@@ -51,7 +51,7 @@ functions:
           method: get
 
   deleteUser:
-    handler: com.javahelp.backend.endpoint.delete.DeleteHandler
+    handler: com.javahelp.backend.endpoint.user.DeleteHandler
     timeout: 20
     events:
       - httpApi:
