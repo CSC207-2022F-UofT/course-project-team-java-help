@@ -1,4 +1,4 @@
-package com.javahelp.frontend.domain.user.search;
+package com.javahelp.frontend.domain.search;
 
 import java.util.Set;
 

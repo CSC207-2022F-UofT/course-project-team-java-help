@@ -1,4 +1,4 @@
-package com.javahelp.frontend.domain.user.search;
+package com.javahelp.frontend.domain.search;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeTrue;
@@ -39,9 +39,9 @@ public class SearchInteractorTest {
             Future<byte[]> salt = saltAccess.getSalt("jacob", null, null, null);
 
             return loginAccess.login("jacob", null, null,
-                    new UserPassword("password",
-                            salt.get(15000, TimeUnit.MILLISECONDS),
-                            SHAPasswordHasher.getInstance()), false, null)
+                            new UserPassword("password",
+                                    salt.get(15000, TimeUnit.MILLISECONDS),
+                                    SHAPasswordHasher.getInstance()), false, null)
                     .get(15000, TimeUnit.MILLISECONDS);
         } catch (Exception e) {
             return null;

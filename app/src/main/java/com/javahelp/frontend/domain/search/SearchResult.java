@@ -1,4 +1,4 @@
-package com.javahelp.frontend.domain.user.search;
+package com.javahelp.frontend.domain.search;
 
 import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.User;

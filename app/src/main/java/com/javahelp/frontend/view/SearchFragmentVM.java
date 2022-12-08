@@ -6,13 +6,12 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.javahelp.frontend.view.LoginViewModel;
+import com.javahelp.frontend.domain.search.ISearchDataAccess;
+import com.javahelp.frontend.domain.search.ISearchInput;
+import com.javahelp.frontend.domain.search.ISearchOutput;
+import com.javahelp.frontend.domain.search.SearchInteractor;
+import com.javahelp.frontend.domain.search.SearchResult;
 import com.javahelp.frontend.gateway.LambdaSearchDataAccess;
-import com.javahelp.frontend.domain.user.search.ISearchDataAccess;
-import com.javahelp.frontend.domain.user.search.ISearchInput;
-import com.javahelp.frontend.domain.user.search.ISearchOutput;
-import com.javahelp.frontend.domain.user.search.SearchInteractor;
-import com.javahelp.frontend.domain.user.search.SearchResult;
 import com.javahelp.frontend.util.auth.SharedPreferencesAuthInformationProvider;
 import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.User;
@@ -63,8 +62,7 @@ public class SearchFragmentVM extends AndroidViewModel implements ISearchOutput 
         if (filters != null && filters.contains(filter)) {
             filters.remove(filters);
             this.filters.setValue(filters);
-        }
-        else {
+        } else {
             filters.add(filter);
             this.filters.setValue(filters);
         }
@@ -76,9 +74,13 @@ public class SearchFragmentVM extends AndroidViewModel implements ISearchOutput 
         setIsFiltering(true);
     }
 
-    public void setIsFiltering(boolean filtering) { this.isFiltering.setValue(filtering); }
+    public void setIsFiltering(boolean filtering) {
+        this.isFiltering.setValue(filtering);
+    }
 
-    public void setIsSearching(boolean searching) { this.isSearching.setValue(searching); }
+    public void setIsSearching(boolean searching) {
+        this.isSearching.setValue(searching);
+    }
 
     public MutableLiveData<String> getUserID() {
         return this.userID;
@@ -92,11 +94,17 @@ public class SearchFragmentVM extends AndroidViewModel implements ISearchOutput 
         return this.isRanking;
     }
 
-    public MutableLiveData<Boolean> getIsFiltering() { return this.isFiltering; }
+    public MutableLiveData<Boolean> getIsFiltering() {
+        return this.isFiltering;
+    }
 
-    public MutableLiveData<Boolean> getIsSearching() { return this.isSearching; }
+    public MutableLiveData<Boolean> getIsSearching() {
+        return this.isSearching;
+    }
 
-    public MutableLiveData<SearchResult> getSearchResult() { return searchResult; }
+    public MutableLiveData<SearchResult> getSearchResult() {
+        return searchResult;
+    }
 
     public List<User> getUsers() {
         SearchResult result = searchResult.getValue();
@@ -148,6 +156,7 @@ public class SearchFragmentVM extends AndroidViewModel implements ISearchOutput 
      * Abort the login attempt
      */
     @Override
-    public void abort() {}
+    public void abort() {
+    }
 }
 
