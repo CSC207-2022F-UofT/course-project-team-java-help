@@ -16,7 +16,7 @@ import java.util.Map;
  * similarities with the main user, in descending order.
  */
 public class ProviderRanker implements IProviderRanker{
-    private ISimilarityScorer similarityScorer;
+    private final ISimilarityScorer similarityScorer;
 
     public ProviderRanker(ISimilarityScorer similarityScorer) {
         this.similarityScorer = similarityScorer;

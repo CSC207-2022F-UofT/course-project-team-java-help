@@ -20,7 +20,7 @@ import jakarta.json.JsonObject;
  * Converts {@link SurveyQuestion} to {@link JsonObject}
  */
 public class SurveyQuestionConverter implements IJSONConverter<SurveyQuestion> {
-    private static SurveyQuestionConverter instance = new SurveyQuestionConverter();
+    private static final SurveyQuestionConverter instance = new SurveyQuestionConverter();
 
     /**
      * Private constructor

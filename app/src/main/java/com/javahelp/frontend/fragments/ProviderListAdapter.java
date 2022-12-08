@@ -35,15 +35,15 @@ public class ProviderListAdapter extends ArrayAdapter<Map<User, SurveyResponse>>
             view = LayoutInflater.from(getContext()).inflate(R.layout.provider_list, parent, false);
         }
 
-        TextView titleText = (TextView) view.findViewById(R.id.title);
-        ImageView imageView = (ImageView) view.findViewById(R.id.icon);
-        TextView subtitleCert = (TextView) view.findViewById(R.id.certified);
-        TextView subtitleNumber = (TextView) view.findViewById(R.id.number);
-        TextView subtitleAddr = (TextView) view.findViewById(R.id.address);
-        TextView subtitleAttr0 = (TextView) view.findViewById(R.id.attr0);
-        TextView subtitleAttr1 = (TextView) view.findViewById(R.id.attr1);
-        TextView subtitleAttr2 = (TextView) view.findViewById(R.id.attr2);
-        TextView subtitleAttr3 = (TextView) view.findViewById(R.id.attr3);
+        TextView titleText = view.findViewById(R.id.title);
+        ImageView imageView = view.findViewById(R.id.icon);
+        TextView subtitleCert = view.findViewById(R.id.certified);
+        TextView subtitleNumber = view.findViewById(R.id.number);
+        TextView subtitleAddr = view.findViewById(R.id.address);
+        TextView subtitleAttr0 = view.findViewById(R.id.attr0);
+        TextView subtitleAttr1 = view.findViewById(R.id.attr1);
+        TextView subtitleAttr2 = view.findViewById(R.id.attr2);
+        TextView subtitleAttr3 = view.findViewById(R.id.attr3);
 
 
         Map<User, SurveyResponse> userAndResponse = getItem(position);
@@ -78,5 +78,5 @@ public class ProviderListAdapter extends ArrayAdapter<Map<User, SurveyResponse>>
 
         return view;
 
-    };
+    }
 }

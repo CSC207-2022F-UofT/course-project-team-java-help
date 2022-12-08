@@ -25,14 +25,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class SearchFragmentVM extends AndroidViewModel implements ISearchOutput {
-    private MutableLiveData<String> userID = new MutableLiveData<>("");
-    private MutableLiveData<Set<String>> filters = new MutableLiveData<>(new HashSet<>());
-    private MutableLiveData<Boolean> isRanking = new MutableLiveData<>(Boolean.FALSE);
-    private MutableLiveData<Boolean> isFiltering = new MutableLiveData<>(Boolean.TRUE);
-    private MutableLiveData<Boolean> isSearching = new MutableLiveData<>(Boolean.FALSE);
-    private MutableLiveData<SearchResult> searchResult = new MutableLiveData<>();
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
-    private ISearchInput searchInteractor;
+    private final MutableLiveData<String> userID = new MutableLiveData<>("");
+    private final MutableLiveData<Set<String>> filters = new MutableLiveData<>(new HashSet<>());
+    private final MutableLiveData<Boolean> isRanking = new MutableLiveData<>(Boolean.FALSE);
+    private final MutableLiveData<Boolean> isFiltering = new MutableLiveData<>(Boolean.TRUE);
+    private final MutableLiveData<Boolean> isSearching = new MutableLiveData<>(Boolean.FALSE);
+    private final MutableLiveData<SearchResult> searchResult = new MutableLiveData<>();
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final ISearchInput searchInteractor;
 
     /**
      * Default {@link AndroidViewModel} constructor for {@link LoginViewModel}
@@ -63,7 +63,7 @@ public class SearchFragmentVM extends AndroidViewModel implements ISearchOutput 
         Set<String> filters = this.filters.getValue();
         if (filters != null && filters.contains(filter)) {
             filters.remove(filters);
-            this.filters.setValue(filters);;
+            this.filters.setValue(filters);
         }
         else {
             filters.add(filter);

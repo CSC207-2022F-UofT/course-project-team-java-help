@@ -28,7 +28,7 @@ public class SharedPreferencesAuthInformationProvider implements IAuthInformatio
     private static final String TOKEN = "token";
     private static final String USER_ID = "userId";
 
-    private Context context;
+    private final Context context;
 
     static {
         System.loadLibrary("javahelp");

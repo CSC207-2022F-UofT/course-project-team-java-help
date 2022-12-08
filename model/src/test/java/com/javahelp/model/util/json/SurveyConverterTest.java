@@ -13,8 +13,8 @@ import java.util.List;
 import jakarta.json.JsonObject;
 
 public class SurveyConverterTest {
-    private Survey survey = setupSurvey();
-    private SurveyConverter converter = SurveyConverter.getInstance();
+    private final Survey survey = setupSurvey();
+    private final SurveyConverter converter = SurveyConverter.getInstance();
 
     @Test
     public void convert() {

@@ -59,7 +59,7 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
                     "email=:emailval " +
                     "REMOVE firstName, lastName";
 
-    private String tableName;
+    private final String tableName;
 
     /**
      * Creates a new {@link DynamoDBStore}

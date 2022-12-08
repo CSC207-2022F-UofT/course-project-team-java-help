@@ -12,7 +12,7 @@ import jakarta.json.JsonObject;
  */
 public class ProviderUserInfoConverter implements IJSONConverter<ProviderUserInfo> {
 
-    private static ProviderUserInfoConverter instance = new ProviderUserInfoConverter();
+    private static final ProviderUserInfoConverter instance = new ProviderUserInfoConverter();
 
     /**
      * Private constructor

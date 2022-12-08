@@ -23,8 +23,8 @@ import java.util.UUID;
 
 
 public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurveyResponseStore{
-    private String tableName;
-    private ISurveyStore surveyStore;
+    private final String tableName;
+    private final ISurveyStore surveyStore;
 
     DynamoDBSurveyResponseStore(String tableName, Regions region, ISurveyStore surveyStore) {
         super(region);

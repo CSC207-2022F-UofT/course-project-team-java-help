@@ -18,7 +18,7 @@ import jakarta.json.JsonObjectBuilder;
  */
 public class SurveyConverter implements IJSONConverter<Survey> {
 
-    private static SurveyConverter instance = new SurveyConverter(SurveyQuestionConverter.getInstance());
+    private static final SurveyConverter instance = new SurveyConverter(SurveyQuestionConverter.getInstance());
 
     /**
      * Private constructor

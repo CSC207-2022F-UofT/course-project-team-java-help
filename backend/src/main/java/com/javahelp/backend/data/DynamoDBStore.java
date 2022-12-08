@@ -9,9 +9,9 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
  */
 abstract class DynamoDBStore {
 
-    private Regions region;
+    private final Regions region;
 
-    private AmazonDynamoDB client;
+    private final AmazonDynamoDB client;
 
     /**
      * Creates a new {@link DynamoDBStore}

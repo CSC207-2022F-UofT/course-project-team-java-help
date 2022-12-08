@@ -17,9 +17,9 @@ import java.util.Map;
 import jakarta.json.JsonObject;
 
 public class SurveyResponseConverterTest {
-    private Survey survey = setupSurvey();
-    private SurveyResponse response = setupSurveyResponse(survey);
-    private SurveyResponseConverter converter = SurveyResponseConverter.getInstance();
+    private final Survey survey = setupSurvey();
+    private final SurveyResponse response = setupSurveyResponse(survey);
+    private final SurveyResponseConverter converter = SurveyResponseConverter.getInstance();
 
     @Test
     public void convert() {

@@ -13,9 +13,9 @@ public class Survey {
 
     private String id;
 
-    private String name;
+    private final String name;
 
-    private List<SurveyQuestion> questions;
+    private final List<SurveyQuestion> questions;
 
     /**
      * Creates a new {@link Survey}

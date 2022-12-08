@@ -18,9 +18,9 @@ import java.util.Set;
  */
 public class SearchInteractorTest {
 
-    private ISurveyStore surveyDB = ISurveyStore.getDefaultImplementation();
-    private ISurveyResponseStore srDB = ISurveyResponseStore.getDefaultImplementation();
-    private IUserStore userDB = IUserStore.getDefaultImplementation();
+    private final ISurveyStore surveyDB = ISurveyStore.getDefaultImplementation();
+    private final ISurveyResponseStore srDB = ISurveyResponseStore.getDefaultImplementation();
+    private final IUserStore userDB = IUserStore.getDefaultImplementation();
 
     @Test
     public void testSearchWithConstraint() {

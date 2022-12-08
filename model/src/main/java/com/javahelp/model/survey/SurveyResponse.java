@@ -9,13 +9,13 @@ import java.util.Set;
  */
 public class SurveyResponse {
 
-    private Survey survey;
+    private final Survey survey;
 
-    private Map<SurveyQuestion, SurveyQuestionResponse> responses;
+    private final Map<SurveyQuestion, SurveyQuestionResponse> responses;
 
     private String id;
 
-    private Set<String> attributes = new HashSet<>();
+    private final Set<String> attributes = new HashSet<>();
 
     /**
      * Creates a new {@link SurveyResponse}

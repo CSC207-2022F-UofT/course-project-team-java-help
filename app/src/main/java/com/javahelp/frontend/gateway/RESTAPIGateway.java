@@ -219,9 +219,9 @@ public abstract class RESTAPIGateway<T> {
     protected static class InternalRESTGatewayResponse {
 
         private boolean successfullyParsed;
-        private boolean shouldHaveBody;
+        private final boolean shouldHaveBody;
         private JsonObject body;
-        private int responseCode;
+        private final int responseCode;
 
         /**
          * Creates a new {@link InternalRESTGatewayResponse}

@@ -22,7 +22,7 @@ import java.util.UUID;
 
 
 public class DynamoDBSurveyStore extends DynamoDBStore implements ISurveyStore{
-    private String tableName;
+    private final String tableName;
     DynamoDBSurveyStore(String tableName, Regions region) {
         super(region);
         this.tableName = tableName;

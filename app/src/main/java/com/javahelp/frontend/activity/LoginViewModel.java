@@ -29,13 +29,13 @@ import java.util.concurrent.Executors;
  */
 public class LoginViewModel extends AndroidViewModel implements ILoginOutput {
 
-    private MutableLiveData<String> username = new MutableLiveData<>("");
-    private MutableLiveData<String> password = new MutableLiveData<>("");
-    private MutableLiveData<Boolean> loggingIn = new MutableLiveData<>(Boolean.FALSE);
-    private MutableLiveData<Boolean> staySignedIn = new MutableLiveData<>(Boolean.FALSE);
-    private MutableLiveData<Optional<LoginResult>> loginResult = new MutableLiveData<>(Optional.empty());
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
-    private ILoginInput loginInteractor;
+    private final MutableLiveData<String> username = new MutableLiveData<>("");
+    private final MutableLiveData<String> password = new MutableLiveData<>("");
+    private final MutableLiveData<Boolean> loggingIn = new MutableLiveData<>(Boolean.FALSE);
+    private final MutableLiveData<Boolean> staySignedIn = new MutableLiveData<>(Boolean.FALSE);
+    private final MutableLiveData<Optional<LoginResult>> loginResult = new MutableLiveData<>(Optional.empty());
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final ILoginInput loginInteractor;
 
     /**
      * Default {@link AndroidViewModel} constructor for {@link LoginViewModel}

@@ -7,7 +7,7 @@ import jakarta.json.Json;
 import jakarta.json.JsonObject;
 
 public class SurveyQuestionResponseConverter implements IJSONConverter<SurveyQuestionResponse> {
-    private static SurveyQuestionResponseConverter instance = new SurveyQuestionResponseConverter(SurveyQuestionConverter.getInstance());
+    private static final SurveyQuestionResponseConverter instance = new SurveyQuestionResponseConverter(SurveyQuestionConverter.getInstance());
 
     /**
      * Private constructor

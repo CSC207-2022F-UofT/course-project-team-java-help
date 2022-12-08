@@ -5,9 +5,9 @@ package com.javahelp.model.survey;
  */
 public class SurveyQuestionResponse {
 
-    private SurveyQuestion question;
+    private final SurveyQuestion question;
 
-    private int responseNumber;
+    private final int responseNumber;
 
     /**
      * Creates a new {@link SurveyQuestionResponse}

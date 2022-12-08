@@ -15,9 +15,9 @@ import java.time.Duration;
  */
 public class LoginInteractor {
 
-    private IUserStore userStore;
+    private final IUserStore userStore;
 
-    private ITokenStore tokenStore;
+    private final ITokenStore tokenStore;
 
     /**
      * Creates a new {@link LoginInteractor}

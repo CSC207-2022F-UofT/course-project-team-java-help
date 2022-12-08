@@ -12,7 +12,7 @@ import jakarta.json.JsonObject;
  */
 public class TokenConverter implements IJSONConverter<Token> {
 
-    private static TokenConverter instance = new TokenConverter();
+    private static final TokenConverter instance = new TokenConverter();
 
     /**
      * Private constructor

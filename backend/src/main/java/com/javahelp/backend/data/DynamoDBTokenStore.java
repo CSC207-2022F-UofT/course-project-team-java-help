@@ -26,7 +26,7 @@ import java.util.UUID;
  */
 class DynamoDBTokenStore extends DynamoDBStore implements ITokenStore {
 
-    private String tableName;
+    private final String tableName;
 
     /**
      * Creates a {@link DynamoDBTokenStore}
