@@ -145,6 +145,8 @@ public class LambdaRegisterDataAccess extends RESTAPIGateway<RegisterResult> imp
             }
             else if (json.containsKey("errorMessage")) {
                 return new RESTAPIGatewayResponse<>(json.getString("errorMessage"));
+            } else if (json.containsKey("message")) {
+                return new RESTAPIGatewayResponse<>(json.getString("message"));
             } else {
                 return new RESTAPIGatewayResponse<>("JSON missing relevant fields");
             }
