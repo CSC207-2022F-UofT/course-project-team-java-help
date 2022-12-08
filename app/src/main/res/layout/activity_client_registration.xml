@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="cdata"
-            type="com.javahelp.frontend.view.ClientRegistrationVm" />
+            name="clientViewModel"
+            type="com.javahelp.frontend.view.ClientRegistrationViewModel" />
 
     </data>
 
@@ -175,6 +175,13 @@
                     android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="18sp"
+                    android:visibility="gone" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:visibility="gone" />
 
                 <Button

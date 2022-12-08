@@ -2,6 +2,7 @@ package com.javahelp.frontend.view;
 
 
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -22,13 +23,16 @@ import com.javahelp.model.user.User;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.Permission;
 import java.util.Optional;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-
+/**
+ * Activity for registering clients
+ */
 public class ClientRegistrationActivity extends AppCompatActivity {
 
     /**
@@ -36,22 +40,21 @@ public class ClientRegistrationActivity extends AppCompatActivity {
      */
     private static final int REQUEST_INTERNET_REGISTER = 1;
 
-    ClientRegistrationVm clientRegistrationVm;
+    ClientRegistrationViewModel clientRegistrationViewModel;
     ActivityClientRegistrationBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_client_registration);
-        clientRegistrationVm = new ViewModelProvider(this).get(ClientRegistrationVm.class);
-        binding.setCdata(clientRegistrationVm);
+        clientRegistrationViewModel = new ViewModelProvider(this).get(ClientRegistrationViewModel.class);
+        binding.setClientViewModel(clientRegistrationViewModel);
         binding.setLifecycleOwner(this);
 
-        clientRegistrationVm.getRegisterResult().observe(this, this::updateOnRegisterResult);
+        clientRegistrationViewModel.getRegisterResult().observe(this, this::updateOnRegisterResult);
         binding.signupbtn1.setOnClickListener(this::registerClick);
     }
-
-
 
     /**
      * Called when the register button is clicked
@@ -59,35 +62,42 @@ public class ClientRegistrationActivity extends AppCompatActivity {
      *@param v {@link View} that was clicked
      */
     private void registerClick(View v) {
-        clientRegistrationVm.setUsername(binding.username1.getText().toString());
-        clientRegistrationVm.setPassword1(binding.password1.getText().toString());
-        clientRegistrationVm.setPassword2(binding.repassword1.getText().toString());
-        clientRegistrationVm.setClientUserInfo(binding.email1.getText().toString(),
-                binding.home1.getText().toString(),
-                binding.phonenumber1.getText().toString(),
-                binding.firstname1.getText().toString(),
-                binding.lastname1.getText().toString());
-        registerAttempt();
-
+        clientRegistrationViewModel.setUsername(binding.username1.getText().toString());
+        clientRegistrationViewModel.setPassword(binding.password1.getText().toString());
+        clientRegistrationViewModel.setEmail(binding.email1.getText().toString());
+        clientRegistrationViewModel.setAddress(binding.home1.getText().toString());
+        clientRegistrationViewModel.setPhone(binding.phonenumber1.getText().toString());
+        clientRegistrationViewModel.setFirstName(binding.firstname1.getText().toString());
+        clientRegistrationViewModel.setLastName(binding.lastname1.getText().toString());
+        if (updateRegisterUI()) {
+            requestPermissions(new String[]{Manifest.permission.INTERNET}, REQUEST_INTERNET_REGISTER);
+        }
     }
     /**
-     * Initiates a register request
+     * Determines whether its appropriate to initiate a register request
+     * and updates UI accordingly
+     * @return whether a register request should be initiated
      */
-    private void registerAttempt() {
+    private boolean updateRegisterUI() {
         if (binding.username1.getText().toString().isEmpty() || binding.password1.getText().toString().isEmpty()
                 || binding.repassword1.getText().toString().isEmpty()) {
-            clientRegistrationVm.setRegisterError("Please enter username and password");
-            return;
+            clientRegistrationViewModel.setRegisterError("Please enter username and password");
         } else if (!binding.password1.getText().toString().equals(binding.repassword1.getText().toString())) {
-            clientRegistrationVm.setRegisterError("Passwords do not match");
-            return;
+            clientRegistrationViewModel.setRegisterError("Passwords do not match");
         } else if (binding.email1.getText().toString().isEmpty() || binding.lastname1.getText().toString().isEmpty()
                 || binding.firstname1.getText().toString().isEmpty() || binding.home1.getText().toString().isEmpty()
                 || binding.phonenumber1.getText().toString().isEmpty()) {
-            clientRegistrationVm.setRegisterError("Please enter your personal information");
-            return;
+            clientRegistrationViewModel.setRegisterError("Please enter your personal information");
+        } else {
+            binding.signupbtn1.setEnabled(false);
+            binding.signupbtn1.setVisibility(View.GONE);
+            binding.progressBar.setVisibility(View.VISIBLE);
+            return true;
         }
-        clientRegistrationVm.setRegisterError("Registering");
+        binding.progressBar.setVisibility(View.GONE);
+        binding.signupbtn1.setEnabled(true);
+        binding.signupbtn1.setVisibility(View.VISIBLE);
+        return false;
     }
 
     /**
@@ -100,6 +110,9 @@ public class ClientRegistrationActivity extends AppCompatActivity {
             updateOnPresentRegisterResult(registerResult.get());
         }else {
             binding.registerResultText1.setVisibility(View.GONE);
+            binding.progressBar.setVisibility(View.GONE);
+            binding.signupbtn1.setEnabled(true);
+            binding.signupbtn1.setVisibility(View.VISIBLE);
         }
     }
 
@@ -113,32 +126,17 @@ public class ClientRegistrationActivity extends AppCompatActivity {
      */
     private void updateOnPresentRegisterResult(RegisterResult registerResult) {
         if (registerResult.isSuccess()) {
-            binding.registerResultText1.setText("Register successful");
-            storeCredentials(registerResult.getUser(), registerResult.getToken());
-            Toast.makeText(this, "Register successful", Toast.LENGTH_SHORT);
-            startActivity(new Intent(ClientRegistrationActivity.this, FrontPageActivity.class));
-
+            Intent intent = new Intent(ClientRegistrationActivity.this, FrontPageActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
         } else {
             binding.registerResultText1.setText(registerResult.getErrorMessage());
         }
+        binding.progressBar.setVisibility(View.GONE);
+        binding.signupbtn1.setEnabled(true);
+        binding.signupbtn1.setVisibility(View.VISIBLE);
         binding.registerResultText1.setVisibility(View.VISIBLE);
-    }
-
-    /**
-     * Stores the accepted credentials
-     *
-     * @param user  {@link User} to store
-     * @param token {@link Token} to store
-     */
-    private void storeCredentials(User user, Token token) {
-        SharedPreferencesAuthInformationProvider credentialStore =
-                new SharedPreferencesAuthInformationProvider(this);
-        try {
-            credentialStore.setTokenString(token.getToken());
-            credentialStore.setUserID(user.getStringID());
-        } catch (NoSuchPaddingException | IllegalBlockSizeException | NoSuchAlgorithmException | BadPaddingException | InvalidKeyException ignored) {
-            Toast.makeText(this, "Error Storing Credentials", Toast.LENGTH_LONG);
-        }
     }
 
     @Override
@@ -147,9 +145,9 @@ public class ClientRegistrationActivity extends AppCompatActivity {
         switch (requestCode) {
             case REQUEST_INTERNET_REGISTER:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    clientRegistrationVm.attemptRegister();
+                    clientRegistrationViewModel.attemptRegister();
                 } else {
-                    Toast.makeText(this, "Internet access denied, cannot log in", Toast.LENGTH_LONG);
+                    Toast.makeText(this, "Internet access denied, cannot log in", Toast.LENGTH_LONG).show();
                 }
                 return;
         }
