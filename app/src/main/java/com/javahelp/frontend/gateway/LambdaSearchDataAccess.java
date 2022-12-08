@@ -28,11 +28,12 @@ import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 
-public class LambdaSearchDataAccess extends RESTAPIGateway<SearchResult> implements ISearchDataAccess {
+/**
+ * Data access for searching for providers
+ */
+public class LambdaSearchDataAccess extends RESTAPITokenGateway<SearchResult> implements ISearchDataAccess {
 
     private static final String ENDPOINT = "https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/providers/search";
-
-    private static final LambdaSearchDataAccess instance = new LambdaSearchDataAccess();
 
     private static java.net.URI URI = null;
 
@@ -45,26 +46,18 @@ public class LambdaSearchDataAccess extends RESTAPIGateway<SearchResult> impleme
     }
 
     /**
-     * @return an instance of {@link LambdaSearchDataAccess}
+     * Creates a new {@link LambdaSearchDataAccess}
+     * @param provider the {@link IAuthInformationProvider} to use for this {@link LambdaSearchDataAccess}
      */
-    public static LambdaSearchDataAccess getInstance() {
-        return instance;
-    }
-
-    /**
-     * Private constructor
-     */
-    private LambdaSearchDataAccess() {
-
+    public LambdaSearchDataAccess(IAuthInformationProvider provider) {
+        super(provider);
     }
 
     @Override
     public Future<SearchResult> search(String userID, Set<String> filters, boolean isRanking, FutureCallback<SearchResult> callback) {
         JsonObjectBuilder bodyBuilder = Json.createObjectBuilder();
 
-        if (userID != null) {
-            bodyBuilder.add("userID", userID);
-        }
+        bodyBuilder.add("userID", userID);
         bodyBuilder.add("ranking", isRanking);
 
         JsonArrayBuilder filterBodyBuilder = Json.createArrayBuilder();

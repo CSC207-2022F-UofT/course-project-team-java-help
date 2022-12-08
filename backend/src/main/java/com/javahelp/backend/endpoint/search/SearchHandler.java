@@ -19,6 +19,10 @@ import com.javahelp.model.user.User;
 import com.javahelp.model.util.json.SurveyResponseConverter;
 import com.javahelp.model.util.json.UserConverter;
 
+import org.apache.http.util.ExceptionUtils;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -78,7 +82,8 @@ public class SearchHandler extends HTTPTokenHandler implements ISearchInputBound
         try {
             result = interactor.search(this);
         } catch (RuntimeException e) {
-            return APIGatewayResponse.error(INTERNAL_SERVER_ERROR, "Failed search.");
+            Logger.getLogger(SearchHandler.class).error("Failed search", e);
+            return APIGatewayResponse.error(INTERNAL_SERVER_ERROR, "Failed search");
         }
 
         String response;

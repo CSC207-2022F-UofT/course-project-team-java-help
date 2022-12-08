@@ -13,6 +13,7 @@ import com.javahelp.frontend.domain.user.search.ISearchInput;
 import com.javahelp.frontend.domain.user.search.ISearchOutput;
 import com.javahelp.frontend.domain.user.search.SearchInteractor;
 import com.javahelp.frontend.domain.user.search.SearchResult;
+import com.javahelp.frontend.util.auth.SharedPreferencesAuthInformationProvider;
 import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.User;
 
@@ -40,7 +41,7 @@ public class SearchFragmentVM extends AndroidViewModel implements ISearchOutput 
      */
     public SearchFragmentVM(@NonNull Application application) {
         super(application);
-        ISearchDataAccess search = LambdaSearchDataAccess.getInstance();
+        ISearchDataAccess search = new LambdaSearchDataAccess(new SharedPreferencesAuthInformationProvider(application.getBaseContext()));
         searchInteractor = new SearchInteractor(this, search);
     }
 

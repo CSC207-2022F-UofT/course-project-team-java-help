@@ -132,6 +132,11 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
 
     @Override
     public Map<String, User> read(String... ids) {
+
+        if (ids.length == 0) {
+            return new HashMap<>();
+        }
+
         Map<String, KeysAndAttributes> requestItems = new HashMap<>();
         Collection<Map<String, AttributeValue>> keys = new ArrayList<>();
 
