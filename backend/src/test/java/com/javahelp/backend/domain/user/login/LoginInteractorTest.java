@@ -50,7 +50,7 @@ public class LoginInteractorTest {
 
             db.read(u.getStringID()); // consistent read should block until information propagated
             try {
-                Thread.sleep(3000);
+                Thread.sleep(5000);
             } catch (InterruptedException ignored) {
 
             }
