@@ -5,43 +5,46 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Button;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.javahelp.R;
 import com.javahelp.databinding.FragmentAccountBinding;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link AccountFragment#newInstance} factory method to
+ * Use the {@link AccountFragment#newInstance} method to
  * create an instance of this fragment.
  */
 public class AccountFragment extends Fragment {
 
-    // This is example code. These will be changed later
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
-
     FragmentAccountBinding binding;
+    AccountFragmentViewModel viewModel;
 
+    /**
+     * Creates a new {@link AccountFragment}
+     */
     public AccountFragment() {
         // Required empty public constructor
     }
-    public static AccountFragment newInstance(String param1, String param2) {
-        AccountFragment fragment = new AccountFragment();
-        return fragment;
+
+    /**
+     * Creates a new {@link AccountFragment}
+     *
+     * @return a new instance of {@link AccountFragment}
+     */
+    public static AccountFragment newInstance() {
+        return new AccountFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        viewModel = new ViewModelProvider(requireActivity()).get(AccountFragmentViewModel.class);
     }
 
     @Override
@@ -51,21 +54,22 @@ public class AccountFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_account, container, false);
 
-        Button deleteButton = v.findViewById(R.id.deleteButton);
+        binding = DataBindingUtil.bind(v);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
+        binding.setAccountFragmentViewModel(viewModel);
 
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(AccountFragment.this.getContext(), DeleteActivity.class));
-            }
-        });
+        binding.deleteButton.setOnClickListener(view -> startActivity(new Intent(AccountFragment.this.getContext(), DeleteActivity.class)));
+
+        viewModel.getRegistering().observe(getViewLifecycleOwner(),
+                registering -> binding.progressBar.setVisibility(registering ? View.VISIBLE : View.GONE));
+
         return v;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        TextView tv = view.findViewById(R.id.name);
-        tv.setText("John Smith");
+
+        viewModel.getInfo();
     }
 }
