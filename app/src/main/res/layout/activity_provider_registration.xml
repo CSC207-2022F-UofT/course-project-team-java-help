@@ -5,16 +5,16 @@
 
     <data>
         <variable
-            name="clientViewModel"
-            type="com.javahelp.frontend.view.ClientRegistrationViewModel" />
+            name="providerData"
+            type="com.javahelp.frontend.view.ProviderRegistrationViewModel" />
 
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         android:orientation="vertical"
+        android:background="@color/white"
         tools:context=".frontend.view.ProviderRegistrationActivity">
 
         <ScrollView
@@ -27,7 +27,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/signuptitle1"
+                    android:id="@+id/signuptitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -41,14 +41,14 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/username1"
+                    android:id="@+id/username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginBottom="10dp"
-                    android:background="#287E7C7C"
+                    android:background="#23857C7C"
                     android:drawablePadding="20dp"
                     android:hint="Username"
                     android:padding="20dp"
@@ -56,7 +56,7 @@
                     android:textColorHint="@color/black" />
 
                 <EditText
-                    android:id="@+id/email1"
+                    android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -69,7 +69,7 @@
                     android:textColorHint="@color/black" />
 
                 <EditText
-                    android:id="@+id/password1"
+                    android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -83,7 +83,7 @@
                     android:textColorHint="@color/black" />
 
                 <EditText
-                    android:id="@+id/repassword1"
+                    android:id="@+id/repassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -111,7 +111,7 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/firstname1"
+                    android:id="@+id/practicename"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -120,26 +120,13 @@
                     android:layout_marginBottom="10dp"
                     android:background="#23857C7C"
                     android:drawablePadding="20dp"
-                    android:hint="First Name"
+                    android:hint="Practice Name"
                     android:padding="20dp"
                     android:textColor="@color/black"
                     android:textColorHint="@color/black" />
 
                 <EditText
-                    android:id="@+id/lastname1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="#23857C7C"
-                    android:drawablePadding="20dp"
-                    android:hint="Last Name"
-                    android:padding="20dp"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/black" />
-
-                <EditText
-                    android:id="@+id/home1"
+                    android:id="@+id/home"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -152,11 +139,10 @@
                     android:textColorHint="@color/black" />
 
                 <EditText
-                    android:id="@+id/phonenumber1"
+                    android:id="@+id/phonenumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginBottom="10dp"
                     android:background="#23857C7C"
@@ -168,7 +154,7 @@
                     android:textColorHint="@color/black" />
 
                 <TextView
-                    android:id="@+id/registerResultText1"
+                    android:id="@+id/registerResultText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Register Error Message"
@@ -176,6 +162,7 @@
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:visibility="gone" />
+
 
                 <ProgressBar
                     android:id="@+id/progressBar"
@@ -185,7 +172,7 @@
                     android:visibility="gone" />
 
                 <Button
-                    android:id="@+id/signupbtn1"
+                    android:id="@+id/signupbtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
@@ -194,7 +181,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="15dp"
                     android:layout_marginBottom="20dp"
-                    android:backgroundTint="@color/teal_700"
+                    android:backgroundTint="#5F9590"
                     android:text="REGISTER"
                     android:textColor="@color/white"
                     android:textSize="30dp" />

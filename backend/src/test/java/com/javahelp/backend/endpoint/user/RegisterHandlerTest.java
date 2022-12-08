@@ -47,7 +47,7 @@ public class RegisterHandlerTest {
         assumeTrue(databaseAccessible());
 
         User u = new User("", new ClientUserInfo(
-                "jacob.klimczak@gmail.com",
+                "jacob.klimczsdhsldjhflak@gmail.com",
                 "123 street",
                 ":(",
                 "jacob",

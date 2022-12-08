@@ -1,7 +1,7 @@
 package com.javahelp.frontend.gateway;
 
-import com.javahelp.frontend.domain.user.search.ISearchDataAccess;
-import com.javahelp.frontend.domain.user.search.SearchResult;
+import com.javahelp.frontend.domain.search.ISearchDataAccess;
+import com.javahelp.frontend.domain.search.SearchResult;
 import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.User;
 import com.javahelp.model.util.json.SurveyResponseConverter;

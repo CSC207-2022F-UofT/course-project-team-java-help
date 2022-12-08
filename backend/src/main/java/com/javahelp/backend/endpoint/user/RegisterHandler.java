@@ -8,7 +8,7 @@ import static com.javahelp.backend.endpoint.APIGatewayResponse.OK;
 import com.amazonaws.HttpMethod;
 import com.javahelp.backend.data.ITokenStore;
 import com.javahelp.backend.data.IUserStore;
-import com.javahelp.backend.domain.user.login.ILoginInput;
+import com.javahelp.backend.domain.user.login.ILoginInputBoundary;
 import com.javahelp.backend.domain.user.login.LoginInteractor;
 import com.javahelp.backend.domain.user.login.LoginResult;
 import com.javahelp.backend.domain.user.register.IUserRegisterInputBoundary;
@@ -36,7 +36,7 @@ import jakarta.json.JsonObject;
 /**
  * Handler to register a {@link User}
  */
-public class RegisterHandler extends HTTPHandler implements IClientRegisterInputBoundary, IProviderRegisterInputBoundary, ILoginInput {
+public class RegisterHandler extends HTTPHandler implements IClientRegisterInputBoundary, IProviderRegisterInputBoundary, ILoginInputBoundary {
 
     private User user;
 

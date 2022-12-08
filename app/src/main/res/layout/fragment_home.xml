@@ -5,7 +5,7 @@
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".frontend.fragments.HomeFragment">
+    tools:context=".frontend.view.HomeFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,12 +33,14 @@
             android:padding="20dp"
             android:textSize="28dp"
             android:textColor="@color/black"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="24dp"
-            android:textSize="26dp"
-            android:text="@string/about"/>
+            android:text="@string/about"
+            android:textColor="@color/DarkGrey"
+            android:textSize="26dp" />
     </LinearLayout>
 
 </FrameLayout>
