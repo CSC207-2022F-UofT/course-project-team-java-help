@@ -2,16 +2,16 @@ package com.javahelp.backend.data;
 
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.BatchGetItemRequest;
+import com.amazonaws.services.dynamodbv2.model.BatchGetItemResult;
 import com.amazonaws.services.dynamodbv2.model.DeleteItemRequest;
 import com.amazonaws.services.dynamodbv2.model.GetItemRequest;
 import com.amazonaws.services.dynamodbv2.model.GetItemResult;
+import com.amazonaws.services.dynamodbv2.model.KeysAndAttributes;
 import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
-import com.amazonaws.services.dynamodbv2.model.ScanRequest;
-import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.amazonaws.services.dynamodbv2.model.UpdateItemRequest;
-import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.ClientUserInfo;
 import com.javahelp.model.user.ProviderUserInfo;
 import com.javahelp.model.user.User;
@@ -19,11 +19,12 @@ import com.javahelp.model.user.UserInfo;
 import com.javahelp.model.user.UserPassword;
 import com.javahelp.model.user.UserType;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * Implementation of {@link IUserStore} through DynamoDB.
@@ -127,6 +128,42 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
         }
 
         return userFromDynamo(result.getItems().get(0));
+    }
+
+    @Override
+    public Map<String, User> read(String... ids) {
+        Map<String, KeysAndAttributes> requestItems = new HashMap<>();
+        Collection<Map<String, AttributeValue>> keys = new ArrayList<>();
+
+        for (String id : ids) {
+            HashMap<String, AttributeValue> idMap = new HashMap<>();
+            idMap.put("id", new AttributeValue(id));
+            keys.add(idMap);
+        }
+
+        requestItems.put(tableName, new KeysAndAttributes().withKeys(keys));
+
+        BatchGetItemRequest request = new BatchGetItemRequest()
+                .withRequestItems(requestItems);
+
+        BatchGetItemResult result = getClient().batchGetItem(request);
+
+        List<Map<String, AttributeValue>> responses = result.getResponses().getOrDefault(tableName, null);
+
+        if (responses == null) {
+            return null;
+        }
+
+        Map<String, User> output = new HashMap<>();
+
+        for (Map<String, AttributeValue> user : responses) {
+            User userObject = userFromDynamo(user);
+            if (userObject != null) {
+                output.put(userObject.getStringID(), userObject);
+            }
+        }
+
+        return output;
     }
 
     @Override

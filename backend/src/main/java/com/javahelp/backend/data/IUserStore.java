@@ -1,9 +1,11 @@
 package com.javahelp.backend.data;
 
 import com.amazonaws.regions.Regions;
-import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.User;
 import com.javahelp.model.user.UserPassword;
+
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * Interface for interacting with {@link User}s in a database
@@ -34,18 +36,22 @@ public interface IUserStore {
     User read(String id);
 
     /**
-     *
      * @param username {@link String} username of the {@link User} to get
      * @return {@link User} with the specified username
      */
     User readByUsername(String username);
 
     /**
-     *
      * @param email {@link String} email of the {@link User} to get
      * @return {@link User} with the specified email
      */
     User readByEmail(String email);
+
+    /**
+     * @param ids {@link String} ids of the {@link User}s to get
+     * @return {@link Map} of the specified {@link User}s and their ids
+     */
+    Map<String, User> read(String... ids);
 
     /**
      * Updates the specified {@link User}
