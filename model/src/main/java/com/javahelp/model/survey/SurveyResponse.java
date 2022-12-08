@@ -23,10 +23,10 @@ public class SurveyResponse {
      * @param id        {@link String} id for this {@link SurveyResponse}
      * @param survey    {@link Survey} to use for this {@link SurveyResponse}
      * @param responses {@link Map} mapping {@link SurveyQuestion}s on the {@link Survey}
-     * to {@link SurveyQuestionResponse}s
+     *                  to {@link SurveyQuestionResponse}s
      */
     public SurveyResponse(String id, Survey survey, Map<SurveyQuestion,
-        SurveyQuestionResponse> responses) {
+            SurveyQuestionResponse> responses) {
         this.id = id;
         this.survey = survey;
         this.responses = responses;
@@ -38,13 +38,13 @@ public class SurveyResponse {
     }
 
     /**
-     *
      * @return the {@link Set} of {@link String} attributes that this set of response represents.
      */
-    public Set<String> getAttributes(){ return this.attributes; }
+    public Set<String> getAttributes() {
+        return this.attributes;
+    }
 
     /**
-     *
      * @return the {@link Survey} for this {@link SurveyResponse}
      */
     public Survey getSurvey() {
@@ -52,7 +52,6 @@ public class SurveyResponse {
     }
 
     /**
-     *
      * @param question the {@link SurveyQuestion} to get the response for
      * @return {@link SurveyQuestionResponse} for the provided {@link SurveyQuestion}
      */
@@ -61,7 +60,6 @@ public class SurveyResponse {
     }
 
     /**
-     *
      * @param i the index of the {@link SurveyQuestion} to get the response for
      * @return the ith {@link SurveyQuestion}'s {@link SurveyQuestionResponse}
      */
@@ -73,7 +71,6 @@ public class SurveyResponse {
     }
 
     /**
-     *
      * @return the number of {@link SurveyQuestion}s the {@link Survey} this is based on has
      */
     public int size() {
@@ -81,7 +78,6 @@ public class SurveyResponse {
     }
 
     /**
-     *
      * @return the unique {@link String} id for this {@link SurveyResponse}
      */
     public String getID() {
@@ -89,8 +85,9 @@ public class SurveyResponse {
     }
 
     /**
-     *
      * @param id {@link String} new id for this {@link SurveyResponse}
      */
-    public void setID(String id) { this.id = id; }
+    public void setID(String id) {
+        this.id = id;
+    }
 }
