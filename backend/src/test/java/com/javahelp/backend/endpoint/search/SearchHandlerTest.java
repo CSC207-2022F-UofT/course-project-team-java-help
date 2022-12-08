@@ -27,7 +27,11 @@ public class SearchHandlerTest {
     ISurveyStore surveys = ISurveyStore.getDefaultImplementation();
     ISurveyResponseStore responses = ISurveyResponseStore.getDefaultImplementation();
 
-    public boolean userDatabaseAccessible() {
+    /**
+     *
+     * @return whether the user table is accessible
+     */
+    private boolean userDatabaseAccessible() {
         try {
             users.read("test");
             return true;
@@ -36,7 +40,11 @@ public class SearchHandlerTest {
         }
     }
 
-    public boolean surveyDatabaseAccessible() {
+    /**
+     *
+     * @return whether the survey table is accessible
+     */
+    private boolean surveyDatabaseAccessible() {
         try {
             surveys.read("test");
             return true;
@@ -45,7 +53,11 @@ public class SearchHandlerTest {
         }
     }
 
-    public boolean responseDatabaseAccessible() {
+    /**
+     *
+     * @return whether the response table is accessible
+     */
+    private boolean responseDatabaseAccessible() {
         try {
             responses.read("test");
             return true;

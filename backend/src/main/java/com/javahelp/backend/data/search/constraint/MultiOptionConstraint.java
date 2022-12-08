@@ -11,12 +11,12 @@ public class MultiOptionConstraint implements IConstraint {
 
     public void setMultiConstraint(List<String> constraintList) {
         for (String constraint : constraintList) {
-            setConstraint(constraint);
+            addConstraint(constraint);
         }
     }
 
     @Override
-    public void setConstraint(String constraint) {
+    public void addConstraint(String constraint) {
         this.constraints.add(constraint);
     }
 

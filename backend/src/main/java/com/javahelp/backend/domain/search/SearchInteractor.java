@@ -3,8 +3,9 @@ package com.javahelp.backend.domain.search;
 import com.javahelp.backend.data.ISurveyResponseStore;
 import com.javahelp.backend.data.ISurveyStore;
 import com.javahelp.backend.data.IUserStore;
+import com.javahelp.backend.data.search.constraint.Constraint;
 import com.javahelp.backend.data.search.constraint.IConstraint;
-import com.javahelp.backend.data.search.constraint.UserQueryConstraint;
+import com.javahelp.backend.data.search.constraint.SurveyQuerier;
 import com.javahelp.backend.data.search.rank.IProviderRanker;
 import com.javahelp.backend.data.search.rank.ISimilarityScorer;
 import com.javahelp.backend.data.search.rank.ProviderRanker;
@@ -17,11 +18,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Interactor for looking up {@link User}s
+ */
 public class SearchInteractor {
-    ISurveyStore surveyStore;
-    ISurveyResponseStore responseStore;
-    IUserStore userStore;
 
+    private final ISurveyStore surveyStore;
+    private final ISurveyResponseStore responseStore;
+    private final IUserStore userStore;
+
+    /**
+     * Creates a new {@link SearchInteractor}
+     * @param surveyStore {@link ISurveyStore} to use
+     * @param responseStore {@link ISurveyResponseStore} to use
+     * @param userStore {@link IUserStore} to use
+     */
     public SearchInteractor(ISurveyStore surveyStore,
                          ISurveyResponseStore responseStore,
                          IUserStore userStore) {
@@ -30,15 +41,20 @@ public class SearchInteractor {
         this.userStore = userStore;
     }
 
+    /**
+     * Searches for providers relevant to a client based on input
+     * @param input {@link ISearchInputBoundary} to use
+     * @return the relevant {@link SearchResult}
+     */
     public SearchResult search(ISearchInputBoundary input) {
-        IConstraint constraint = IConstraint.getDefaultImplementation();
+        IConstraint constraint = new Constraint();
         for (String c : input.getConstraints()) {
-            constraint.setConstraint(c);
+            constraint.addConstraint(c);
         }
 
-        UserQueryConstraint userQueryConstraint = new UserQueryConstraint(this.responseStore, this.userStore);
-        Map<String, User> users = userQueryConstraint.getProvidersWithConstraints(constraint);
-        Map<String, SurveyResponse> responses = userQueryConstraint.getResponsesWithConstraints(constraint);
+        SurveyQuerier userQueryConstraint = new SurveyQuerier(responseStore, userStore);
+        Map<String, User> users = userQueryConstraint.getUsersByConstraint(constraint);
+        Map<String, SurveyResponse> responses = userQueryConstraint.getSurveyResponses(constraint);
 
         List<User> userList = new ArrayList<>();
         List<SurveyResponse> responseList = new ArrayList<>();
@@ -50,7 +66,7 @@ public class SearchInteractor {
         }
 
         if (input.getIsRanking() && input.getUserID() != null) {
-            SurveyResponse responseMain = this.responseStore.readByUser(input.getUserID()).get(0);
+            SurveyResponse responseMain = responseStore.readByUser(input.getUserID()).get(0);
             ISimilarityScorer similarityScorer = new SimilarityScorer();
             IProviderRanker ranker = new ProviderRanker(similarityScorer);
             userList = ranker.rank(responseMain, userToResponseMap);
