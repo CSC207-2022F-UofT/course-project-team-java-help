@@ -1,4 +1,4 @@
-package com.javahelp.backend.endpoint.login;
+package com.javahelp.backend.endpoint.user;
 
 import static com.javahelp.backend.endpoint.APIGatewayResponse.BAD_REQUEST;
 import static com.javahelp.backend.endpoint.APIGatewayResponse.OK;

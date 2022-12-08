@@ -1,4 +1,4 @@
-package com.javahelp.backend.endpoint.delete;
+package com.javahelp.backend.endpoint.user;
 
 
 import static org.hamcrest.Matchers.equalTo;

@@ -1,4 +1,4 @@
-package com.javahelp.backend.endpoint.delete;
+package com.javahelp.backend.endpoint.user;
 
 import static com.javahelp.backend.endpoint.APIGatewayResponse.FORBIDDEN;
 import static com.javahelp.backend.endpoint.APIGatewayResponse.OK;
@@ -19,6 +19,9 @@ import java.util.Map;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 
+/**
+ * Handler for deleting a {@link User}
+ */
 public class DeleteHandler extends HTTPTokenHandler implements IDeleteInputBoundary {
     private String userID;
 

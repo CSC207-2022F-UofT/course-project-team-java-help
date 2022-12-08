@@ -1,4 +1,4 @@
-package com.javahelp.backend.endpoint.login;
+package com.javahelp.backend.endpoint.user;
 
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.Matchers.equalTo;
@@ -9,6 +9,7 @@ import static org.junit.Assume.assumeTrue;
 import static io.restassured.RestAssured.given;
 
 import com.javahelp.backend.data.IUserStore;
+import com.javahelp.backend.endpoint.user.LoginHandler;
 import com.javahelp.model.user.ClientUserInfo;
 import com.javahelp.model.user.SHAPasswordHasher;
 import com.javahelp.model.user.User;
