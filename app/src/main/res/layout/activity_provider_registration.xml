@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="pdata"
-            type="com.javahelp.frontend.view.ProviderRegistrationViewmodel" />
+            name="providerData"
+            type="com.javahelp.frontend.view.ProviderRegistrationViewModel" />
 
     </data>
 
@@ -143,7 +143,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginBottom="10dp"
                     android:background="#23857C7C"
@@ -164,6 +163,13 @@
                     android:textSize="18sp"
                     android:visibility="gone" />
 
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
 
                 <Button
                     android:id="@+id/signupbtn"

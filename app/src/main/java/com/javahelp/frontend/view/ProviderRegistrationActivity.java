@@ -13,19 +13,10 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.javahelp.R;
-import com.javahelp.databinding.ActivityPregBinding;
+import com.javahelp.databinding.ActivityProviderRegistrationBinding;
 import com.javahelp.frontend.domain.user.register.RegisterResult;
-import com.javahelp.frontend.util.auth.SharedPreferencesAuthInformationProvider;
-import com.javahelp.model.token.Token;
-import com.javahelp.model.user.User;
 
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 
 /**
@@ -38,71 +29,64 @@ public class ProviderRegistrationActivity extends AppCompatActivity {
      */
     private static final int REQUEST_INTERNET_REGISTER = 1;
 
-    ProviderRegistrationViewmodel providerRegistrationViewmodel;
-    ActivityPregBinding binding;
-
+    ProviderRegistrationViewModel providerRegistrationViewModel;
+    ActivityProviderRegistrationBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_preg);
-        providerRegistrationViewmodel = new ViewModelProvider(this).
-                get(ProviderRegistrationViewmodel.class);
-        binding.setPdata(providerRegistrationViewmodel);
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_provider_registration);
+        providerRegistrationViewModel = new ViewModelProvider(this).get(ProviderRegistrationViewModel.class);
+        binding.setProviderData(providerRegistrationViewModel);
         binding.setLifecycleOwner(this);
 
-        providerRegistrationViewmodel.getRegisterResult().observe(this, this::updateOnRegisterResult);
-
+        providerRegistrationViewModel.getRegisterResult().observe(this, this::updateOnRegisterResult);
         binding.signupbtn.setOnClickListener(this::registerClick);
-
     }
 
     /**
-     * Called when the Register button is clicked
+     * Called when the register button is clicked
      *
      * @param v {@link View} that was clicked
      */
     private void registerClick(View v) {
-        providerRegistrationViewmodel.setUsername(binding.username.getText().toString());
-        providerRegistrationViewmodel.setPassword1(binding.password.getText().toString());
-        providerRegistrationViewmodel.setPassword2(binding.repassword.getText().toString());
-        providerRegistrationViewmodel.setProviderUserInfo(binding.email.getText().toString(),
-                binding.practicename.getText().toString(),
-                binding.home.getText().toString(),
-                binding.phonenumber.getText().toString());
-        registerAttempt();
+        providerRegistrationViewModel.setUsername(binding.username.getText().toString());
+        providerRegistrationViewModel.setPassword(binding.password.getText().toString());
+        providerRegistrationViewModel.setEmail(binding.email.getText().toString());
+        providerRegistrationViewModel.setAddress(binding.home.getText().toString());
+        providerRegistrationViewModel.setPhone(binding.phonenumber.getText().toString());
+        providerRegistrationViewModel.setPracticeName(binding.practicename.getText().toString());
+        if (updateRegisterUI()) {
+            requestPermissions(new String[]{Manifest.permission.INTERNET}, REQUEST_INTERNET_REGISTER);
+        }
     }
 
     /**
-     * Initiates a register request
+     * Determines whether its appropriate to initiate a register request
+     * and updates UI accordingly
+     *
+     * @return whether a register request should be initiated
      */
-    private void registerAttempt() {
+    private boolean updateRegisterUI() {
         if (binding.username.getText().toString().isEmpty() || binding.password.getText().toString().isEmpty()
                 || binding.repassword.getText().toString().isEmpty()) {
-            providerRegistrationViewmodel.setRegisterError("Please enter username and password");
-            return; // early return on invalid username or password
+            providerRegistrationViewModel.setRegisterError("Please enter username and password");
         } else if (!binding.password.getText().toString().equals(binding.repassword.getText().toString())) {
-            providerRegistrationViewmodel.setRegisterError("Passwords do not match");
-            return;
+            providerRegistrationViewModel.setRegisterError("Passwords do not match");
         } else if (binding.email.getText().toString().isEmpty() || binding.practicename.getText().toString().isEmpty()
-                || binding.home.getText().toString().isEmpty() || binding.phonenumber.getText().toString().isEmpty()) {
-            providerRegistrationViewmodel.setRegisterError("Please enter your personal information");
-            return;
+                || binding.phonenumber.getText().toString().isEmpty() || binding.home.getText().toString().isEmpty()) {
+            providerRegistrationViewModel.setRegisterError("Please enter your business information");
+        } else {
+            binding.signupbtn.setEnabled(false);
+            binding.signupbtn.setVisibility(View.GONE);
+            binding.progressBar.setVisibility(View.VISIBLE);
+            return true;
         }
-        providerRegistrationViewmodel.setRegisterError("Registering");
-        requestPermissions(new String[]{Manifest.permission.INTERNET}, REQUEST_INTERNET_REGISTER);
-//            new Thread(() -> {
-//                try {
-//                    Thread.sleep(750);
-//                } catch (InterruptedException ignored) {
-//
-//                }
-//                runOnUiThread(() -> {
-//                    Intent intent = new Intent(ProviderRegistrationActivity.this, FrontPageActivity.class);
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                    startActivity(intent);
-//                });
-//            }).start();
+        binding.progressBar.setVisibility(View.GONE);
+        binding.signupbtn.setEnabled(true);
+        binding.signupbtn.setVisibility(View.VISIBLE);
+        return false;
     }
 
     /**
@@ -115,6 +99,9 @@ public class ProviderRegistrationActivity extends AppCompatActivity {
             updateOnPresentRegisterResult(registerResult.get());
         } else {
             binding.registerResultText.setVisibility(View.GONE);
+            binding.progressBar.setVisibility(View.GONE);
+            binding.signupbtn.setEnabled(true);
+            binding.signupbtn.setVisibility(View.VISIBLE);
         }
     }
 
@@ -124,35 +111,21 @@ public class ProviderRegistrationActivity extends AppCompatActivity {
      * which is called with an {@link Optional} {@link RegisterResult}, and calls this method if that
      * {@link Optional} is present.
      *
-     * @param result {@link RegisterResult} of login attempt
+     * @param registerResult {@link RegisterResult} of login attempt
      */
-    private void updateOnPresentRegisterResult(RegisterResult result) {
-        if (result.isSuccess()) {
-            binding.registerResultText.setText("Register successful");
-            storeCredentials(result.getUser(), result.getToken());
-            Toast.makeText(this, "Register successful", Toast.LENGTH_SHORT);
-            startActivity(new Intent(ProviderRegistrationActivity.this, FrontPageActivity.class));
+    private void updateOnPresentRegisterResult(RegisterResult registerResult) {
+        if (registerResult.isSuccess()) {
+            Intent intent = new Intent(ProviderRegistrationActivity.this, FrontPageActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
         } else {
-            binding.registerResultText.setText(result.getErrorMessage());
+            binding.registerResultText.setText(registerResult.getErrorMessage());
         }
+        binding.progressBar.setVisibility(View.GONE);
+        binding.signupbtn.setEnabled(true);
+        binding.signupbtn.setVisibility(View.VISIBLE);
         binding.registerResultText.setVisibility(View.VISIBLE);
-    }
-
-    /**
-     * Stores the accepted credentials
-     *
-     * @param user  {@link User} to store
-     * @param token {@link Token} to store
-     */
-    private void storeCredentials(User user, Token token) {
-        SharedPreferencesAuthInformationProvider credentialStore =
-                new SharedPreferencesAuthInformationProvider(this);
-        try {
-            credentialStore.setTokenString(token.getToken());
-            credentialStore.setUserID(user.getStringID());
-        } catch (NoSuchPaddingException | IllegalBlockSizeException | NoSuchAlgorithmException | BadPaddingException | InvalidKeyException ignored) {
-            Toast.makeText(this, "Error Storing Credentials", Toast.LENGTH_LONG);
-        }
     }
 
     @Override
@@ -161,9 +134,9 @@ public class ProviderRegistrationActivity extends AppCompatActivity {
         switch (requestCode) {
             case REQUEST_INTERNET_REGISTER:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    providerRegistrationViewmodel.attemptRegister();
+                    providerRegistrationViewModel.attemptRegister();
                 } else {
-                    Toast.makeText(this, "Internet access denied, cannot log in", Toast.LENGTH_LONG);
+                    Toast.makeText(this, "Internet access denied, cannot log in", Toast.LENGTH_LONG).show();
                 }
                 return;
         }
