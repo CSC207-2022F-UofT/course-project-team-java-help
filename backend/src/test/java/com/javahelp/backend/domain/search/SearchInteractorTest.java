@@ -1,20 +1,16 @@
 package com.javahelp.backend.domain.search;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.javahelp.backend.data.ISurveyResponseStore;
 import com.javahelp.backend.data.ISurveyStore;
 import com.javahelp.backend.data.IUserStore;
 import com.javahelp.backend.data.search.RandomSurveyPopulation;
-import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.User;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -56,8 +52,7 @@ public class SearchInteractorTest {
             });
 
             assertTrue(result.getUsers().size() > 0);
-        }
-        finally {
+        } finally {
             population.delete();
         }
     }
@@ -75,11 +70,19 @@ public class SearchInteractorTest {
 
             SearchResult result = interactor.search(new ISearchInputBoundary() {
                 @Override
-                public String getSearchUserID() { return population.getRandomClient().getStringID(); }
+                public String getSearchUserID() {
+                    return population.getRandomClient().getStringID();
+                }
+
                 @Override
-                public Set<String> getConstraints() { return attributes; }
+                public Set<String> getConstraints() {
+                    return attributes;
+                }
+
                 @Override
-                public boolean getIsRanking() { return false; }
+                public boolean getIsRanking() {
+                    return false;
+                }
             });
 
             assertTrue(population.getPopulationSize() <= result.getUsers().size());
@@ -87,8 +90,7 @@ public class SearchInteractorTest {
             for (User u : population.getRandomProviders()) {
                 assertTrue(result.getUsers().stream().map(User::getStringID).anyMatch(x -> u.getStringID().equals(x)));
             }
-        }
-        finally {
+        } finally {
             population.delete();
         }
     }
