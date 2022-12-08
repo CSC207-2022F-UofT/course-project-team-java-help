@@ -24,10 +24,6 @@ public class FrontPageActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         replaceFragment(new HomeFragment());
 
-        //viewModel = new FrontPageActivityVm(this).get(LoginViewModel.class);
-        //binding.setData(viewModel);
-        //binding.setLifecycleOwner(this);
-
         binding.bottomNavigationView.setOnItemSelectedListener(item ->{
             switch(item.getItemId()){
                 case R.id.home:
