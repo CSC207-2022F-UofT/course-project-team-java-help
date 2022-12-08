@@ -33,9 +33,8 @@ public class ClientRegistrationVm extends AndroidViewModel implements IRegisterO
     private MutableLiveData<String> phone = new MutableLiveData<>("");
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private MutableLiveData<Optional<RegisterResult>> registerResult = new MutableLiveData<>(Optional.empty());
-    private ClientUserInfo clientUserInfo = new ClientUserInfo("","","","", "");
+    private ClientUserInfo clientUserInfo = new ClientUserInfo("", "", "", "", "");
     private RegisterInteractor registerInteractor;
-
 
     public ClientRegistrationVm(@NonNull Application application) {
 
@@ -47,6 +46,7 @@ public class ClientRegistrationVm extends AndroidViewModel implements IRegisterO
 
     /**
      * Sets the username for this {@link ClientRegistrationVm}
+     *
      * @param username {@link String} username
      */
     public void setUsername(String username) {
@@ -55,6 +55,7 @@ public class ClientRegistrationVm extends AndroidViewModel implements IRegisterO
 
     /**
      * Sets the password for this {@link ClientRegistrationVm}
+     *
      * @param password1 {@link String} password1 to use
      */
     public void setPassword1(String password1) {
@@ -63,42 +64,61 @@ public class ClientRegistrationVm extends AndroidViewModel implements IRegisterO
 
     /**
      * Sets the confirmed_password for this {@link ClientRegistrationVm}
+     *
      * @param password2 {@link String} password2 to use
      */
-    public void setPassword2(String password2) { this.password2.setValue(password2);}
+    public void setPassword2(String password2) {
+        this.password2.setValue(password2);
+    }
 
     /**
      * Sets the email for this {@link ClientRegistrationVm}
+     *
      * @param email {@link String} email to use
      */
-    public void setEmail(String email) { this.email.setValue(email);}
+    public void setEmail(String email) {
+        this.email.setValue(email);
+    }
 
     /**
      * Sets the firstname for this {@link ClientRegistrationVm}
+     *
      * @param firstname {@link String} firstname to use
      */
-    public void setFirstname(String firstname) { this.firstname.setValue(firstname);}
+    public void setFirstname(String firstname) {
+        this.firstname.setValue(firstname);
+    }
 
     /**
      * Sets the lastname for this {@link ClientRegistrationVm}
+     *
      * @param lastname {@link String} firstname to use
      */
-    public void setLastname(String lastname) { this.firstname.setValue(lastname);}
+    public void setLastname(String lastname) {
+        this.firstname.setValue(lastname);
+    }
 
     /**
      * Sets the address for this {@link ClientRegistrationVm}
+     *
      * @param address {@link String} address to use
      */
-    public void setAddress(String address) { this.address.setValue(address);}
+    public void setAddress(String address) {
+        this.address.setValue(address);
+    }
 
     /**
      * Sets the phone for this {@link ClientRegistrationVm}
+     *
      * @param phone {@link String} phone to use
      */
-    public void setPhone(String phone) { this.phone.setValue(phone);}
+    public void setPhone(String phone) {
+        this.phone.setValue(phone);
+    }
 
     /**
      * Sets the register error
+     *
      * @param s {@link String} register error to set
      */
     public void setRegisterError(String s) {
@@ -107,9 +127,10 @@ public class ClientRegistrationVm extends AndroidViewModel implements IRegisterO
 
     /**
      * Sets the clientUserInfo for this {@link ClientRegistrationVm}
+     *
      * @param email, firstname, lastname, phone, address {@link String}
      */
-    public void setClientUserInfo(String email, String address, String phone, String firstname, String lastname){
+    public void setClientUserInfo(String email, String address, String phone, String firstname, String lastname) {
         this.clientUserInfo.setEmailAddress(email);
         this.clientUserInfo.setFirstName(firstname);
         this.clientUserInfo.setLastName(lastname);
@@ -118,18 +139,18 @@ public class ClientRegistrationVm extends AndroidViewModel implements IRegisterO
     }
 
     /**
-     *
      * @return the {@link RegisterResult} of the latest register attempt, if applicable
      */
-    public MutableLiveData<Optional<RegisterResult>> getRegisterResult () {return registerResult;}
+    public MutableLiveData<Optional<RegisterResult>> getRegisterResult() {
+        return registerResult;
+    }
 
 
     /**
-     *
-     * @return the boolean of the input passwords are matched or not
      * @param password1, password2 {@link String}
+     * @return the boolean of the input passwords are matched or not
      */
-    public boolean passwordMatch(String password1, String password2){
+    public boolean passwordMatch(String password1, String password2) {
         return password1.equals(password2);
 
     }
@@ -137,14 +158,14 @@ public class ClientRegistrationVm extends AndroidViewModel implements IRegisterO
     /**
      * Tries to Register in
      */
-    public void attemptRegister(){
-        executor.execute(() ->{
+    public void attemptRegister() {
+        executor.execute(() -> {
             try {
                 Thread.sleep(250);
-            }catch (InterruptedException ignored) {
+            } catch (InterruptedException ignored) {
 
             }
-            if (passwordMatch(password1.getValue(), password2.getValue())){
+            if (passwordMatch(password1.getValue(), password2.getValue())) {
                 registerInteractor.register(username.getValue(), password1.getValue(), clientUserInfo);
             }
         });

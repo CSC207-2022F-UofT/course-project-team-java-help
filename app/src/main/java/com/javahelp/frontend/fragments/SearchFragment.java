@@ -16,7 +16,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.chip.Chip;
 import com.javahelp.R;
-import com.javahelp.frontend.activity.LoginViewModel;
 import com.javahelp.frontend.domain.user.login.LoginResult;
 import com.javahelp.frontend.domain.user.search.SearchResult;
 import com.javahelp.model.survey.Survey;

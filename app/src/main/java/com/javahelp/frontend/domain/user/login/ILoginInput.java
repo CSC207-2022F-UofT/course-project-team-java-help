@@ -2,8 +2,6 @@ package com.javahelp.frontend.domain.user.login;
 
 import com.javahelp.model.user.User;
 
-import java.util.concurrent.Future;
-
 /**
  * Input boundary for a {@link User} logging in
  * <p>

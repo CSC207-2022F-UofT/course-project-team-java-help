@@ -17,7 +17,6 @@ import com.javahelp.frontend.util.auth.SharedPreferencesAuthInformationProvider;
 import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.User;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

@@ -3,7 +3,6 @@ package com.javahelp.model.util.json;
 import static org.junit.Assert.assertEquals;
 
 import com.javahelp.model.survey.SurveyQuestion;
-import com.javahelp.model.user.User;
 
 import org.junit.Test;
 

@@ -1,10 +1,6 @@
 package com.javahelp.backend.endpoint.user;
 
-import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasEntry;
-import static org.hamcrest.Matchers.hasKey;
-import static org.hamcrest.Matchers.hasProperty;
 import static org.junit.Assume.assumeTrue;
 import static io.restassured.RestAssured.given;
 

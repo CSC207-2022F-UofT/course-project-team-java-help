@@ -4,18 +4,14 @@ import com.javahelp.model.survey.Survey;
 import com.javahelp.model.survey.SurveyQuestion;
 import com.javahelp.model.survey.SurveyQuestionResponse;
 import com.javahelp.model.survey.SurveyResponse;
-import com.javahelp.model.user.UserInfo;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
-import jakarta.json.JsonObjectBuilder;
 
 public class SurveyResponseConverter implements IJSONConverter<SurveyResponse> {
 

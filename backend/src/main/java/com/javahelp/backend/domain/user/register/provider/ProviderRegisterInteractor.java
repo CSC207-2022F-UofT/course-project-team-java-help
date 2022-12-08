@@ -5,7 +5,6 @@ import com.javahelp.backend.domain.user.register.UserRegisterResult;
 import com.javahelp.backend.domain.user.register.UserRegisterInteractor;
 import com.javahelp.model.user.ProviderUserInfo;
 import com.javahelp.model.user.User;
-import com.javahelp.model.user.UserPassword;
 
 /**
  * Interactor that registers new provider {@link User}s

@@ -4,7 +4,6 @@ import com.amazonaws.regions.Regions;
 import com.javahelp.model.user.User;
 import com.javahelp.model.user.UserPassword;
 
-import java.util.Collection;
 import java.util.Map;
 
 /**

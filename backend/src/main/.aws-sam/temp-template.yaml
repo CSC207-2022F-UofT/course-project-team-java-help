@@ -1,0 +1,11 @@
+Resources:
+  Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Timeout: 300
+      MemorySize: 128
+      Handler: com.javahelp.backend.endpoint.user.LoginHandler
+      CodeUri: C:\Users\jacob\Documents\Source\course-project-team-java-help\backend
+      Runtime: java11
+      Architectures:
+        - x86_64

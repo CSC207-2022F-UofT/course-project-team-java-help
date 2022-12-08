@@ -13,7 +13,6 @@ import com.javahelp.model.user.UserPassword;
 
 import org.junit.Test;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.Random;
 

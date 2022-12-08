@@ -1,10 +1,6 @@
 package com.javahelp.model.util.json;
 
 import com.javahelp.model.survey.SurveyQuestion;
-import com.javahelp.model.user.ClientUserInfo;
-import com.javahelp.model.user.ProviderUserInfo;
-import com.javahelp.model.user.User;
-import com.javahelp.model.user.UserInfo;
 
 import java.util.ArrayList;
 import java.util.HashSet;

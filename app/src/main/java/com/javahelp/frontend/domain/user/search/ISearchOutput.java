@@ -2,7 +2,6 @@ package com.javahelp.frontend.domain.user.search;
 
 
 import com.javahelp.model.survey.SurveyResponse;
-import com.javahelp.model.token.Token;
 import com.javahelp.model.user.User;
 
 import java.util.List;

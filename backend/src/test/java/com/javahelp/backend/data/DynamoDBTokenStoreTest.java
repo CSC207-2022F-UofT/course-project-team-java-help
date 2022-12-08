@@ -8,13 +8,9 @@ import static org.junit.Assume.assumeTrue;
 import com.amazonaws.regions.Regions;
 import com.javahelp.model.token.Token;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.time.Duration;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Tests for {@link DynamoDBTokenStore}

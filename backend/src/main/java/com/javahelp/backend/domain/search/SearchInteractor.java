@@ -1,7 +1,6 @@
 package com.javahelp.backend.domain.search;
 
 import com.javahelp.backend.data.ISurveyResponseStore;
-import com.javahelp.backend.data.ISurveyStore;
 import com.javahelp.backend.data.IUserStore;
 import com.javahelp.backend.data.search.constraint.Constraint;
 import com.javahelp.backend.data.search.constraint.IConstraint;

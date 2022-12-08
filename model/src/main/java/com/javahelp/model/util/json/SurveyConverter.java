@@ -2,7 +2,6 @@ package com.javahelp.model.util.json;
 
 import com.javahelp.model.survey.Survey;
 import com.javahelp.model.survey.SurveyQuestion;
-import com.javahelp.model.user.UserInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +10,6 @@ import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
-import jakarta.json.JsonObjectBuilder;
 
 /**
  * Converts {@link Survey} to {@link JsonObject}

@@ -2,12 +2,8 @@ package com.javahelp.backend.endpoint.user;
 
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assume.assumeTrue;
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.request;
-import static io.restassured.RestAssured.when;
 
 import com.javahelp.backend.data.ITokenStore;
 import com.javahelp.backend.data.IUserStore;
@@ -18,19 +14,11 @@ import com.javahelp.model.user.User;
 import com.javahelp.model.user.UserInfo;
 import com.javahelp.model.user.UserPassword;
 
-import org.hamcrest.CoreMatchers;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
 
 import io.restassured.http.Header;
-import io.restassured.http.Headers;
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
 
 public class DeleteHandlerTest {
     final IUserStore userStore = IUserStore.getDefaultImplementation();

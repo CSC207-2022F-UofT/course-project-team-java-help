@@ -5,7 +5,6 @@ import com.javahelp.frontend.domain.user.login.LoginResult;
 import com.javahelp.model.token.Token;
 import com.javahelp.model.user.User;
 import com.javahelp.model.user.UserPassword;
-import com.javahelp.model.util.json.IJSONConverter;
 import com.javahelp.model.util.json.TokenConverter;
 import com.javahelp.model.util.json.UserConverter;
 
@@ -16,7 +15,6 @@ import org.apache.hc.core5.http.ContentType;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Base64;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;

@@ -19,8 +19,6 @@ import com.javahelp.model.user.User;
 import com.javahelp.model.util.json.SurveyResponseConverter;
 import com.javahelp.model.util.json.UserConverter;
 
-import org.apache.http.util.ExceptionUtils;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import java.util.HashSet;

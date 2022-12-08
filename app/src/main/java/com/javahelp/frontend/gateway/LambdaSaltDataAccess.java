@@ -1,7 +1,5 @@
 package com.javahelp.frontend.gateway;
 
-import androidx.annotation.NonNull;
-
 import com.javahelp.frontend.domain.user.login.ISaltDataAccess;
 import com.javahelp.model.user.User;
 
