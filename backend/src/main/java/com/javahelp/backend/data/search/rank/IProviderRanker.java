@@ -6,6 +6,9 @@ import com.javahelp.model.user.User;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Interface for ranking provider {@link User}s
+ */
 public interface IProviderRanker {
     /**
      *
