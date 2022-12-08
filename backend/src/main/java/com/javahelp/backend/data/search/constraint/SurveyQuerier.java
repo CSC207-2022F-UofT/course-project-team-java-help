@@ -5,7 +5,6 @@ import com.javahelp.backend.data.IUserStore;
 import com.javahelp.model.survey.SurveyResponse;
 import com.javahelp.model.user.User;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -47,6 +46,6 @@ public class SurveyQuerier {
      * @return
      */
     public Map<String, SurveyResponse> getSurveyResponses(IConstraint constraint) {
-        return dbSRStore.readByConstraint(constraint);
+        return dbSRStore.readProviderByConstraint(constraint);
     }
 }

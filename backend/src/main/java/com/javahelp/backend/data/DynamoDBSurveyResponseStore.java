@@ -180,15 +180,8 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
         }
     }
 
-    /**
-     *
-     * @param constraint {@link Map <>} which specifies the required attributes
-     *                   from the User.
-     * @return {@link Map} of all users and their corresponding survey responses
-     * with the specific constraints.
-     */
     @Override
-    public Map<String, SurveyResponse> readByConstraint(IConstraint constraint) {
+    public Map<String, SurveyResponse> readProviderByConstraint(IConstraint constraint) {
         Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
         expressionAttributeValues.put(":provider_survey_val", new AttributeValue().withBOOL(true));
 

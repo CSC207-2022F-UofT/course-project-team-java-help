@@ -64,7 +64,7 @@ public interface ISurveyResponseStore {
      *                   from the User.
      * @return {@link Set<User>} with the specified constraints.
      */
-    Map<String, SurveyResponse> readByConstraint(IConstraint constraint);
+    Map<String, SurveyResponse> readProviderByConstraint(IConstraint constraint);
 
     /**
      *
