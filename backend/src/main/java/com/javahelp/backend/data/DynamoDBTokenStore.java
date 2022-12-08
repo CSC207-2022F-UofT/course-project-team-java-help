@@ -63,7 +63,8 @@ class DynamoDBTokenStore extends DynamoDBStore implements ITokenStore {
 
         GetItemRequest request = new GetItemRequest()
                 .withTableName(tableName)
-                .withKey(key);
+                .withKey(key)
+                .withConsistentRead(true);
 
         GetItemResult result = getClient().getItem(request);
 

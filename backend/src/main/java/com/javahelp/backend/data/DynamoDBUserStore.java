@@ -79,7 +79,8 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
 
         GetItemRequest request = new GetItemRequest()
                 .withTableName(tableName)
-                .withKey(key);
+                .withKey(key)
+                .withConsistentRead(true);
 
         GetItemResult result = getClient().getItem(request);
 
@@ -146,7 +147,7 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
             keys.add(idMap);
         }
 
-        requestItems.put(tableName, new KeysAndAttributes().withKeys(keys));
+        requestItems.put(tableName, new KeysAndAttributes().withKeys(keys).withConsistentRead(true));
 
         BatchGetItemRequest request = new BatchGetItemRequest()
                 .withRequestItems(requestItems);
@@ -236,7 +237,8 @@ public class DynamoDBUserStore extends DynamoDBStore implements IUserStore {
 
         GetItemRequest request = new GetItemRequest()
                 .withTableName(tableName)
-                .withKey(key);
+                .withKey(key)
+                .withConsistentRead(true);
 
         GetItemResult result = getClient().getItem(request);
 

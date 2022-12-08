@@ -58,7 +58,8 @@ public class DynamoDBSurveyStore extends DynamoDBStore implements ISurveyStore{
 
         GetItemRequest request = new GetItemRequest()
                 .withTableName(tableName)
-                .withKey(key);
+                .withKey(key)
+                .withConsistentRead(true);
 
         GetItemResult result = getClient().getItem(request);
 

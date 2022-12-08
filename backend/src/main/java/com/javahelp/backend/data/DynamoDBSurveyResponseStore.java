@@ -72,7 +72,8 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
 
         GetItemRequest request = new GetItemRequest()
                 .withTableName(tableName)
-                .withKey(key);
+                .withKey(key)
+                .withConsistentRead(true);
 
         GetItemResult result = getClient().getItem(request);
 
@@ -236,6 +237,7 @@ public class DynamoDBSurveyResponseStore extends DynamoDBStore implements ISurve
         ScanRequest scanRequest = new ScanRequest()
                 .withTableName(this.tableName)
                 .withFilterExpression(keyConditionExpression)
+                .withConsistentRead(true)
                 .withExpressionAttributeValues(expressionAttributeValues);
         ScanResult result = getClient().scan(scanRequest);
 
