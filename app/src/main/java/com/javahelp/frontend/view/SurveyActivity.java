@@ -18,7 +18,9 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.javahelp.R;
+import com.javahelp.model.survey.Survey;
 import com.javahelp.model.survey.SurveyQuestion;
+import com.javahelp.model.survey.SurveyResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,13 +68,14 @@ public class SurveyActivity extends AppCompatActivity implements LifecycleOwner 
 
     public static class SurveyAdapter extends RecyclerView.Adapter<SurveyActivity.ViewHolder> {
         private static final String TAG = "SurveyAdapter";
-
         private List<SurveyQuestion> questions;
+        private List<SurveyResponse> responses;
         private LayoutInflater inflater;
 
         SurveyAdapter(Context context) {
             this.inflater = LayoutInflater.from(context);
             this.questions = new ArrayList<SurveyQuestion>();
+            this.responses = new ArrayList<SurveyResponse>();
         }
 
         @NonNull
