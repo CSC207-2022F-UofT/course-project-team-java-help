@@ -42,7 +42,7 @@ public class RegisterInteractor implements IRegisterInput {
                 if (result.isSuccess()) {
                     output.success(result.getUser(), result.getToken());
                 } else {
-                    output.failure();
+                    output.error(result.getErrorMessage());
                 }
             }
 
