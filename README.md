@@ -2,25 +2,40 @@
   <img src="https://github.com/CSC207-2022F-UofT/course-project-team-java-help/blob/main/images/JavaHelp_logo.png?raw=true" width="100"/>
 </div>
 
-
 # JavaHelp 
 
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white) ![C++](https://img.shields.io/badge/c++-%2300599C.svg?style=for-the-badge&logo=c%2B%2B&logoColor=white) ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white) 	![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
 
 [![GitHub merged PRs](https://badgen.net/github/closed-issues/CSC207-2022F-UofT/course-project-team-java-help)](https://github.com/CSC207-2022F-UofT/course-project-team-java-help/issues) [![GitHub merged PRs](https://badgen.net/github/merged-prs/CSC207-2022F-UofT/course-project-team-java-help)](https://github.com/CSC207-2022F-UofT/course-project-team-java-help/pulls) [![GitHub stars](https://img.shields.io/github/stars/CSC207-2022F-UofT/course-project-team-java-help.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/CSC207-2022F-UofT/course-project-team-java-help/stargazers/)
 
+
 ## Table of Contents
 1. [Introduction](#introduction)
 2. [Design](#design)
-3. [Deployment & QA](#deployment--qa)
-4. [The Project](#the-project)
-5. [Buildin, running, testing](#building-running--testing)
+    * [Stack & Structure](#stack--structure) 
+    * [AWS Lambda Notes](#a-brief-note-on-aws-lambda)
+    * [Design decisions](#design-decisions)
+        + [AWS Lambda](#aws-lambda)
+        + [MVVM](#mvvm)
+        + [Inverted Input Boundary](#inverted-input-boundary)
+        + [Activities](#activities)
+    * [Implemented design patterns](#design-patterns)
+    * [Package structure](#package-structure)
+4. [Deployment & QA](#deployment--qa)
+    * [Testing](#testing)
+    * [Deployment](#deployment)
+    * [CI/CD & Github Actions](#cicd--github-actions)
+    * [Release via Github](#release-via-github)
+6. [The Project](#the-project)
+7. [Building, running, testing](#building-running--testing)
+    * [Building](#building)
+    * [Running](#running)
+    * [API routes](#api-routes)
+    * [Gradle testing](#testing-on-gradle)
 
 
 ## Introduction 
-
 <img align="right" src="https://github.com/CSC207-2022F-UofT/course-project-team-java-help/blob/main/images/JavaHelp_homepage.png?raw=true" height="400"/>
-
 A Java based platform where people can connect with the mental health services and providers that are right for them.
 
 On JavaHelp, users are able to search for and filter mental health providers in their area, and are able to contact or reach out to any they desire. Search recommendations are based on the user's information, as well as on surveys that the user may fill out.
@@ -59,32 +74,43 @@ Unlike something like an EC2 instance, Lambda is not always running. Each handle
 
 There are several places where smaller scale design decisions had to be made, this section will address the rationale behind some of these.
 
-First, the decision to use AWS Lambda. This was driven by the desire to use on of the simplest, cleanest, and most popular modern API patterns: REST.
+
+#### AWS Lambda 
+First, the decision to use AWS Lambda. This was driven by the desire to use on of the simplest, cleanest, and most popular modern API patterns: *REST*. One of the qualifying factors our program had to then meet is that it had to be stateless, which meant that the project had to be designed in a way where the all session related information can be stored and handled on the client side.
 
 Despite using a REST API, we used the more basic AWS HTTP API Gateway rather than the REST API Gateway because it was simpler, and integrated better with the Serverless framework we use to manage deployment.
 
-The MVVM approach was used rather than MVP, MVC, etc... because of Android's built in `ViewModel` classes. A subclass called `AmdroidViewModel` also gives extra credits of using MVVM as it amplifies the benefits. Moreover, after using the Data Binding library, the whole architecture becomes even clear, and the neatness improves a lot by creating a declarative data flow. The utilization of `Livedata` also helps us to better manage the MVVM as it can obeserve the Lifecycle of the view and frees up the responsibility of tracking the lifecycle and disposing-off resources. When all these things work together, our project have a every clean architecture and each layer and each class has a clear division of responsibility. Therefore, no memory leaks, no crashes due to stopped activities, and always up-to-date data.
+#### MVVM
+The MVVM approach was used rather than MVP, MVC, etc... because of Android's built in `ViewModel` classes.
 
-Our handlers make use of an inverted input boundary pattern where rather than the use case implementing its own input boundary and handler's making use of this interface, instead the handlers implement the use case's input boundary, and pass themselves to the use case. This way, dependency inversion is maintained, and it has the additional benefit that it is easier to add a parameter, and requires fewer refactors to do so. The reason for this, is that because the handler simply accepts an input and returns an output, the conventional output boundary pattern is a bit unwieldy. Having an output boundary would mean modifying the state of the handler through interface methods as it runs, to return an object based on these modifications. Instead, the handler can extract all information from the request, package it into the required objects, and pass it through the input boundary it implements. The use case can then receive this information, without knowing anything about the handler, or the nature of the handler's implementation of its input boundary, and return a result which the handler will package into a `APIGatewayResponse`.
+#### Inverted Input Boundary
+Our handlers make use of an inverted input boundary pattern where rather than the use case implementing its own input boundary and handler's making use of this interface, instead the handlers implement the use case's input boundary, and pass themselves to the use case. This way, *dependency inversion* is maintained, and it has the additional benefit that it is easier to add a parameter, and requires fewer refactors to do so. The reason for this, is that because the handler simply accepts an input and returns an output, the conventional output boundary pattern is a bit unwieldy. ***Having an output boundary would mean modifying  the state of the handler through interface methods as it runs, to return an object based on these modifications***. Instead, the handler can extract all information from the request, package it into the required objects, and pass it through the input boundary it implements. The use case can then receive this information, without knowing anything about the handler, or the nature of the handler's implementation of its input boundary, and return a result which the handler will package into a `APIGatewayResponse`.
 
-Another place where the CLEAN architecture looks a bit funny is the activities. In Android, `Activity` is not just the view class. It is the view class, AND the outermost class facing the OS. Specifically, it is the only class where a lot of operations relying on the OS can be performed. Even something so simple as making use of the network interface to make an HTTP request. For this reason, some functionalities that would traditionally be initiated through the ViewModel must instead be initiated through activities. For instance, before making an HTTP request, permission from the operating system (& end user) must first be obtained through an activity. Only if permission is provided, does the activity call a method in the ViewModel initiating the request. Similarly, when storing information in Android's shared preferences (kind of like application settings), some type of `Context` must be provided. This frequently comes from an activity.
+#### Activities
+Another place where the CLEAN architecture looks a bit funny is the activities. In Android, `Activity` is not just the view class. It is the view class, AND the outermost class facing the OS. Specifically, it is the only class where a lot of operations relying on the OS can be performed. Even something so simple as making use of the network interface to make an HTTP request. For this reason, some functionalities that would traditionally be initiated through the ViewModel must instead be initiated through activities. For instance, before making an HTTP request, permission from the operating system (& end user) must first be obtained through an activity. ***Only if permission is provided, does the activity call a method in the ViewModel initiating the request***. Similarly, when storing information in Android's shared preferences (kind of like application settings), some type of `Context` must be provided. This frequently comes from an activity.
 
 ### Design Patterns
 
-#### Factory Method ([BackendRegister.java](https://github.com/CSC207-2022F-UofT/course-project-team-java-help/tree/main/backend/src/main/java/com/javahelp/backend/domain/user/register))
-This is the most effective at allowing specific user types to create their User (account) and UserPassword instances, based on their own registration requirements as well as their user properties. This implementation ensures Simple Responsibility, Open/Closed, and Liskov’s substitution; the general and parent interactor only has to worry about a general procedure in creating a user without having to know much about specific properties of one type of user. 
-
-#### Static Factory Method ([HomeFragment.java [L12-L21]](https://github.com/CSC207-2022F-UofT/course-project-team-java-help/blob/main/app/src/main/java/com/javahelp/frontend/fragments/HomeFragment.java))
-Android Studio fragment is a reusable portion of the UI, which makes it easier to modify the activity's appearance at runtimes. Fragment's uses statis factory method, which initialies and setup fragments without calling the constructor or extra setter methods. By doing this, it encapsulates and abstracts the required setup of the object for the client. 
+#### Abstract User Factory ([BackendRegister.java](https://github.com/CSC207-2022F-UofT/course-project-team-java-help/tree/main/backend/src/main/java/com/javahelp/backend/domain/user/register))
+In the interest of the Open/Closed principle, and Liskov substitution, we decided it would be good practice to implement the abstract factory pattern with our use-case for registering new Users. Because we have several types of users, and may add more in the future, it made sense to have our use-case for registering users be extensible, and able to process arbitrary user types. There is an abstract `UserRegisterInteractor<T extends UserInfo, S extends IUserRegisterInputBoundary>` class with methods to create new `UserInfo` subclass instances of unspecified type. Concrete implementations of this (`ClientRegisterInteractor` and `ProviderRegisterInteractor`) can instantiate users with `ClientUserInfo` and `ProviderUserInfo` using two different input boundaries. 
 
 
-#### Strategy ([ProviderRanker.java](https://github.com/CSC207-2022F-UofT/course-project-team-java-help/blob/main/backend/src/main/java/com/javahelp/backend/data/search/rank/ProviderRanker.java))
-To sort the similarities between the client's attributes (obtained from their survey response) and the list of providers' attributes, we may implement different types of similarity measurements. For example, it could be as simple as counting the number of identical attributes (currently implemented), or it could be cosine similarities between feature vectors. Hence, the way that our `ProviderRanker` and `SimilarityScorer` is implemented allows the different implementations of SimilarityScorers to be strategies that are called in our `SearchInteractor` and passed into `ProviderRanker`.
- 
-#### Façade ([DeleteViewModel.java](https://github.com/CSC207-2022F-UofT/course-project-team-java-help/blob/main/app/src/main/java/com/javahelp/frontend/activity/DeleteViewModel.java))
+#### Static Factory Method For Fragments ([HomeFragment.java](https://github.com/CSC207-2022F-UofT/course-project-team-java-help/blob/main/app/src/main/java/com/javahelp/frontend/fragments/HomeFragment.java))
+For instantiating our fragments (the Android version of small, modular UIs,) we use static factory methods that collect parameters, call an empty constructor, and set the parameters on the resulting instance. This is necessary because Android requires that fragments have a public, parameterless constructor. It also encapsulates the logic involved in creating a fragment nicely, much in the same way a constructor would, while allowing us to work around the Android requirement for public, parameterless constructors.
+
+#### Deletion Façade ([DeleteViewModel.java](https://github.com/CSC207-2022F-UofT/course-project-team-java-help/blob/main/app/src/main/java/com/javahelp/frontend/activity/DeleteViewModel.java))
 The account deletion feature consists of 2 parts: Upon clicking the *"Delete My Account"* button in their account page, the user will first enter their password for verification purposes; the deletion will only be processed after the verification passes. The decision being made here was to include both the `LoginInteractor` (for verifying password) and the `DeleteInteractor` (for deleting account) in the `DeleteViewModel` in the frontend, which creates a *Façade*. This way, we adhere to the *Single Responsibility Principle* because each interactor is only doing one part of the feature.
 
-#### Observable ([LoginActivity.java](https://github.com/CSC207-2022F-UofT/course-project-team-java-help/blob/main/app/src/main/java/com/javahelp/frontend/activity/LoginActivity.java))
+#### Provider Ranker Strategy ([ProviderRanker.java](https://github.com/CSC207-2022F-UofT/course-project-team-java-help/blob/main/backend/src/main/java/com/javahelp/backend/data/search/rank/ProviderRanker.java))
+To sort the similarities between the client's attributes (obtained from their survey response) and the list of providers' attributes, we may implement different types of similarity measurements. For example, it could be as simple as counting the number of identical attributes (currently implemented), or it could be cosine similarities between feature vectors. Hence, the way that our `ProviderRanker` and `SimilarityScorer` is implemented allows the different implementations of SimilarityScorers to be strategies that are called in our `SearchInteractor` and passed into `ProviderRanker`.
+
+#### Hashing Strategy ([IPasswordHasher.java](https://github.com/CSC207-2022F-UofT/course-project-team-java-help/blob/main/model/src/main/java/com/javahelp/model/user/IPasswordHasher.java))
+We made heavy use of the strategy pattern for a variety of purposes. Our application hashes user passwords, but we did not want to be totally dependent on a single hashing implementation in the event that current technology advances, and 512 bit SHA hashes (which are what we currently use) fall out of common use. For this reason, we implemented our hashing functionality through the strategy pattern. Our hashing functionalities implement `IPasswordHasher`. Arbitrary new hashing strategies can be added, because nothing depends on specific strategies, and simply depends on the interface.
+
+#### Authorization Information Strategy ([IAuthInformationProvider.java](https://github.com/CSC207-2022F-UofT/course-project-team-java-help/blob/main/app/src/main/java/com/javahelp/frontend/gateway/IAuthInformationProvider.java))
+We use a similar design pattern for storing user credentials. Determining the best way to securely store user information locally is difficult. It is very possible that the current implementation will change in the future, as requirements change and greater security is needed. Currently we encrypt and store information in _SharedPreferences_, a feature of the Android SDK. However, this is not a particularly secure storage location. Although our credentials are encrypted, it is very likely we could, and would want to find a better way to store them in the future. For this reason, we use the strategy design pattern here as well. The actual storage and retrieval of credentials is done by implementations of an `IAuthInformationProvider` interface. The strategy used can be changed without needing to change much other code.
+
+#### ViewModel Observables ([LoginActivity.java](https://github.com/CSC207-2022F-UofT/course-project-team-java-help/blob/main/app/src/main/java/com/javahelp/frontend/activity/LoginActivity.java))
 
 The usage of Android's `MutableLiveData` is an example of the observer design pattern. Some functions in the `LoginActivity` observe a certain `MutableLiveData` in the viewmodel, and are only called when there is a change to the `MutableLiveData`. This is exceptionally useful when a function should be called when a button is clicked on the screen.
 
@@ -98,19 +124,24 @@ The project combines packaging by component and packaging by layer. Use cases ar
 
 As already mentioned, JUnit 4 and RESTAssured (only for the backend) are used for testing. The JUnit tests for the backend are the most extensive, and probably the most complex. For components involving the database, the backend verifies that the current process is authenticated with DynamoDB, before attempting to run the test. It does this through JUnit 4's `assertTrue`. This is necessary, as without process authentication, attempts to read from, or modify the database would fail. In cases such as these, since the expected behavior is that the attempts to access the database would fail, these tests are ignored by JUnit.
 
-If you wish to run these tests and require credentials, reach out to me at [jacob.klimczak@gmail.com](jacob.klimczak@gmail.com), and I can provide credentials, and instructions for using them.
+*If you wish to run these tests and require credentials, reach out to me at [jacob.klimczak@gmail.com](jacob.klimczak@gmail.com), and I can provide credentials, and instructions for using them.*
 
 RESTAssured was used as it provided a simple, functional interface for quickly parsing JSON responses, asserting expected values, and verifying other response properties.
 
 ### Deployment
 
-The Serverless framework is responsible for the bulk of the deployment and configuration of our project. It simplifies the creation of all sorts of AWS resources, and allows for their management from a single YAML file. Deploying with serverless is also much easier compared to using the AWS-CLI. It simply requires running the `serverless deploy` command, and it will deploy automatically using the YAML file for the project. In contrast, AWS requires you build a function package, and then specifically point AWS SAM at the package before uploading it.
+The Serverless framework is responsible for the bulk of the deployment and configuration of our project. It simplifies the creation of all sorts of AWS resources, and allows for their management from a single *YAML file*. Deploying with serverless is also much easier compared to using the AWS-CLI. It simply requires running the `serverless deploy` command, and it will deploy automatically using the YAML file for the project. In contrast, AWS requires you build a function package, and then specifically point AWS SAM at the package before uploading it.
 
-One of the major concerns with our deployments, particularly of the backend, was keeping the size of our function package low. This is necessary because AWS imposes a maximum size (250MB uncompressed, 50MB compressed) for function packages that can be uploaded as archives. The alternative is to use a Docker image for your Lambda handler. While the ability to make use of large libraries would have been nice, the time it takes for Lambda to cold start a handler instance inside a Docker container is much greater than from an archive. This would have compounded with the already increased Lambda cold start time, due to needing to launch the JVM on every cold start. For this reason, we felt the archive function package was most desirable.
+One of the major concerns with our deployments, particularly of the backend, was keeping the size of our function package low. This is necessary because AWS imposes a maximum size (250MB uncompressed, 50MB compressed) for function packages that can be uploaded as archives. The alternative is to use a *Docker image* for your Lambda handler. While the ability to make use of large libraries would have been nice, the time it takes for Lambda to cold start a handler instance inside a Docker container is much greater than from an archive. This would have compounded with the already increased Lambda cold start time, due to needing to launch the JVM on every cold start. For this reason, we felt the archive function package was most desirable.
 
 ### CI/CD & Github Actions
 
 We used Github actions for our CI/CD pipelines. Every push triggered a Gradle build followed by running all the tests. Whenever a pull request is merged into main, Github actions uses the Serverless framework to redeploy the backend (provided all tests pass).
+
+### Release Via Github
+
+The v1.0 APK is available on our Github as a release. This release contains both the source code, and the APK.
+
 
 ## The Project
 
@@ -209,7 +240,21 @@ GET [https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/users/{userid}](http
 
 - User ID and token must be valid for the user being retrieved
 
-### Testing
+POST [https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/register/user](https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/register/user)
+  
+- This registers a user
+   
+- Expects request bodies to be JSONs containing: a JSON representation of the user to register under the key ‘user’, the salt and hash of the password formatted the same as in the login requests under the key ‘saltHash’
+
+POST [https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/providers/search](https://gwkvm1k2j5.execute-api.us-east-1.amazonaws.com/providers/search)
+  
+- This searches for providers that match the input criteria
+   
+- Returns JSON representations of provider ids mapped to providers
+
+- Takes in authorization, and a list of constraints for the providers
+    
+### Testing on Gradle
 
 Tests can be run with
 
@@ -221,3 +266,4 @@ Tests can be run with
 
 All tests in this project involving the database should use `assumeTrue` to verify the database is accessible before beginning to execute. If it is not, the test will terminate immediately. Furthermore, any tests that create resources in the database, should clean up these resources in a finally block. This way, even if the test fails, the resources will still be cleaned up, and will not be left in the database (potentially to mess with future runs).
 
+When inspecting test coverage, it is important to note that some tests only invoke methods and classes indirectly. For instance, if you were to examine the test coverage of any `Handler` class, it would come back as 0%. In reality, the handlers are each tested extensively. The reason they are reported as having no coverage, is because the test suite invokes the handlers over the network, just as any consumer of our API would. As a result, the tests of the handlers are not aware that the handlers are running. These tests are done with the RESTAssured library.
