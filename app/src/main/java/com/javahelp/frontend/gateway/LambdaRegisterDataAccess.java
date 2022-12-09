@@ -113,12 +113,20 @@ public class LambdaRegisterDataAccess extends RESTAPIGateway<RegisterResult> imp
 
             @Override
             public RegisterResult get() throws ExecutionException, InterruptedException {
-                return response.get().get();
+                RESTAPIGatewayResponse<RegisterResult> result = response.get();
+                if (!result.isSuccess()) {
+                    return new RegisterResult(result.getErrorMessage());
+                }
+                return result.get();
             }
 
             @Override
             public RegisterResult get(long l, TimeUnit timeUnit) throws ExecutionException, InterruptedException, TimeoutException {
-                return response.get(l, timeUnit).get();
+                RESTAPIGatewayResponse<RegisterResult> result = response.get(l, timeUnit);
+                if (!result.isSuccess()) {
+                    return new RegisterResult(result.getErrorMessage());
+                }
+                return result.get();
             }
         };
     }

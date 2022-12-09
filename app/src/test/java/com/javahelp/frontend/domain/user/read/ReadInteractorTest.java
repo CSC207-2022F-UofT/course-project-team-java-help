@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.javahelp.frontend.domain.user.delete.DeleteResult;
 import com.javahelp.frontend.domain.user.delete.IDeleteDataAccess;
 import com.javahelp.frontend.domain.user.login.ILoginDataAccess;
 import com.javahelp.frontend.domain.user.login.ISaltDataAccess;
@@ -109,7 +110,7 @@ public class ReadInteractorTest {
             assertEquals(u.getStringID(), readUser.getStringID());
         } finally {
             if (u != null && t != null) {
-                new LambdaDeleteDataAccess(new IAuthInformationProvider() {
+                DeleteResult r = new LambdaDeleteDataAccess(new IAuthInformationProvider() {
                     @Override
                     public String getUserID() {
                         return u.getStringID();
