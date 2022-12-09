@@ -115,7 +115,7 @@ public class ProviderRegistrationActivity extends AppCompatActivity {
      */
     private void updateOnPresentRegisterResult(RegisterResult registerResult) {
         if (registerResult.isSuccess()) {
-            Intent intent = new Intent(ProviderRegistrationActivity.this, FrontPageActivity.class);
+            Intent intent = new Intent(ProviderRegistrationActivity.this, FrontPage2Activity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
