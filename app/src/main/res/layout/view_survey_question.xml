@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/survey_question_info"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:cardElevation="5dp"
+    tools:context=".frontend.activity.SurveyActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/survey_question"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:text="Example Question"
+            android:textSize="18sp">
+
+        </TextView>
+
+        <RadioGroup
+            android:id="@+id/survey_answers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+<!--            <RadioButton-->
+<!--                android:id="@+id/question_answer_1"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="28dp"-->
+<!--                android:text="Example Answer">-->
+
+<!--            </RadioButton>-->
+
+<!--            <RadioButton-->
+<!--                android:id="@+id/question_answer_2"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="28dp"-->
+<!--                android:text="Example Answer">-->
+
+<!--            </RadioButton>-->
+
+<!--            <RadioButton-->
+<!--                android:id="@+id/question_answer_3"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="28dp"-->
+<!--                android:text="Example Answer">-->
+
+<!--            </RadioButton>-->
+
+<!--            <RadioButton-->
+<!--                android:id="@+id/question_answer_4"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="28dp"-->
+<!--                android:text="Example Answer">-->
+
+<!--            </RadioButton>-->
+
+        </RadioGroup>
+
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>
