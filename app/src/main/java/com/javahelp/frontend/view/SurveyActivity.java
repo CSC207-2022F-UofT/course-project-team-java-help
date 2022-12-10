@@ -1,14 +1,8 @@
 package com.javahelp.frontend.view;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,66 +10,136 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.javahelp.R;
 import com.javahelp.model.survey.Survey;
 import com.javahelp.model.survey.SurveyQuestion;
-import com.javahelp.model.survey.SurveyResponse;
+import com.javahelp.model.survey.SurveyQuestionResponse;
 
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * Activity for viewing and answering {@link Survey}
+ */
 public class SurveyActivity extends AppCompatActivity implements LifecycleOwner {
-    SurveyActivity context;
-    SurveyViewModel surveyViewModel;
-    RecyclerView surveyView;
-    SurveyAdapter surveyAdapter;
 
+    static final String SURVEY_ID_KEY = "com.javahelp.frontend.view.SurveyActivity:surveyId";
+
+    private String surveyId;
+    private SurveyViewModel surveyViewModel;
+    private RecyclerView surveyView;
+    private SurveyAdapter surveyAdapter;
+
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+
+        surveyId = intent.getExtras().getString(SURVEY_ID_KEY, null);
+
+        if (surveyId == null) {
+            Toast.makeText(this, "Invalid Survey ID", Toast.LENGTH_LONG).show();
+            finish();
+        }
+
         setContentView(R.layout.activity_survey);
-        context = this;
-        surveyView = findViewById(R.id.survey);
-        surveyAdapter = new SurveyAdapter(context);
-        surveyView.setAdapter(surveyAdapter);
+
         surveyViewModel = new ViewModelProvider(this).get(SurveyViewModel.class);
-        surveyViewModel.getSurveyQuestionsLiveData().observe(context, surveyQuestionsUpdateObserver);
+        surveyViewModel.getSurveyQuestions().forEach(liveData -> // for every survey response
+                liveData.observe(this, surveyQuestion -> // bind response to update adapter
+                        surveyAdapter.notifyItemChanged( // update adapter where corresponding
+                                surveyViewModel.getSurveyQuestions().indexOf(liveData))));
+
+        surveyAdapter = new SurveyAdapter(this);
+
+        surveyView = findViewById(R.id.survey);
+        surveyView.setAdapter(surveyAdapter);
+
+        // this should maybe be moved into a request internet permission section block depending
+        // on the eventual behaviour of the gateway this makes use of
+        surveyViewModel.loadSurvey(surveyId);
     }
 
-    Observer<ArrayList<SurveyQuestion>> surveyQuestionsUpdateObserver = new Observer<ArrayList<SurveyQuestion>>() {
-        @Override
-        public void onChanged(ArrayList<SurveyQuestion> surveyQuestions) {
-            surveyAdapter.updateSurveyQuestions(surveyQuestions);
-        }
-    };
+    /**
+     * Listener for radio groups to call to update the {@link Survey} to reflect
+     * changes
+     * @param group {@link RadioGroup} that was changed
+     * @param radioButtonId id of {@link RadioButton} that was clicked
+     */
+    private void radioButtonUpdateSurvey(RadioGroup group, int radioButtonId) {
+        RadioButton button = group.findViewById(radioButtonId);
+        int question = (Integer) group.getTag();
+        int response = (Integer) button.getTag();
+        surveyViewModel.setResponse(question, response);
+    }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    /**
+     * View holder class for a question in the survey
+     */
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final CardView cardView;
         private final TextView surveyQuestion;
         private final RadioGroup radioGroup;
 
+        /**
+         * Creates a new {@link ViewHolder}
+         *
+         * @param v {@link View} to create with
+         */
         public ViewHolder(View v) {
             super(v);
-            cardView = (CardView) v.findViewById(R.id.survey_question_info);
-            surveyQuestion = (TextView) v.findViewById(R.id.survey_question);
-            radioGroup = (RadioGroup) v.findViewById(R.id.survey_answers);
+            surveyQuestion = v.findViewById(R.id.survey_question);
+            radioGroup = v.findViewById(R.id.survey_answers);
+        }
 
-         }
-
+        /**
+         * Populates from the specified {@link SurveyQuestionResponse}
+         *
+         * @param index index of the question to populate from
+         * @param q     {@link SurveyQuestion} to use
+         * @param r     {@link SurveyQuestionResponse} to use, or null if not yet answered
+         */
+        private void populateFromQuestion(int index, SurveyQuestion q, SurveyQuestionResponse r) {
+            surveyQuestion.setText(q.getQuestion());
+            radioGroup.removeAllViews();
+            radioGroup.setTag(index);
+            radioGroup.setOnCheckedChangeListener(SurveyActivity.this::radioButtonUpdateSurvey);
+            for (int i = 0; i < q.getNumberOfResponses(); i++) {
+                String s = q.getAnswer(i);
+                RadioButton b = new RadioButton(SurveyActivity.this);
+                b.setId(View.generateViewId());
+                b.setText(s);
+                b.getTag(i);
+                radioGroup.addView(b);
+                if (r != null && i == r.getResponseNumber()) {
+                    b.setChecked(true);
+                }
+            }
+        }
     }
 
-    public static class SurveyAdapter extends RecyclerView.Adapter<SurveyActivity.ViewHolder> {
-        private static final String TAG = "SurveyAdapter";
-        private List<SurveyQuestion> questions;
-        private List<SurveyResponse> responses;
-        private LayoutInflater inflater;
+    /**
+     * Adapter for {@link SurveyQuestion}s
+     */
+    public class SurveyAdapter extends RecyclerView.Adapter<SurveyActivity.ViewHolder> {
 
+        private final LayoutInflater inflater;
+
+        /**
+         * Creates a new {@link SurveyAdapter}
+         * @param context {@link Context} to use
+         */
         SurveyAdapter(Context context) {
-            this.inflater = LayoutInflater.from(context);
-            this.questions = new ArrayList<SurveyQuestion>();
-            this.responses = new ArrayList<SurveyResponse>();
+            super();
+            inflater = LayoutInflater.from(context);
         }
 
         @NonNull
@@ -87,28 +151,17 @@ public class SurveyActivity extends AppCompatActivity implements LifecycleOwner 
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            SurveyQuestion question = questions.get(position);
-            holder.surveyQuestion.setText(question.getQuestion());
-            holder.radioGroup.removeAllViews();
-
-            for(int i = 0; i < question.getNumberOfResponses(); i++){
-                RadioButton radioButton= new RadioButton(holder.cardView.getContext());
-                radioButton.setText(question.getAnswer(i));
-                holder.radioGroup.addView(radioButton);
-            }
+            Survey survey = SurveyActivity.this.surveyViewModel.getSurvey();
+            SurveyQuestion question = survey.get(position);
+            SurveyQuestionResponse response = SurveyActivity.this.surveyViewModel
+                    .getSurveyQuestions().get(position).getValue();
+            holder.populateFromQuestion(position, question, response);
         }
 
         @Override
         public int getItemCount() {
-            return questions.size();
+            Survey survey = SurveyActivity.this.surveyViewModel.getSurvey();
+            return survey != null ? survey.size() : 0;
         }
-
-        public void updateSurveyQuestions(List<SurveyQuestion> surveyQuestions) {
-            this.questions.clear();
-            this.questions = surveyQuestions;
-            notifyDataSetChanged();
-        }
-
     }
-
 }
